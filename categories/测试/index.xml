@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>测试 on mkkkk</title>
-    <link>https://mkkkk-create.github.io/categories/%E6%B5%8B%E8%AF%95/</link>
+    <link>http://localhost:1313/categories/%E6%B5%8B%E8%AF%95/</link>
     <description>Recent content in 测试 on mkkkk</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 16 Jul 2024 11:46:31 +0800</lastBuildDate>
-    <atom:link href="https://mkkkk-create.github.io/categories/%E6%B5%8B%E8%AF%95/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/categories/%E6%B5%8B%E8%AF%95/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Test 2</title>
-      <link>https://mkkkk-create.github.io/2024/test-2/</link>
+      <link>http://localhost:1313/2024/test-2/</link>
       <pubDate>Tue, 16 Jul 2024 11:46:31 +0800</pubDate>
-      <guid>https://mkkkk-create.github.io/2024/test-2/</guid>
+      <guid>http://localhost:1313/2024/test-2/</guid>
       <description>中文测试 这是一次测试 图片引用 Photo by Florian Klauer on Unsplash</description>
     </item>
   </channel>
