@@ -6,7 +6,7 @@
     <description>Recent content in Pages on mkkkk</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 09 Oct 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 15 Jul 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://mkkkk-create.github.io/page/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>About</title>
@@ -16,17 +16,17 @@
       <description>一个简单的逆向菜鸟的自学之路</description>
     </item>
     <item>
+      <title>Friends</title>
+      <link>https://mkkkk-create.github.io/links/</link>
+      <pubDate>Mon, 15 Jul 2024 00:00:00 +0000</pubDate>
+      <guid>https://mkkkk-create.github.io/links/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>Archives</title>
       <link>https://mkkkk-create.github.io/archives/</link>
       <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
       <guid>https://mkkkk-create.github.io/archives/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Friends</title>
-      <link>https://mkkkk-create.github.io/links/</link>
-      <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
-      <guid>https://mkkkk-create.github.io/links/</guid>
       <description></description>
     </item>
     <item>
