@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='2024WMCTF Re复现 Rustdriod 发现是apk文件，拖入jadx查看 发现加载wmcheck的包，apktool解包打开so文件，定位到check函数 我们发现这是类'><title>WMCTF</title>
+
+<link rel='canonical' href='https://mkkkk-create.github.io/2024/wmctf/'>
+
+<link rel="stylesheet" href="/scss/style.min.e6c6a8eb379099a52a1148e4f0a5152d4590bfbcd698edad53dbb030ed6b66d3.css"><meta property='og:title' content='WMCTF'>
+<meta property='og:description' content='2024WMCTF Re复现 Rustdriod 发现是apk文件，拖入jadx查看 发现加载wmcheck的包，apktool解包打开so文件，定位到check函数 我们发现这是类'>
+<meta property='og:url' content='https://mkkkk-create.github.io/2024/wmctf/'>
+<meta property='og:site_name' content='mkkkk'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='复现' /><meta property='article:published_time' content='2024-09-11T07:37:15&#43;08:00'/><meta property='article:modified_time' content='2024-09-11T07:37:15&#43;08:00'/>
+<meta name="twitter:title" content="WMCTF">
+<meta name="twitter:description" content="2024WMCTF Re复现 Rustdriod 发现是apk文件，拖入jadx查看 发现加载wmcheck的包，apktool解包打开so文件，定位到check函数 我们发现这是类">
+  
+
+<style>
+    :root {
+        --article-font-family: "Noto Serif SC", var(--base-font-family);
+    }
+</style>
+
+<script> 
+		(function () {
+		    const customFont = document.createElement('link');
+		    customFont.href = "https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;700&display=swap"; 
+		    customFont.type = "text/css";
+		    customFont.rel = "stylesheet";
+		
+		    document.head.appendChild(customFont);
+		}());
+</script>
+
+    </head>
+    <body class="
+    article-page
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    <!-- 
+        extended
+     -->
+    on-phone--column extended
+">
+    
+<div id="article-toolbar">
+    <a href="https://mkkkk-create.github.io/" class="back-home">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+        <span>Back</span>
+    </a>
+</div>
+    <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hucc22f317b722483cb6f9ebca57a3518b_11388_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <h1 class="site-name"><a href="/">mkkkk</a></h1>
+        <h2 class="site-description">逆向小菜鸟</h2><ol class="social-menu">
+                
+                    <li>
+                        <a 
+                            href='https://github.com/mkkkk-create'
+                            target="_blank"
+                            title="GitHub"
+                        >
+                            
+                            
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a 
+                            href='2418747278@qq.com'
+                            target="_blank"
+                            title="QQ Mail"
+                        >
+                            
+                            
+                                <?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="body_1" width="24" height="24">
+
+<g transform="matrix(1.3333334 0 0 1.3333334 0 0)">
+    <image  x="0" y="0" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADoSURBVEhL7dRfCgFBHMDxjTfFAZRcQSlnICkvruAKruAKruDFg1Mo5Qry5wCUN+L70/w0a2Z2293SPvjWp6b57c4UEv0rVUOc8CzoiAGcZOB7IY8DnHRYtOA5OlijLRsZa2KJ1AvEDTNUkVYFU1xhn+GkgxH2Zr1DD6E62ECePWNi1uKTbtiDGua444EFGtB88zok+5x39uGxAXWxhezLL2NsyFr2ZCbP2PnOSUw/4wv05aTvKPMFWgsrQ9ahnAt041venPftQ215K/p+ar+/QDdCNN8sJPZn53vApvlmPnJ4H/9KURS9AMRjoJPa2qZXAAAAAElFTkSuQmCC" preserveAspectRatio="none" width="18" height="18"/>
+</g>
+</svg>
+
+                            
+                        </a>
+                    </li>
+                
+            </ol></header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>friends</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+
+        
+            <li id="dark-mode-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <span>Dark Mode</span>
+            </li>
+        
+    </ol>
+</aside>
+
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/ctf/" >
+                CTF
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/2024/wmctf/">WMCTF</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Sep 11, 2024</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-words">
+                    2659字
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="2024wmctf-re复现">2024WMCTF Re复现</h1>
+<br>
+<h2 id="rustdriod">Rustdriod</h2>
+<p>发现是apk文件，拖入jadx查看
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 221; 
+			flex-basis: 532px"
+	>
+	<a href="/2024/wmctf/1.png" data-size="1998x901">
+		<img src="/2024/wmctf/1.png"
+			width="1998"
+			height="901"
+			srcset="/2024/wmctf/1_hu9f4d034c3720da2db319698b0f7386f0_90225_480x0_resize_box_3.png 480w, /2024/wmctf/1_hu9f4d034c3720da2db319698b0f7386f0_90225_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>发现加载wmcheck的包，apktool解包打开so文件，定位到check函数
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 195; 
+			flex-basis: 469px"
+	>
+	<a href="/2024/wmctf/2.png" data-size="1966x1006">
+		<img src="/2024/wmctf/2.png"
+			width="1966"
+			height="1006"
+			srcset="/2024/wmctf/2_hu117b9cf32f4b0ace76636be79edf8483_107129_480x0_resize_box_3.png 480w, /2024/wmctf/2_hu117b9cf32f4b0ace76636be79edf8483_107129_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>我们发现这是类似于rc4的初始化
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 270; 
+			flex-basis: 649px"
+	>
+	<a href="/2024/wmctf/3.png" data-size="855x316">
+		<img src="/2024/wmctf/3.png"
+			width="855"
+			height="316"
+			srcset="/2024/wmctf/3_hufdea6e380e744a9e9cd9cdadaa4174a6_28406_480x0_resize_box_3.png 480w, /2024/wmctf/3_hufdea6e380e744a9e9cd9cdadaa4174a6_28406_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>之后再次看到函数里面有名称为rc4的函数名，我们就可以确定了，但是这个rc4是魔改的！！！
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 343; 
+			flex-basis: 823px"
+	>
+	<a href="/2024/wmctf/4.png" data-size="1966x573">
+		<img src="/2024/wmctf/4.png"
+			width="1966"
+			height="573"
+			srcset="/2024/wmctf/4_hu1e0176159b210fb4e4e5e7cf2474a810_75223_480x0_resize_box_3.png 480w, /2024/wmctf/4_hu1e0176159b210fb4e4e5e7cf2474a810_75223_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>通过其他师傅的wp(<a class="link" href="https://blog.wm-team.cn/index.php/archives/80/"  target="_blank" rel="noopener"
+    >https://blog.wm-team.cn/index.php/archives/80/</a>)得知是单字节加密，下面是解题脚本
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">KSA</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">S</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">256</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">256</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">j</span> <span class="o">=</span> <span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">key</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)])</span> <span class="o">%</span> <span class="mi">256</span>
+</span></span><span class="line"><span class="cl">        <span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">S</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">S</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">S</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">PRGA</span><span class="p">(</span><span class="n">S</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">i</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">256</span>
+</span></span><span class="line"><span class="cl">        <span class="n">j</span> <span class="o">=</span> <span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">%</span> <span class="mi">256</span>
+</span></span><span class="line"><span class="cl">        <span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">S</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">S</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">        <span class="n">K</span> <span class="o">=</span> <span class="n">S</span><span class="p">[(</span><span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">S</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">%</span> <span class="mi">256</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">        <span class="k">yield</span> <span class="n">K</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">RC4</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">S</span> <span class="o">=</span> <span class="n">KSA</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">keystream</span> <span class="o">=</span> <span class="n">PRGA</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">char</span> <span class="o">^</span> <span class="nb">next</span><span class="p">(</span><span class="n">keystream</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">s1</span><span class="o">=</span><span class="p">[</span> <span class="mh">0x77</span><span class="p">,</span> <span class="mh">0x88</span><span class="p">,</span> <span class="mh">0x99</span><span class="p">,</span> <span class="mh">0x66</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">s2</span><span class="o">=</span><span class="p">[</span><span class="mh">0x4E4FCE594215BA1F</span><span class="p">,</span><span class="mh">0xC745BAE69BFD994</span><span class="p">,</span><span class="mh">0x87081E9C7F8AFCC0</span><span class="p">,</span><span class="mh">0x2BB08F87F5646BF5</span><span class="p">,</span><span class="mh">0x29FF53E2</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">key</span><span class="o">=</span><span class="sa">b</span><span class="s1">&#39;fun@eZ&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">s3</span><span class="o">=</span><span class="sa">b</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">num</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">((</span><span class="n">num</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span><span class="o">+</span><span class="mi">7</span><span class="p">)</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span> <span class="n">byteorder</span><span class="o">=</span><span class="s1">&#39;little&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">s2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">s5</span><span class="o">=</span><span class="n">RC4</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">s3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">s4</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">128</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s5</span><span class="p">)):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">s4</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">s5</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s5</span><span class="p">)):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">s4</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^=</span> <span class="n">s1</span><span class="p">[</span><span class="n">i</span><span class="o">&amp;</span><span class="mi">3</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">s4</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">s4</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">5</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xff</span><span class="p">)</span> <span class="o">|</span> <span class="p">((</span><span class="n">s4</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xff</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">s4</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^=</span> <span class="mh">0xde</span>
+</span></span><span class="line"><span class="cl">    <span class="n">s4</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">s4</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">4</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xff</span><span class="p">)</span> <span class="o">|</span> <span class="p">((</span><span class="n">s4</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xff</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">s4</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^=</span> <span class="mh">0xad</span>
+</span></span><span class="line"><span class="cl">    <span class="n">s4</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">s4</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">3</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xff</span><span class="p">)</span> <span class="o">|</span> <span class="p">((</span><span class="n">s4</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;&gt;</span> <span class="mi">5</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xff</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">s4</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^=</span> <span class="mh">0xbe</span>
+</span></span><span class="line"><span class="cl">    <span class="n">s4</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">s4</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xff</span><span class="p">)</span> <span class="o">|</span> <span class="p">((</span><span class="n">s4</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;&gt;</span> <span class="mi">6</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xff</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">s4</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^=</span> <span class="mh">0xef</span>
+</span></span><span class="line"><span class="cl">    <span class="n">s4</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">s4</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xff</span><span class="p">)</span> <span class="o">|</span> <span class="p">((</span><span class="n">s4</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;&gt;</span> <span class="mi">7</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xff</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="n">s4</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span><span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span></span></span></code></pre></td></tr></table>
+</div>
+</div>
+得到flag WMCTF{2a04aed7-e736-43c4-80a7-f6ed28de34eb}</p>
+<h2 id="ez_learn">ez_learn</h2>
+<p>无壳，拖进ida，反编译之后奇奇怪怪
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 390; 
+			flex-basis: 938px"
+	>
+	<a href="/2024/wmctf/5.png" data-size="1024x262">
+		<img src="/2024/wmctf/5.png"
+			width="1024"
+			height="262"
+			srcset="/2024/wmctf/5_hub945958f0830d302d20f32f55639f9ba_10003_480x0_resize_box_3.png 480w, /2024/wmctf/5_hub945958f0830d302d20f32f55639f9ba_10003_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>下个断点调试一下，发现调试就闪退，往下翻看到了TLS反调试函数
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 346; 
+			flex-basis: 832px"
+	>
+	<a href="/2024/wmctf/6.png" data-size="1366x394">
+		<img src="/2024/wmctf/6.png"
+			width="1366"
+			height="394"
+			srcset="/2024/wmctf/6_hu5c720953871f983ec02ed948a042f151_45080_480x0_resize_box_3.png 480w, /2024/wmctf/6_hu5c720953871f983ec02ed948a042f151_45080_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>nop掉反调试函数，之后发现了一处引起堆栈不平衡的花指令
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 448; 
+			flex-basis: 1077px"
+	>
+	<a href="/2024/wmctf/7.png" data-size="1432x319">
+		<img src="/2024/wmctf/7.png"
+			width="1432"
+			height="319"
+			srcset="/2024/wmctf/7_hu00d4a4d97acf4e114d340884415cf980_39090_480x0_resize_box_3.png 480w, /2024/wmctf/7_hu00d4a4d97acf4e114d340884415cf980_39090_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>nop掉重新编译一下就可以进入主函数了
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 182; 
+			flex-basis: 437px"
+	>
+	<a href="/2024/wmctf/8.png" data-size="1369x751">
+		<img src="/2024/wmctf/8.png"
+			width="1369"
+			height="751"
+			srcset="/2024/wmctf/8_hua118fc4dface759c60dcf7cf2ef25291_76321_480x0_resize_box_3.png 480w, /2024/wmctf/8_hua118fc4dface759c60dcf7cf2ef25291_76321_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>发现有两个flag wrong，猜测flag应该分成两部分加密
+<br>
+之后发现还有一个加密函数跟进，发现是SM4加密
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 397; 
+			flex-basis: 952px"
+	>
+	<a href="/2024/wmctf/9.png" data-size="2041x514">
+		<img src="/2024/wmctf/9.png"
+			width="2041"
+			height="514"
+			srcset="/2024/wmctf/9_hucc816a84d3266567ad98151fd34ff9de_44955_480x0_resize_box_3.png 480w, /2024/wmctf/9_hucc816a84d3266567ad98151fd34ff9de_44955_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>这是S盒
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 278; 
+			flex-basis: 667px"
+	>
+	<a href="/2024/wmctf/10.png" data-size="1285x462">
+		<img src="/2024/wmctf/10.png"
+			width="1285"
+			height="462"
+			srcset="/2024/wmctf/10_hube898b3b9a7c57ac5c649afcecf18a1c_62549_480x0_resize_box_3.png 480w, /2024/wmctf/10_hube898b3b9a7c57ac5c649afcecf18a1c_62549_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>对比普通的SM4加密，我们发现有魔改，一处异或0x34，一处0x12
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 643; 
+			flex-basis: 1545px"
+	>
+	<a href="/2024/wmctf/11.png" data-size="1333x207">
+		<img src="/2024/wmctf/11.png"
+			width="1333"
+			height="207"
+			srcset="/2024/wmctf/11_hu8c3f62d7720573727d97224073f7e8b4_15711_480x0_resize_box_3.png 480w, /2024/wmctf/11_hu8c3f62d7720573727d97224073f7e8b4_15711_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure><br>
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 924; 
+			flex-basis: 2219px"
+	>
+	<a href="/2024/wmctf/12.png" data-size="2025x219">
+		<img src="/2024/wmctf/12.png"
+			width="2025"
+			height="219"
+			srcset="/2024/wmctf/12_hu9998d2adf2fdfa780f1a62b647f4baa5_17558_480x0_resize_box_3.png 480w, /2024/wmctf/12_hu9998d2adf2fdfa780f1a62b647f4baa5_17558_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>下面是脚本，基于普通SM4(<a class="link" href="https://blog.csdn.net/twq1689739507/article/details/122118411"  target="_blank" rel="noopener"
+    >https://blog.csdn.net/twq1689739507/article/details/122118411</a>)修改
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span><span class="lnt">147
+</span><span class="lnt">148
+</span><span class="lnt">149
+</span><span class="lnt">150
+</span><span class="lnt">151
+</span><span class="lnt">152
+</span><span class="lnt">153
+</span><span class="lnt">154
+</span><span class="lnt">155
+</span><span class="lnt">156
+</span><span class="lnt">157
+</span><span class="lnt">158
+</span><span class="lnt">159
+</span><span class="lnt">160
+</span><span class="lnt">161
+</span><span class="lnt">162
+</span><span class="lnt">163
+</span><span class="lnt">164
+</span><span class="lnt">165
+</span><span class="lnt">166
+</span><span class="lnt">167
+</span><span class="lnt">168
+</span><span class="lnt">169
+</span><span class="lnt">170
+</span><span class="lnt">171
+</span><span class="lnt">172
+</span><span class="lnt">173
+</span><span class="lnt">174
+</span><span class="lnt">175
+</span><span class="lnt">176
+</span><span class="lnt">177
+</span><span class="lnt">178
+</span><span class="lnt">179
+</span><span class="lnt">180
+</span><span class="lnt">181
+</span><span class="lnt">182
+</span><span class="lnt">183
+</span><span class="lnt">184
+</span><span class="lnt">185
+</span><span class="lnt">186
+</span><span class="lnt">187
+</span><span class="lnt">188
+</span><span class="lnt">189
+</span><span class="lnt">190
+</span><span class="lnt">191
+</span><span class="lnt">192
+</span><span class="lnt">193
+</span><span class="lnt">194
+</span><span class="lnt">195
+</span><span class="lnt">196
+</span><span class="lnt">197
+</span><span class="lnt">198
+</span><span class="lnt">199
+</span><span class="lnt">200
+</span><span class="lnt">201
+</span><span class="lnt">202
+</span><span class="lnt">203
+</span><span class="lnt">204
+</span><span class="lnt">205
+</span><span class="lnt">206
+</span><span class="lnt">207
+</span><span class="lnt">208
+</span><span class="lnt">209
+</span><span class="lnt">210
+</span><span class="lnt">211
+</span><span class="lnt">212
+</span><span class="lnt">213
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cp">#include</span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define u8 unsigned char
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define u32 unsigned long
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="c1">// S盒
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">const</span> <span class="n">u8</span> <span class="n">Sbox</span><span class="p">[</span><span class="mi">256</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="mh">0xd6</span><span class="p">,</span><span class="mh">0x90</span><span class="p">,</span><span class="mh">0xe9</span><span class="p">,</span><span class="mh">0xfe</span><span class="p">,</span><span class="mh">0xcc</span><span class="p">,</span><span class="mh">0xe1</span><span class="p">,</span><span class="mh">0x3d</span><span class="p">,</span><span class="mh">0xb7</span><span class="p">,</span><span class="mh">0x16</span><span class="p">,</span><span class="mh">0xb6</span><span class="p">,</span><span class="mh">0x14</span><span class="p">,</span><span class="mh">0xc2</span><span class="p">,</span><span class="mh">0x28</span><span class="p">,</span><span class="mh">0xfb</span><span class="p">,</span><span class="mh">0x2c</span><span class="p">,</span><span class="mh">0x05</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="mh">0x2b</span><span class="p">,</span><span class="mh">0x67</span><span class="p">,</span><span class="mh">0x9a</span><span class="p">,</span><span class="mh">0x76</span><span class="p">,</span><span class="mh">0x2a</span><span class="p">,</span><span class="mh">0xbe</span><span class="p">,</span><span class="mh">0x04</span><span class="p">,</span><span class="mh">0xc3</span><span class="p">,</span><span class="mh">0xaa</span><span class="p">,</span><span class="mh">0x44</span><span class="p">,</span><span class="mh">0x13</span><span class="p">,</span><span class="mh">0x26</span><span class="p">,</span><span class="mh">0x49</span><span class="p">,</span><span class="mh">0x86</span><span class="p">,</span><span class="mh">0x06</span><span class="p">,</span><span class="mh">0x99</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="mh">0x9c</span><span class="p">,</span><span class="mh">0x42</span><span class="p">,</span><span class="mh">0x50</span><span class="p">,</span><span class="mh">0xf4</span><span class="p">,</span><span class="mh">0x91</span><span class="p">,</span><span class="mh">0xef</span><span class="p">,</span><span class="mh">0x98</span><span class="p">,</span><span class="mh">0x7a</span><span class="p">,</span><span class="mh">0x33</span><span class="p">,</span><span class="mh">0x54</span><span class="p">,</span><span class="mh">0x0b</span><span class="p">,</span><span class="mh">0x43</span><span class="p">,</span><span class="mh">0xed</span><span class="p">,</span><span class="mh">0xcf</span><span class="p">,</span><span class="mh">0xac</span><span class="p">,</span><span class="mh">0x62</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="mh">0xe4</span><span class="p">,</span><span class="mh">0xb3</span><span class="p">,</span><span class="mh">0x1c</span><span class="p">,</span><span class="mh">0xa9</span><span class="p">,</span><span class="mh">0xc9</span><span class="p">,</span><span class="mh">0x08</span><span class="p">,</span><span class="mh">0xe8</span><span class="p">,</span><span class="mh">0x95</span><span class="p">,</span><span class="mh">0x80</span><span class="p">,</span><span class="mh">0xdf</span><span class="p">,</span><span class="mh">0x94</span><span class="p">,</span><span class="mh">0xfa</span><span class="p">,</span><span class="mh">0x75</span><span class="p">,</span><span class="mh">0x8f</span><span class="p">,</span><span class="mh">0x3f</span><span class="p">,</span><span class="mh">0xa6</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="mh">0x47</span><span class="p">,</span><span class="mh">0x07</span><span class="p">,</span><span class="mh">0xa7</span><span class="p">,</span><span class="mh">0xfc</span><span class="p">,</span><span class="mh">0xf3</span><span class="p">,</span><span class="mh">0x73</span><span class="p">,</span><span class="mh">0x17</span><span class="p">,</span><span class="mh">0xba</span><span class="p">,</span><span class="mh">0x83</span><span class="p">,</span><span class="mh">0x59</span><span class="p">,</span><span class="mh">0x3c</span><span class="p">,</span><span class="mh">0x19</span><span class="p">,</span><span class="mh">0xe6</span><span class="p">,</span><span class="mh">0x85</span><span class="p">,</span><span class="mh">0x4f</span><span class="p">,</span><span class="mh">0xa8</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="mh">0x68</span><span class="p">,</span><span class="mh">0x6b</span><span class="p">,</span><span class="mh">0x81</span><span class="p">,</span><span class="mh">0xb2</span><span class="p">,</span><span class="mh">0x71</span><span class="p">,</span><span class="mh">0x64</span><span class="p">,</span><span class="mh">0xda</span><span class="p">,</span><span class="mh">0x8b</span><span class="p">,</span><span class="mh">0xf8</span><span class="p">,</span><span class="mh">0xeb</span><span class="p">,</span><span class="mh">0x0f</span><span class="p">,</span><span class="mh">0x4b</span><span class="p">,</span><span class="mh">0x70</span><span class="p">,</span><span class="mh">0x56</span><span class="p">,</span><span class="mh">0x9d</span><span class="p">,</span><span class="mh">0x35</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="mh">0x1e</span><span class="p">,</span><span class="mh">0x24</span><span class="p">,</span><span class="mh">0x0e</span><span class="p">,</span><span class="mh">0x5e</span><span class="p">,</span><span class="mh">0x63</span><span class="p">,</span><span class="mh">0x58</span><span class="p">,</span><span class="mh">0xd1</span><span class="p">,</span><span class="mh">0xa2</span><span class="p">,</span><span class="mh">0x25</span><span class="p">,</span><span class="mh">0x22</span><span class="p">,</span><span class="mh">0x7c</span><span class="p">,</span><span class="mh">0x3b</span><span class="p">,</span><span class="mh">0x01</span><span class="p">,</span><span class="mh">0x21</span><span class="p">,</span><span class="mh">0x78</span><span class="p">,</span><span class="mh">0x87</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="mh">0xd4</span><span class="p">,</span><span class="mh">0x00</span><span class="p">,</span><span class="mh">0x46</span><span class="p">,</span><span class="mh">0x57</span><span class="p">,</span><span class="mh">0x9f</span><span class="p">,</span><span class="mh">0xd3</span><span class="p">,</span><span class="mh">0x27</span><span class="p">,</span><span class="mh">0x52</span><span class="p">,</span><span class="mh">0x4c</span><span class="p">,</span><span class="mh">0x36</span><span class="p">,</span><span class="mh">0x02</span><span class="p">,</span><span class="mh">0xe7</span><span class="p">,</span><span class="mh">0xa0</span><span class="p">,</span><span class="mh">0xc4</span><span class="p">,</span><span class="mh">0xc8</span><span class="p">,</span><span class="mh">0x9e</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="mh">0xea</span><span class="p">,</span><span class="mh">0xbf</span><span class="p">,</span><span class="mh">0x8a</span><span class="p">,</span><span class="mh">0xd2</span><span class="p">,</span><span class="mh">0x40</span><span class="p">,</span><span class="mh">0xc7</span><span class="p">,</span><span class="mh">0x38</span><span class="p">,</span><span class="mh">0xb5</span><span class="p">,</span><span class="mh">0xa3</span><span class="p">,</span><span class="mh">0xf7</span><span class="p">,</span><span class="mh">0xf2</span><span class="p">,</span><span class="mh">0xce</span><span class="p">,</span><span class="mh">0xf9</span><span class="p">,</span><span class="mh">0x61</span><span class="p">,</span><span class="mh">0x15</span><span class="p">,</span><span class="mh">0xa1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="mh">0xe0</span><span class="p">,</span><span class="mh">0xae</span><span class="p">,</span><span class="mh">0x5d</span><span class="p">,</span><span class="mh">0xa4</span><span class="p">,</span><span class="mh">0x9b</span><span class="p">,</span><span class="mh">0x34</span><span class="p">,</span><span class="mh">0x1a</span><span class="p">,</span><span class="mh">0x55</span><span class="p">,</span><span class="mh">0xad</span><span class="p">,</span><span class="mh">0x93</span><span class="p">,</span><span class="mh">0x32</span><span class="p">,</span><span class="mh">0x30</span><span class="p">,</span><span class="mh">0xf5</span><span class="p">,</span><span class="mh">0x8c</span><span class="p">,</span><span class="mh">0xb1</span><span class="p">,</span><span class="mh">0xe3</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="mh">0x1d</span><span class="p">,</span><span class="mh">0xf6</span><span class="p">,</span><span class="mh">0xe2</span><span class="p">,</span><span class="mh">0x2e</span><span class="p">,</span><span class="mh">0x82</span><span class="p">,</span><span class="mh">0x66</span><span class="p">,</span><span class="mh">0xca</span><span class="p">,</span><span class="mh">0x60</span><span class="p">,</span><span class="mh">0xc0</span><span class="p">,</span><span class="mh">0x29</span><span class="p">,</span><span class="mh">0x23</span><span class="p">,</span><span class="mh">0xab</span><span class="p">,</span><span class="mh">0x0d</span><span class="p">,</span><span class="mh">0x53</span><span class="p">,</span><span class="mh">0x4e</span><span class="p">,</span><span class="mh">0x6f</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="mh">0xd5</span><span class="p">,</span><span class="mh">0xdb</span><span class="p">,</span><span class="mh">0x37</span><span class="p">,</span><span class="mh">0x45</span><span class="p">,</span><span class="mh">0xde</span><span class="p">,</span><span class="mh">0xfd</span><span class="p">,</span><span class="mh">0x8e</span><span class="p">,</span><span class="mh">0x2f</span><span class="p">,</span><span class="mh">0x03</span><span class="p">,</span><span class="mh">0xff</span><span class="p">,</span><span class="mh">0x6a</span><span class="p">,</span><span class="mh">0x72</span><span class="p">,</span><span class="mh">0x6d</span><span class="p">,</span><span class="mh">0x6c</span><span class="p">,</span><span class="mh">0x5b</span><span class="p">,</span><span class="mh">0x51</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="mh">0x8d</span><span class="p">,</span><span class="mh">0x1b</span><span class="p">,</span><span class="mh">0xaf</span><span class="p">,</span><span class="mh">0x92</span><span class="p">,</span><span class="mh">0xbb</span><span class="p">,</span><span class="mh">0xdd</span><span class="p">,</span><span class="mh">0xbc</span><span class="p">,</span><span class="mh">0x7f</span><span class="p">,</span><span class="mh">0x11</span><span class="p">,</span><span class="mh">0xd9</span><span class="p">,</span><span class="mh">0x5c</span><span class="p">,</span><span class="mh">0x41</span><span class="p">,</span><span class="mh">0x1f</span><span class="p">,</span><span class="mh">0x10</span><span class="p">,</span><span class="mh">0x5a</span><span class="p">,</span><span class="mh">0xd8</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="mh">0x0a</span><span class="p">,</span><span class="mh">0xc1</span><span class="p">,</span><span class="mh">0x31</span><span class="p">,</span><span class="mh">0x88</span><span class="p">,</span><span class="mh">0xa5</span><span class="p">,</span><span class="mh">0xcd</span><span class="p">,</span><span class="mh">0x7b</span><span class="p">,</span><span class="mh">0xbd</span><span class="p">,</span><span class="mh">0x2d</span><span class="p">,</span><span class="mh">0x74</span><span class="p">,</span><span class="mh">0xd0</span><span class="p">,</span><span class="mh">0x12</span><span class="p">,</span><span class="mh">0xb8</span><span class="p">,</span><span class="mh">0xe5</span><span class="p">,</span><span class="mh">0xb4</span><span class="p">,</span><span class="mh">0xb0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="mh">0x89</span><span class="p">,</span><span class="mh">0x69</span><span class="p">,</span><span class="mh">0x97</span><span class="p">,</span><span class="mh">0x4a</span><span class="p">,</span><span class="mh">0x0c</span><span class="p">,</span><span class="mh">0x96</span><span class="p">,</span><span class="mh">0x77</span><span class="p">,</span><span class="mh">0x7e</span><span class="p">,</span><span class="mh">0x65</span><span class="p">,</span><span class="mh">0xb9</span><span class="p">,</span><span class="mh">0xf1</span><span class="p">,</span><span class="mh">0x09</span><span class="p">,</span><span class="mh">0xc5</span><span class="p">,</span><span class="mh">0x6e</span><span class="p">,</span><span class="mh">0xc6</span><span class="p">,</span><span class="mh">0x84</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="mh">0x18</span><span class="p">,</span><span class="mh">0xf0</span><span class="p">,</span><span class="mh">0x7d</span><span class="p">,</span><span class="mh">0xec</span><span class="p">,</span><span class="mh">0x3a</span><span class="p">,</span><span class="mh">0xdc</span><span class="p">,</span><span class="mh">0x4d</span><span class="p">,</span><span class="mh">0x20</span><span class="p">,</span><span class="mh">0x79</span><span class="p">,</span><span class="mh">0xee</span><span class="p">,</span><span class="mh">0x5f</span><span class="p">,</span><span class="mh">0x3e</span><span class="p">,</span><span class="mh">0xd7</span><span class="p">,</span><span class="mh">0xcb</span><span class="p">,</span><span class="mh">0x39</span><span class="p">,</span><span class="mh">0x48</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 密钥扩展算法的常数FK 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">const</span> <span class="n">u32</span> <span class="n">FK</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="mh">0xa3b1bac6</span><span class="p">,</span> <span class="mh">0x56aa3350</span><span class="p">,</span> <span class="mh">0x677d9197</span><span class="p">,</span> <span class="mh">0xb27022dc</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 密钥扩展算法的固定参数CK 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">const</span> <span class="n">u32</span> <span class="n">CK</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="mh">0x00070e15</span><span class="p">,</span> <span class="mh">0x1c232a31</span><span class="p">,</span> <span class="mh">0x383f464d</span><span class="p">,</span> <span class="mh">0x545b6269</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="mh">0x70777e85</span><span class="p">,</span> <span class="mh">0x8c939aa1</span><span class="p">,</span> <span class="mh">0xa8afb6bd</span><span class="p">,</span> <span class="mh">0xc4cbd2d9</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="mh">0xe0e7eef5</span><span class="p">,</span> <span class="mh">0xfc030a11</span><span class="p">,</span> <span class="mh">0x181f262d</span><span class="p">,</span> <span class="mh">0x343b4249</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="mh">0x50575e65</span><span class="p">,</span> <span class="mh">0x6c737a81</span><span class="p">,</span> <span class="mh">0x888f969d</span><span class="p">,</span> <span class="mh">0xa4abb2b9</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="mh">0xc0c7ced5</span><span class="p">,</span> <span class="mh">0xdce3eaf1</span><span class="p">,</span> <span class="mh">0xf8ff060d</span><span class="p">,</span> <span class="mh">0x141b2229</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="mh">0x30373e45</span><span class="p">,</span> <span class="mh">0x4c535a61</span><span class="p">,</span> <span class="mh">0x686f767d</span><span class="p">,</span> <span class="mh">0x848b9299</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="mh">0xa0a7aeb5</span><span class="p">,</span> <span class="mh">0xbcc3cad1</span><span class="p">,</span> <span class="mh">0xd8dfe6ed</span><span class="p">,</span> <span class="mh">0xf4fb0209</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="mh">0x10171e25</span><span class="p">,</span> <span class="mh">0x2c333a41</span><span class="p">,</span> <span class="mh">0x484f565d</span><span class="p">,</span> <span class="mh">0x646b7279</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">u32</span> <span class="nf">functionB</span><span class="p">(</span><span class="n">u32</span> <span class="n">b</span><span class="p">);</span> <span class="c1">// 查S盒的函数B 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">u32</span> <span class="nf">loopLeft</span><span class="p">(</span><span class="n">u32</span> <span class="n">a</span><span class="p">,</span> <span class="kt">short</span> <span class="n">length</span><span class="p">);</span> <span class="c1">// 循环左移函数 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">u32</span> <span class="nf">functionL1</span><span class="p">(</span><span class="n">u32</span> <span class="n">a</span><span class="p">);</span> <span class="c1">// 线性变换L
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">u32</span> <span class="nf">functionL2</span><span class="p">(</span><span class="n">u32</span> <span class="n">a</span><span class="p">);</span> <span class="c1">// 线性变换L&#39;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">u32</span> <span class="nf">functionT</span><span class="p">(</span><span class="n">u32</span> <span class="n">a</span><span class="p">,</span> <span class="kt">short</span> <span class="n">mode</span><span class="p">);</span> <span class="c1">// 合成变换T
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">extendFirst</span><span class="p">(</span><span class="n">u32</span> <span class="n">MK</span><span class="p">[],</span> <span class="n">u32</span> <span class="n">K</span><span class="p">[]);</span> <span class="c1">// 密钥扩展算法第一步
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">extendSecond</span><span class="p">(</span><span class="n">u32</span> <span class="n">RK</span><span class="p">[],</span> <span class="n">u32</span> <span class="n">K</span><span class="p">[]);</span> <span class="c1">// 密钥扩展算法第二步
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">getRK</span><span class="p">(</span><span class="n">u32</span> <span class="n">MK</span><span class="p">[],</span> <span class="n">u32</span> <span class="n">K</span><span class="p">[],</span> <span class="n">u32</span> <span class="n">RK</span><span class="p">[]);</span> <span class="c1">// 轮密钥获取算法
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">iterate32</span><span class="p">(</span><span class="n">u32</span> <span class="n">X</span><span class="p">[],</span> <span class="n">u32</span> <span class="n">RK</span><span class="p">[]);</span> <span class="c1">// 迭代算法
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">reverse</span><span class="p">(</span><span class="n">u32</span> <span class="n">X</span><span class="p">[],</span> <span class="n">u32</span> <span class="n">Y</span><span class="p">[]);</span> <span class="c1">// 反转函数 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">encryptSM4</span><span class="p">(</span><span class="n">u32</span> <span class="n">X</span><span class="p">[],</span> <span class="n">u32</span> <span class="n">RK</span><span class="p">[],</span> <span class="n">u32</span> <span class="n">Y</span><span class="p">[]);</span> <span class="c1">// 加密算法
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">decryptSM4</span><span class="p">(</span><span class="n">u32</span> <span class="n">X</span><span class="p">[],</span> <span class="n">u32</span> <span class="n">RK</span><span class="p">[],</span> <span class="n">u32</span> <span class="n">Y</span><span class="p">[]);</span> <span class="c1">// 解密算法
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">        查S盒的函数B
+</span></span></span><span class="line"><span class="cl"><span class="cm">        参数:        u32 b
+</span></span></span><span class="line"><span class="cl"><span class="cm">        返回值:        查S盒的结果u32 b
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span><span class="line"><span class="cl"><span class="n">u32</span> <span class="nf">functionB</span><span class="p">(</span><span class="n">u32</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">u8</span> <span class="n">a</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">short</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span> <span class="o">/</span> <span class="mh">0x1000000</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span> <span class="o">/</span> <span class="mh">0x10000</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span> <span class="o">/</span> <span class="mh">0x100</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">b</span> <span class="o">=</span> <span class="n">Sbox</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">*</span> <span class="mh">0x1000000</span> <span class="o">+</span> <span class="n">Sbox</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">*</span> <span class="mh">0x10000</span> <span class="o">+</span> <span class="n">Sbox</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span> <span class="o">*</span> <span class="mh">0x100</span> <span class="o">+</span> <span class="n">Sbox</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]];</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">b</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">        循环左移算法
+</span></span></span><span class="line"><span class="cl"><span class="cm">        参数：        u32 a    length：循环左移位数
+</span></span></span><span class="line"><span class="cl"><span class="cm">        返回值：u32 b
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span><span class="line"><span class="cl"><span class="n">u32</span> <span class="nf">loopLeft</span><span class="p">(</span><span class="n">u32</span> <span class="n">a</span><span class="p">,</span> <span class="kt">short</span> <span class="n">length</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">short</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">a</span> <span class="o">/</span> <span class="mh">0x80000000</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">a</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">        密钥线性变换函数L
+</span></span></span><span class="line"><span class="cl"><span class="cm">        参数：        u32 a
+</span></span></span><span class="line"><span class="cl"><span class="cm">        返回值：线性变换后的u32 a
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span><span class="line"><span class="cl"><span class="n">u32</span> <span class="nf">functionL1</span><span class="p">(</span><span class="n">u32</span> <span class="n">a</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">a</span> <span class="o">^</span> <span class="nf">loopLeft</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">^</span> <span class="nf">loopLeft</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="o">^</span> <span class="nf">loopLeft</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">18</span><span class="p">)</span> <span class="o">^</span> <span class="nf">loopLeft</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">24</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">        密钥线性变换函数L&#39;
+</span></span></span><span class="line"><span class="cl"><span class="cm">        参数：        u32 a
+</span></span></span><span class="line"><span class="cl"><span class="cm">        返回值：移位操作后的u32 a
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span><span class="line"><span class="cl"><span class="n">u32</span> <span class="nf">functionL2</span><span class="p">(</span><span class="n">u32</span> <span class="n">a</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">a</span> <span class="o">^</span> <span class="nf">loopLeft</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span> <span class="o">^</span> <span class="nf">loopLeft</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">23</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">        合成变换T
+</span></span></span><span class="line"><span class="cl"><span class="cm">        参数：        u32 a    short mode：1表示明文的T，调用L；2表示密钥的T，调用L&#39;
+</span></span></span><span class="line"><span class="cl"><span class="cm">        返回值：合成变换后的u32 a
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span><span class="line"><span class="cl"><span class="n">u32</span> <span class="nf">functionT</span><span class="p">(</span><span class="n">u32</span> <span class="n">a</span><span class="p">,</span> <span class="kt">short</span> <span class="n">mode</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">mode</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">?</span> <span class="nf">functionL1</span><span class="p">(</span><span class="nf">functionB</span><span class="p">(</span><span class="n">a</span><span class="p">))</span> <span class="o">:</span> <span class="nf">functionL2</span><span class="p">(</span><span class="nf">functionB</span><span class="p">(</span><span class="n">a</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">        密钥扩展算法第一步
+</span></span></span><span class="line"><span class="cl"><span class="cm">        参数：        MK[4]：密钥  K[4]:中间数据，保存结果        （FK[4]：常数）
+</span></span></span><span class="line"><span class="cl"><span class="cm">        返回值：无
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">extendFirst</span><span class="p">(</span><span class="n">u32</span> <span class="n">MK</span><span class="p">[],</span> <span class="n">u32</span> <span class="n">K</span><span class="p">[])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">K</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">MK</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^</span> <span class="n">FK</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">^</span><span class="mh">0x34343434</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">extendThird</span><span class="p">(</span><span class="n">u32</span> <span class="n">MK</span><span class="p">[],</span> <span class="n">u32</span> <span class="n">K</span><span class="p">[])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">K</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">MK</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^</span> <span class="n">K</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^</span> <span class="mh">0x34343434</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">        密钥扩展算法第二步
+</span></span></span><span class="line"><span class="cl"><span class="cm">        参数：        RK[32]：轮密钥，保存结果    K[4]：中间数据 （CK[32]：固定参数）
+</span></span></span><span class="line"><span class="cl"><span class="cm">        返回值：无
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">extendSecond</span><span class="p">(</span><span class="n">u32</span> <span class="n">RK</span><span class="p">[],</span> <span class="n">u32</span> <span class="n">K</span><span class="p">[])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">short</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">32</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">K</span><span class="p">[(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span> <span class="o">%</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x34343434</span><span class="o">^</span><span class="n">K</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="mi">4</span><span class="p">]</span> <span class="o">^</span> <span class="nf">functionT</span><span class="p">(</span><span class="n">K</span><span class="p">[(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">4</span><span class="p">]</span> <span class="o">^</span> <span class="n">K</span><span class="p">[(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">%</span> <span class="mi">4</span><span class="p">]</span> <span class="o">^</span> <span class="n">K</span><span class="p">[(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span> <span class="o">%</span> <span class="mi">4</span><span class="p">]</span> <span class="o">^</span> <span class="n">CK</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">^</span><span class="mh">0x12121212</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">RK</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">K</span><span class="p">[(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span> <span class="o">%</span> <span class="mi">4</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">        密钥扩展算法
+</span></span></span><span class="line"><span class="cl"><span class="cm">        参数：        MK[4]：密钥     K[4]：中间数据    RK[32]：轮密钥，保存结果
+</span></span></span><span class="line"><span class="cl"><span class="cm">        返回值：无
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">getRK</span><span class="p">(</span><span class="n">u32</span> <span class="n">MK</span><span class="p">[],</span> <span class="n">u32</span> <span class="n">K</span><span class="p">[],</span> <span class="n">u32</span> <span class="n">RK</span><span class="p">[])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">extendFirst</span><span class="p">(</span><span class="n">MK</span><span class="p">,</span> <span class="n">K</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">extendSecond</span><span class="p">(</span><span class="n">RK</span><span class="p">,</span> <span class="n">K</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">//extendThird(MK,K);
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">        迭代32次
+</span></span></span><span class="line"><span class="cl"><span class="cm">        参数：        u32 X[4]：迭代对象，保存结果    u32 RK[32]：轮密钥
+</span></span></span><span class="line"><span class="cl"><span class="cm">        返回值：无
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">iterate32</span><span class="p">(</span><span class="n">u32</span> <span class="n">X</span><span class="p">[],</span> <span class="n">u32</span> <span class="n">RK</span><span class="p">[])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">short</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">32</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">X</span><span class="p">[(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span> <span class="o">%</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="mi">4</span><span class="p">]</span> <span class="o">^</span><span class="mh">0x34343434</span><span class="o">^</span> <span class="nf">functionT</span><span class="p">(</span><span class="n">X</span><span class="p">[(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">4</span><span class="p">]</span> <span class="o">^</span> <span class="n">X</span><span class="p">[(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">%</span> <span class="mi">4</span><span class="p">]</span> <span class="o">^</span> <span class="n">X</span><span class="p">[(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span> <span class="o">%</span> <span class="mi">4</span><span class="p">]</span> <span class="o">^</span> <span class="n">RK</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">^</span><span class="mh">0x12121212</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">        反转函数
+</span></span></span><span class="line"><span class="cl"><span class="cm">        参数；        u32 X[4]：反转对象    u32 Y[4]：反转结果
+</span></span></span><span class="line"><span class="cl"><span class="cm">        返回值：无
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">reverse</span><span class="p">(</span><span class="n">u32</span> <span class="n">X</span><span class="p">[],</span> <span class="n">u32</span> <span class="n">Y</span><span class="p">[])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">short</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">4</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">        加密算法
+</span></span></span><span class="line"><span class="cl"><span class="cm">        参数：        u32 X[4]：明文    u32 RK[32]：轮密钥    u32 Y[4]：密文，保存结果
+</span></span></span><span class="line"><span class="cl"><span class="cm">        返回值：无
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">encryptSM4</span><span class="p">(</span><span class="n">u32</span> <span class="n">X</span><span class="p">[],</span> <span class="n">u32</span> <span class="n">RK</span><span class="p">[],</span> <span class="n">u32</span> <span class="n">Y</span><span class="p">[])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">iterate32</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">RK</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">reverse</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">        解密算法
+</span></span></span><span class="line"><span class="cl"><span class="cm">        参数：         u32 X[4]：密文    u32 RK[32]：轮密钥    u32 Y[4]：明文，保存结果
+</span></span></span><span class="line"><span class="cl"><span class="cm">        返回值：无
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">decryptSM4</span><span class="p">(</span><span class="n">u32</span> <span class="n">X</span><span class="p">[],</span> <span class="n">u32</span> <span class="n">RK</span><span class="p">[],</span> <span class="n">u32</span> <span class="n">Y</span><span class="p">[])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">short</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">u32</span> <span class="n">reverseRK</span><span class="p">[</span><span class="mi">32</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">32</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">reverseRK</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">RK</span><span class="p">[</span><span class="mi">32</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">iterate32</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">reverseRK</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">reverse</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">u32</span> <span class="n">X</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span> <span class="c1">// 明文 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">u32</span> <span class="n">MK</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mh">0x22313</span> <span class="p">,</span><span class="mh">0x821DEF</span> <span class="p">,</span><span class="mh">0x123128</span> <span class="p">,</span><span class="mh">0x43434310</span> <span class="p">};</span> <span class="c1">// 密钥 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">u32</span> <span class="n">RK</span><span class="p">[</span><span class="mi">32</span><span class="p">];</span> <span class="c1">// 轮密钥  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">u32</span> <span class="n">K</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span> <span class="c1">// 中间数据 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">u32</span> <span class="n">Y</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mh">0xC676E86F</span><span class="p">,</span> <span class="mh">0xAD67E8F8</span><span class="p">,</span> <span class="mh">0xCA9DB9AC</span><span class="p">,</span> <span class="mh">0xB1AE068E</span> <span class="p">};</span> <span class="c1">// 密文 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">//u32 Y[4] = { 0xD51B0298, 0xD827C6D3, 0x31A5A335, 0x893A7A66 };
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kt">short</span> <span class="n">i</span><span class="p">;</span> <span class="c1">// 临时变量 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">        <span class="nf">decryptSM4</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">RK</span><span class="p">,</span> <span class="n">X</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;%08x %08x %08x %08x</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div></p>
+<p>flag：WMCTF{CRC32andAnti_IS_SO_EASY!!}</p>
+<h2 id="re1">re1</h2>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 183; 
+			flex-basis: 440px"
+	>
+	<a href="/2024/wmctf/14.png" data-size="1771x964">
+		<img src="/2024/wmctf/14.png"
+			width="1771"
+			height="964"
+			srcset="/2024/wmctf/14_hu4d6a9a348cbb6e2235685d0c9e202e49_96694_480x0_resize_box_3.png 480w, /2024/wmctf/14_hu4d6a9a348cbb6e2235685d0c9e202e49_96694_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure>
+拖入jadx查看主函数，发现加载Encrypt的so文件中的checkyourflag函数，解包apk，so拖入ida <br></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 152; 
+			flex-basis: 365px"
+	>
+	<a href="/2024/wmctf/15.png" data-size="1410x925">
+		<img src="/2024/wmctf/15.png"
+			width="1410"
+			height="925"
+			srcset="/2024/wmctf/15_hud38dce41216a2dd0d3db2948c5be91a4_89946_480x0_resize_box_3.png 480w, /2024/wmctf/15_hud38dce41216a2dd0d3db2948c5be91a4_89946_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure>
+下断点调试不了，后面看官方wp才知道是因为动态注册的原因
+<br></p>
+<p><mark>JNI注册方法分为静态注册和动态注册，静态注册的方法可以在IDA的函数窗口或者导出表中直接找到，比较简单。动态注册的方法需要分析JNI_OnLoad函数</mark>
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 167; 
+			flex-basis: 401px"
+	>
+	<a href="/2024/wmctf/16.png" data-size="1041x622">
+		<img src="/2024/wmctf/16.png"
+			width="1041"
+			height="622"
+			srcset="/2024/wmctf/16_huaddc60ce6222a82a6ee9904e90a80a00_57234_480x0_resize_box_3.png 480w, /2024/wmctf/16_huaddc60ce6222a82a6ee9904e90a80a00_57234_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure>
+从图片可以得知题目使用bytehook直接把几个函数hook了
+<br>
+接下来回到真正的check函数处，看到了被hook的函数，接下来就可以下断点慢慢调试了
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 151; 
+			flex-basis: 364px"
+	>
+	<a href="/2024/wmctf/17.png" data-size="1123x739">
+		<img src="/2024/wmctf/17.png"
+			width="1123"
+			height="739"
+			srcset="/2024/wmctf/17_hu4a3455edf51ce97dd2faf69b6773bdd6_62214_480x0_resize_box_3.png 480w, /2024/wmctf/17_hu4a3455edf51ce97dd2faf69b6773bdd6_62214_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure>
+经过分析，我们可以知道这是一个普通的xtea+魔改，异或了0x5A
+<br>
+下面是脚本
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">ctypes</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">decrypt</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">v0</span><span class="p">,</span> <span class="n">v1</span> <span class="o">=</span> <span class="n">c_uint32</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">c_uint32</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">    <span class="n">delta</span> <span class="o">=</span> <span class="mh">0x5EEFEF3</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">total</span> <span class="o">=</span> <span class="n">c_uint32</span><span class="p">(</span><span class="mi">0</span> <span class="o">-</span> <span class="p">(</span><span class="n">delta</span> <span class="o">*</span> <span class="mi">66</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">66</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">v1</span><span class="o">.</span><span class="n">value</span> <span class="o">-=</span> <span class="p">(((</span><span class="n">v0</span><span class="o">.</span><span class="n">value</span> <span class="o">&lt;&lt;</span> <span class="mi">6</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">v0</span><span class="o">.</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="mi">6</span><span class="p">))</span> <span class="o">+</span> <span class="n">v0</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">total</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="n">key</span><span class="p">[((</span><span class="n">total</span><span class="o">.</span><span class="n">value</span> <span class="o">&amp;</span> <span class="mh">0xff</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">6</span><span class="p">)])</span>
+</span></span><span class="line"><span class="cl">        <span class="n">total</span><span class="o">.</span><span class="n">value</span> <span class="o">+=</span> <span class="n">delta</span>
+</span></span><span class="line"><span class="cl">        <span class="n">v0</span><span class="o">.</span><span class="n">value</span> <span class="o">-=</span> <span class="p">(((</span><span class="n">v1</span><span class="o">.</span><span class="n">value</span> <span class="o">&lt;&lt;</span> <span class="mi">6</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">v1</span><span class="o">.</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="mi">6</span><span class="p">))</span> <span class="o">+</span> <span class="n">v1</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">total</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="n">key</span><span class="p">[</span><span class="n">total</span><span class="o">.</span><span class="n">value</span> <span class="o">&amp;</span> <span class="mi">3</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">v0</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">v1</span><span class="o">.</span><span class="n">value</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">xtea</span><span class="p">(</span><span class="n">inp</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="kn">from</span> <span class="nn">struct</span> <span class="kn">import</span> <span class="n">pack</span><span class="p">,</span> <span class="n">unpack</span>
+</span></span><span class="line"><span class="cl">    <span class="n">k</span> <span class="o">=</span> <span class="n">unpack</span><span class="p">(</span><span class="s2">&#34;&lt;4I&#34;</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">inp_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span> <span class="o">//</span> <span class="mi">4</span>
+</span></span><span class="line"><span class="cl">    <span class="n">value</span> <span class="o">=</span> <span class="n">unpack</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;&lt;</span><span class="si">{</span><span class="n">inp_len</span><span class="si">}</span><span class="s2">I&#34;</span><span class="p">,</span> <span class="n">inp</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">res</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inp_len</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">v</span> <span class="o">=</span> <span class="p">[</span><span class="n">value</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">value</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># x = encrypt(v,k)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">x</span> <span class="o">=</span> <span class="n">decrypt</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">res</span> <span class="o">+=</span> <span class="n">pack</span><span class="p">(</span><span class="s2">&#34;&lt;2I&#34;</span><span class="p">,</span> <span class="o">*</span><span class="n">x</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">res</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">cip</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">([</span><span class="mh">0xD2</span><span class="p">,</span> <span class="mh">0x5F</span><span class="p">,</span> <span class="mh">0xC0</span><span class="p">,</span> <span class="mh">0xEF</span><span class="p">,</span> <span class="mh">0x5E</span><span class="p">,</span> <span class="mh">0x62</span><span class="p">,</span> <span class="mh">0x78</span><span class="p">,</span> <span class="mh">0x93</span><span class="p">,</span> <span class="mh">0xA0</span><span class="p">,</span> <span class="mh">0x41</span><span class="p">,</span> <span class="mh">0x1F</span><span class="p">,</span> <span class="mh">0x84</span><span class="p">,</span> <span class="mh">0x4A</span><span class="p">,</span> <span class="mh">0x5F</span><span class="p">,</span> <span class="mh">0xD0</span><span class="p">,</span> <span class="mh">0x06</span><span class="p">,</span> <span class="mh">0x9A</span><span class="p">,</span> <span class="mh">0x8F</span><span class="p">,</span> <span class="mh">0x89</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">     <span class="mh">0xDC</span><span class="p">,</span> <span class="mh">0xFC</span><span class="p">,</span> <span class="mh">0x7C</span><span class="p">,</span> <span class="mh">0xAA</span><span class="p">,</span> <span class="mh">0x21</span><span class="p">,</span> <span class="mh">0x0B</span><span class="p">,</span> <span class="mh">0xFB</span><span class="p">,</span> <span class="mh">0x29</span><span class="p">,</span> <span class="mh">0x42</span><span class="p">,</span> <span class="mh">0x8B</span><span class="p">,</span> <span class="mh">0x2B</span><span class="p">,</span> <span class="mh">0xE5</span><span class="p">,</span> <span class="mh">0x31</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl"><span class="n">key</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">([</span><span class="mh">0xFF</span><span class="p">,</span> <span class="mh">0xFF</span><span class="p">,</span> <span class="mh">0xFF</span><span class="p">,</span> <span class="mh">0xFF</span><span class="p">,</span> <span class="mh">0xAA</span><span class="p">,</span> <span class="mh">0xAA</span><span class="p">,</span> <span class="mh">0xAA</span><span class="p">,</span> <span class="mh">0xAA</span><span class="p">,</span> <span class="mh">0x11</span><span class="p">,</span> <span class="mh">0x11</span><span class="p">,</span> <span class="mh">0x11</span><span class="p">,</span> <span class="mh">0x11</span><span class="p">,</span> <span class="mh">0x11</span><span class="p">,</span> <span class="mh">0x11</span><span class="p">,</span> <span class="mh">0x11</span><span class="p">,</span> <span class="mh">0x11</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl"><span class="n">ret</span> <span class="o">=</span> <span class="n">xtea</span><span class="p">(</span><span class="n">cip</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ret</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ret</span><span class="p">)):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ret</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^=</span> <span class="n">i</span> <span class="o">^</span> <span class="mh">0x5a</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">ret</span><span class="p">))</span></span></span></code></pre></td></tr></table>
+</div>
+</div></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E5%A4%8D%E7%8E%B0/">复现</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+</aside>
+
+     
+    
+
+    <footer class="site-footer">
+  
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+
+<script>
+(function(u, c) {
+  var d = document, t = 'script', o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+  o.src = u;
+  if (c) { o.addEventListener('load', function(e) { c(e); }); }
+  s.parentNode.insertBefore(o, s);
+})('//cdn.bootcss.com/pangu/3.3.0/pangu.min.js', function() {
+  pangu.spacingPage();
+});
+</script>
+
+    <section class="copyright">
+        &copy; 
+        
+        2024 <a href="https://stack-theme-mod.vercel.app/">Example Site</a>·<i class="fas fa-bell"></i> <a id="days">0</a>Days<br>
+      共书写了2.8k字·共 1篇文章</br><span><p>
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.2.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a><br />
+         <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">© Licensed Under CC BY-NC-SA 4.0</a>
+    </section>
+
+<script>
+var s1 = '2024-07-15';
+s1 = new Date(s1.replace(/-/g, "/"));
+s2 = new Date();
+var days = s2.getTime() - s1.getTime();
+var number_of_days = parseInt(days / (1000 * 60 * 60 * 24));
+document.getElementById('days').innerHTML = number_of_days;
+</script>
+    
+</footer>
+
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+    
+    
+    <aside class="sidebar right-sidebar sticky">
+        
+            <form action="/search/" class="search-form widget" >
+        <p>
+            <label>Search</label>
+            <input name="keyword" required placeholder="Type something..." />
+        
+            <button title="Search">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+            </button>
+        </p>
+    </form>
+        
+            
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#rustdriod">Rustdriod</a></li>
+    <li><a href="#ez_learn">ez_learn</a></li>
+    <li><a href="#re1">re1</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+        
+            <section class="widget categories">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-infinity" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M9.828 9.172a4 4 0 1 0 0 5.656 a10 10 0 0 0 2.172 -2.828a10 10 0 0 1 2.172 -2.828 a4 4 0 1 1 0 5.656a10 10 0 0 1 -2.172 -2.828a10 10 0 0 0 -2.172 -2.828" />
+</svg>
+
+
+  
+        </div> 
+        <h2 class="widget-title section-title">Categories</h2>
+    <div class="widget-categories--list">
+<div class="widget">
+    <h3 class="widget-title"> </h3>
+    <div class="widget-body">
+        <div class="category-list">
+            <div class="category-list-item"><a href="https://mkkkk-create.github.io/categories/ctf/" class="category-list-link">ctf<span class="category-list-count">1</a>
+            </span></div>
+        </div>
+    </div>
+</div>
+    </div>
+    </section>
+        
+            <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-infinity" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M9.828 9.172a4 4 0 1 0 0 5.656 a10 10 0 0 0 2.172 -2.828a10 10 0 0 1 2.172 -2.828 a4 4 0 1 1 0 5.656a10 10 0 0 1 -2.172 -2.828a10 10 0 0 0 -2.172 -2.828" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Archives</h2>
+
+        
+        
+        
+        
+        
+        <div class="widget-archive--list">
+            <div class="archives-year">
+                    <a href="/archives/#2024">
+                        
+                            <span class="year">2024</span>
+                            <span class="count">1</span>
+                        
+                    </a> 
+                </div>
+            
+        </div>
+    </section>
+        
+            <section class="widget tagCloud">
+    <div class="widget-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+    </div>
+    <h2 class="widget-title section-title">Tags</h2>
+
+    <div class="tagCloud-tags">
+        
+            <a href="/tags/%E5%A4%8D%E7%8E%B0/" class="font_size_1">
+                复现
+            </a>
+        
+    </div>
+</section>
+        
+    </aside>
+
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

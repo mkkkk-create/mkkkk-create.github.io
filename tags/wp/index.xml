@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Wp on mkkkk</title>
-    <link>https://mkkkk-create.github.io/tags/wp/</link>
-    <description>Recent content in Wp on mkkkk</description>
+    <title>WP on mkkkk</title>
+    <link>http://localhost:1313/tags/wp/</link>
+    <description>Recent content in WP on mkkkk</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 16 Jul 2024 11:46:31 +0800</lastBuildDate>
-    <atom:link href="https://mkkkk-create.github.io/tags/wp/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 16 Aug 2024 11:03:14 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/wp/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Test 2</title>
-      <link>https://mkkkk-create.github.io/2024/test-2/</link>
-      <pubDate>Tue, 16 Jul 2024 11:46:31 +0800</pubDate>
-      <guid>https://mkkkk-create.github.io/2024/test-2/</guid>
-      <description>中文测试 这是一次测试 图片引用 Photo by Florian Klauer on Unsplash</description>
+      <title>LIT CTF</title>
+      <link>http://localhost:1313/2024/lit-ctf/</link>
+      <pubDate>Fri, 16 Aug 2024 11:03:14 +0800</pubDate>
+      <guid>http://localhost:1313/2024/lit-ctf/</guid>
+      <description>2024LIT CTF Reverse方向WP+复现 [2/6] forgotten message 下载下来文件，查壳 无壳，拖进ida里面 shift+F12查看字符串 发现flag就藏在里面 Burger Reviewer 下下来发现</description>
     </item>
   </channel>
 </rss>
