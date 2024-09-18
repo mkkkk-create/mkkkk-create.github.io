@@ -6,8 +6,15 @@
     <description>Recent content in CTF on mkkkk</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 11 Sep 2024 07:37:15 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 18 Sep 2024 00:57:35 +0800</lastBuildDate>
     <atom:link href="https://mkkkk-create.github.io/categories/ctf/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Base64算法详解</title>
+      <link>https://mkkkk-create.github.io/2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/</link>
+      <pubDate>Wed, 18 Sep 2024 00:57:35 +0800</pubDate>
+      <guid>https://mkkkk-create.github.io/2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/</guid>
+      <description>编码原理 Base64编码是将字符串以每3个8比特(bit)的字节子序列拆分成4个6比特(bit)的字节(6比特有效字节，其实也是8比特的字节</description>
+    </item>
     <item>
       <title>WMCTF</title>
       <link>https://mkkkk-create.github.io/2024/wmctf/</link>

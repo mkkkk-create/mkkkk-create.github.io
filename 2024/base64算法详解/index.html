@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en-us">
-    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content=''><title>Post</title>
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='编码原理 Base64编码是将字符串以每3个8比特(bit)的字节子序列拆分成4个6比特(bit)的字节(6比特有效字节，其实也是8比特的字节'><title>Base64算法详解</title>
 
-<link rel='canonical' href='http://localhost:1313/2024/post/'>
+<link rel='canonical' href='https://mkkkk-create.github.io/2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/'>
 
-<link rel="stylesheet" href="/scss/style.min.e6c6a8eb379099a52a1148e4f0a5152d4590bfbcd698edad53dbb030ed6b66d3.css"><meta property='og:title' content='Post'>
-<meta property='og:description' content=''>
-<meta property='og:url' content='http://localhost:1313/2024/post/'>
+<link rel="stylesheet" href="/scss/style.min.e6c6a8eb379099a52a1148e4f0a5152d4590bfbcd698edad53dbb030ed6b66d3.css"><meta property='og:title' content='Base64算法详解'>
+<meta property='og:description' content='编码原理 Base64编码是将字符串以每3个8比特(bit)的字节子序列拆分成4个6比特(bit)的字节(6比特有效字节，其实也是8比特的字节'>
+<meta property='og:url' content='https://mkkkk-create.github.io/2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/'>
 <meta property='og:site_name' content='mkkkk'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-09-18T00:57:35&#43;08:00'/><meta property='article:modified_time' content='2024-09-18T00:57:35&#43;08:00'/>
-<meta name="twitter:title" content="Post">
-<meta name="twitter:description" content="">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='加密算法' /><meta property='article:published_time' content='2024-09-18T00:57:35&#43;08:00'/><meta property='article:modified_time' content='2024-09-18T00:57:35&#43;08:00'/>
+<meta name="twitter:title" content="Base64算法详解">
+<meta name="twitter:description" content="编码原理 Base64编码是将字符串以每3个8比特(bit)的字节子序列拆分成4个6比特(bit)的字节(6比特有效字节，其实也是8比特的字节">
   
 
 <style>
@@ -65,7 +65,7 @@
 ">
     
 <div id="article-toolbar">
-    <a href="http://localhost:1313/" class="back-home">
+    <a href="https://mkkkk-create.github.io/" class="back-home">
         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <polyline points="15 6 9 12 15 18" />
@@ -287,9 +287,17 @@
 
     <div class="article-details">
     
+    <header class="article-category">
+        
+            <a href="/categories/ctf/" >
+                CTF
+            </a>
+        
+    </header>
+    
 
     <h2 class="article-title">
-        <a href="/2024/post/">Post</a>
+        <a href="/2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/">Base64算法详解</a>
     </h2>
 
     
@@ -322,7 +330,7 @@
 
 
                 <time class="article-words">
-                    0字
+                    757字
                 </time>
             </div>
         
@@ -334,12 +342,199 @@
     <section class="article-content">
     
     
-    
+    <h1 id="编码原理">编码原理</h1>
+<p>Base64编码是将字符串以每3个8比特(bit)的字节子序列拆分成4个6比特(bit)的字节(6比特有效字节，其实也是8比特的字节，只是最左边两个比特永远为0)子序列，再将得到的子序列查找Base64的编码索引表，得到对应的字符拼接成新的字符串的一种编码方式。</p>
+<h2 id="举例">举例</h2>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 260; 
+			flex-basis: 626px"
+	>
+	<a href="/2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/1.png" data-size="1174x450">
+		<img src="/2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/1.png"
+			width="1174"
+			height="450"
+			srcset="/2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/1_hu66d0c0d229e3660e102e9cc2bb85bed5_234949_480x0_resize_box_3.png 480w, /2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/1_hu66d0c0d229e3660e102e9cc2bb85bed5_234949_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="图摘自知乎">
+	</a>
+	
+	<figcaption>图摘自知乎</figcaption>
+	
+</figure>
+（1）.先将原文转为ASCII码<br>
+（2）.将ASCII码转为二进制数<br>
+（3）.将二进制数合并，每八个二进制位为一组，将每一组按照索引表对应相应的base64码<br></p>
+<p><mark> 注：如果编码内容字节数不是3的整数倍！！！ </mark><br>
+1.如果最后剩下1个字节，那么将补 4个 0 位，编码成 2个 Base64 字符，然后补两个&quot;=&quot;
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 257; 
+			flex-basis: 617px"
+	>
+	<a href="/2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/2.png" data-size="1129x439">
+		<img src="/2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/2.png"
+			width="1129"
+			height="439"
+			srcset="/2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/2_hu6c68874b16554f0ee43754daa9ef1853_193478_480x0_resize_box_3.png 480w, /2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/2_hu6c68874b16554f0ee43754daa9ef1853_193478_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="图摘自知乎">
+	</a>
+	
+	<figcaption>图摘自知乎</figcaption>
+	
+</figure><br>
+2.如果最后剩下 2 个字节，那么将补 2 个 0 位，编码成 3 个 Base64 字符，然后补一个&quot;=&quot;
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 238; 
+			flex-basis: 572px"
+	>
+	<a href="/2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/3.png" data-size="1119x469">
+		<img src="/2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/3.png"
+			width="1119"
+			height="469"
+			srcset="/2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/3_huc3e003611086238286ecc2019bb05e1e_59124_480x0_resize_box_3.png 480w, /2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/3_huc3e003611086238286ecc2019bb05e1e_59124_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="图摘自知乎">
+	</a>
+	
+	<figcaption>图摘自知乎</figcaption>
+	
+</figure>
+在知道了加密原理之后我们就可以逆向解密<br>
+先找出编码后的字符在编码之前代表的数字<br>
+编码中将3位个字符变成4个字符，得到这4个字符的每个字符代表的原本数字<br>
+因为在编码中间每个字符用base64码表进行了替换，所以这里要先换回来<br>
+在对换回来的数字进行位运算使其还原成3个字符
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="c1">// Base64字符表
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">static</span> <span class="k">const</span> <span class="kt">char</span> <span class="n">base64_chars</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&#34;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 将Base64字符转换为其对应的整数值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">int</span> <span class="nf">base64_value</span><span class="p">(</span><span class="kt">char</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">64</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">base64_chars</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 将Base64字符串解码为原始数据
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">base64_decode</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">input</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">output</span><span class="p">,</span> <span class="kt">int</span> <span class="n">output_size</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">input_size</span> <span class="o">=</span> <span class="nf">strlen</span><span class="p">(</span><span class="n">input</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">temp</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">input_size</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">temp</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nf">base64_value</span><span class="p">(</span><span class="n">input</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">k</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">output</span><span class="p">[</span><span class="n">j</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">k</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">output</span><span class="p">[</span><span class="n">j</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">temp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&amp;</span> <span class="mh">0x0F</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">4</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;&gt;</span> <span class="mi">2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">k</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">output</span><span class="p">[</span><span class="n">j</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">temp</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&amp;</span> <span class="mh">0x03</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">6</span><span class="p">)</span> <span class="o">|</span> <span class="n">temp</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">output</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">input</span> <span class="o">=</span> <span class="s">&#34;SGVsbG8sIFdvcmxkIQ==&#34;</span><span class="p">;</span> <span class="c1">// &#34;Hello, World!&#34;的Base64编码
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">output</span><span class="p">[</span><span class="nf">strlen</span><span class="p">(</span><span class="n">input</span><span class="p">)];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">base64_encode</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">base64_decode</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">output</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Decoded string: %s&#34;</span><span class="p">,</span> <span class="n">output</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div></p>
+
 </section>
 
 
     <footer class="article-footer">
     
+    <section class="article-tags">
+        
+            <a href="/tags/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/">加密算法</a>
+        
+    </section>
+
 
     
     <section class="article-copyright">
@@ -362,6 +557,25 @@
     <aside class="related-contents--wrapper">
     
     
+        <h2 class="section-title">Related contents</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/2024/wmctf/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">WMCTF</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
 </aside>
 
      
@@ -370,8 +584,6 @@
     <footer class="site-footer">
   
 
-
-    
 
     
 
@@ -402,7 +614,7 @@
         &copy; 
         
         2024 <a href="https://stack-theme-mod.vercel.app/">Example Site</a>·<i class="fas fa-bell"></i> <a id="days">0</a>Days<br>
-      共书写了3.1k字·共 3篇文章</br><span><p>
+      共书写了3.6k字·共 2篇文章</br><span><p>
     </section>
     
     <section class="powerby">
@@ -544,7 +756,7 @@ document.getElementById('days').innerHTML = number_of_days;
     <h3 class="widget-title"> </h3>
     <div class="widget-body">
         <div class="category-list">
-            <div class="category-list-item"><a href="http://localhost:1313/categories/ctf/" class="category-list-link">ctf<span class="category-list-count">2</a>
+            <div class="category-list-item"><a href="https://mkkkk-create.github.io/categories/ctf/" class="category-list-link">ctf<span class="category-list-count">2</a>
             </span></div>
         </div>
     </div>
@@ -574,7 +786,7 @@ document.getElementById('days').innerHTML = number_of_days;
                     <a href="/archives/#2024">
                         
                             <span class="year">2024</span>
-                            <span class="count">3</span>
+                            <span class="count">2</span>
                         
                     </a> 
                 </div>
@@ -597,12 +809,12 @@ document.getElementById('days').innerHTML = number_of_days;
 
     <div class="tagCloud-tags">
         
-            <a href="/tags/%E5%A4%8D%E7%8E%B0/" class="font_size_2">
-                复现
+            <a href="/tags/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" class="font_size_1">
+                加密算法
             </a>
         
-            <a href="/tags/wp/" class="font_size_1">
-                WP
+            <a href="/tags/%E5%A4%8D%E7%8E%B0/" class="font_size_1">
+                复现
             </a>
         
     </div>
