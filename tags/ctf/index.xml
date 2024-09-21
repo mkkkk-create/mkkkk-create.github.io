@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CTF on mkkkk</title>
+    <link>https://mkkkk-create.github.io/tags/ctf/</link>
+    <description>Recent content in CTF on mkkkk</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 20 Sep 2024 11:17:49 +0800</lastBuildDate>
+    <atom:link href="https://mkkkk-create.github.io/tags/ctf/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>从工具到手动学会UPX脱壳</title>
+      <link>https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9Aupx%E8%84%B1%E5%A3%B3/</link>
+      <pubDate>Fri, 20 Sep 2024 11:17:49 +0800</pubDate>
+      <guid>https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9Aupx%E8%84%B1%E5%A3%B3/</guid>
+      <description>本篇博客以BaseCTF的UPX压缩壳的三道题目为基础进行讲解 什么是压缩壳 加壳：其实是利用特殊的算法，对EXE、DLL文件里的资源进行压缩。</description>
+    </item>
+    <item>
+      <title>Base64算法详解</title>
+      <link>https://mkkkk-create.github.io/2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/</link>
+      <pubDate>Wed, 18 Sep 2024 00:57:35 +0800</pubDate>
+      <guid>https://mkkkk-create.github.io/2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/</guid>
+      <description>编码原理 Base64编码是将字符串以每3个8比特(bit)的字节子序列拆分成4个6比特(bit)的字节(6比特有效字节，其实也是8比特的字节</description>
+    </item>
+    <item>
+      <title>WMCTF</title>
+      <link>https://mkkkk-create.github.io/2024/wmctf/</link>
+      <pubDate>Wed, 11 Sep 2024 07:37:15 +0800</pubDate>
+      <guid>https://mkkkk-create.github.io/2024/wmctf/</guid>
+      <description>2024WMCTF Re复现 Rustdriod 发现是apk文件，拖入jadx查看 发现加载wmcheck的包，apktool解包打开so文件，定位到check函数 我们发现这是类</description>
+    </item>
+  </channel>
+</rss>

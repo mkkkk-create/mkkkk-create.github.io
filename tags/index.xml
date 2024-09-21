@@ -6,8 +6,22 @@
     <description>Recent content in Tags on mkkkk</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 18 Sep 2024 00:57:35 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 20 Sep 2024 11:17:49 +0800</lastBuildDate>
     <atom:link href="https://mkkkk-create.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CTF</title>
+      <link>https://mkkkk-create.github.io/tags/ctf/</link>
+      <pubDate>Fri, 20 Sep 2024 11:17:49 +0800</pubDate>
+      <guid>https://mkkkk-create.github.io/tags/ctf/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>UPX压缩壳</title>
+      <link>https://mkkkk-create.github.io/tags/upx%E5%8E%8B%E7%BC%A9%E5%A3%B3/</link>
+      <pubDate>Fri, 20 Sep 2024 11:17:49 +0800</pubDate>
+      <guid>https://mkkkk-create.github.io/tags/upx%E5%8E%8B%E7%BC%A9%E5%A3%B3/</guid>
+      <description></description>
+    </item>
     <item>
       <title>加密算法</title>
       <link>https://mkkkk-create.github.io/tags/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/</link>
@@ -16,10 +30,10 @@
       <description></description>
     </item>
     <item>
-      <title>复现</title>
-      <link>https://mkkkk-create.github.io/tags/%E5%A4%8D%E7%8E%B0/</link>
+      <title>Writeup</title>
+      <link>https://mkkkk-create.github.io/tags/writeup/</link>
       <pubDate>Wed, 11 Sep 2024 07:37:15 +0800</pubDate>
-      <guid>https://mkkkk-create.github.io/tags/%E5%A4%8D%E7%8E%B0/</guid>
+      <guid>https://mkkkk-create.github.io/tags/writeup/</guid>
       <description></description>
     </item>
   </channel>
