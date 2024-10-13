@@ -6,8 +6,22 @@
     <description>Recent content in Writeup on mkkkk</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 11 Sep 2024 07:37:15 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 11 Oct 2024 18:46:04 +0800</lastBuildDate>
     <atom:link href="https://mkkkk-create.github.io/tags/writeup/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>0xgame</title>
+      <link>https://mkkkk-create.github.io/2024/0xgame/</link>
+      <pubDate>Fri, 11 Oct 2024 18:46:04 +0800</pubDate>
+      <guid>https://mkkkk-create.github.io/2024/0xgame/</guid>
+      <description>0xGame RE WP Week1 BabyBase 查壳无壳ida打开，进入主函数 发现有个encode函数，跟进 发现是普通的base64加密，拿到密文之后用cyber解一下即可 0xGame{N0w_y0u_kn0w_B4se64_Enc0d1ng_w3ll!} BinaryMaster 查</description>
+    </item>
+    <item>
+      <title>第二届黄河流域网络安全技能挑战赛</title>
+      <link>https://mkkkk-create.github.io/2024/%E7%AC%AC%E4%BA%8C%E5%B1%8A%E9%BB%84%E6%B2%B3%E6%B5%81%E5%9F%9F%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%8A%80%E8%83%BD%E6%8C%91%E6%88%98%E8%B5%9B/</link>
+      <pubDate>Sun, 22 Sep 2024 19:20:28 +0800</pubDate>
+      <guid>https://mkkkk-create.github.io/2024/%E7%AC%AC%E4%BA%8C%E5%B1%8A%E9%BB%84%E6%B2%B3%E6%B5%81%E5%9F%9F%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%8A%80%E8%83%BD%E6%8C%91%E6%88%98%E8%B5%9B/</guid>
+      <description>复现了一下久远的比赛哈哈哈 easypyc 题目直接给了pyc文件，我们直接uncompyle6反编译 可以看到图片中显示反汇编失败原因，我们知道这是pyth</description>
+    </item>
     <item>
       <title>WMCTF</title>
       <link>https://mkkkk-create.github.io/2024/wmctf/</link>

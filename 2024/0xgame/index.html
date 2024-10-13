@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='0xGame RE WP Week1 BabyBase 查壳无壳ida打开，进入主函数 发现有个encode函数，跟进 发现是普通的base64加密，拿到密文之后用cyber解一下即可 0xGame{N0w_y0u_kn0w_B4se64_Enc0d1ng_w3ll!} BinaryMaster 查'><title>0xgame</title>
+
+<link rel='canonical' href='https://mkkkk-create.github.io/2024/0xgame/'>
+
+<link rel="stylesheet" href="/scss/style.min.e6c6a8eb379099a52a1148e4f0a5152d4590bfbcd698edad53dbb030ed6b66d3.css"><meta property='og:title' content='0xgame'>
+<meta property='og:description' content='0xGame RE WP Week1 BabyBase 查壳无壳ida打开，进入主函数 发现有个encode函数，跟进 发现是普通的base64加密，拿到密文之后用cyber解一下即可 0xGame{N0w_y0u_kn0w_B4se64_Enc0d1ng_w3ll!} BinaryMaster 查'>
+<meta property='og:url' content='https://mkkkk-create.github.io/2024/0xgame/'>
+<meta property='og:site_name' content='mkkkk'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Writeup' /><meta property='article:tag' content='CTF' /><meta property='article:published_time' content='2024-10-11T18:46:04&#43;08:00'/><meta property='article:modified_time' content='2024-10-11T18:46:04&#43;08:00'/>
+<meta name="twitter:title" content="0xgame">
+<meta name="twitter:description" content="0xGame RE WP Week1 BabyBase 查壳无壳ida打开，进入主函数 发现有个encode函数，跟进 发现是普通的base64加密，拿到密文之后用cyber解一下即可 0xGame{N0w_y0u_kn0w_B4se64_Enc0d1ng_w3ll!} BinaryMaster 查">
+  
+
+<style>
+    :root {
+        --article-font-family: "Noto Serif SC", var(--base-font-family);
+    }
+</style>
+
+<script> 
+		(function () {
+		    const customFont = document.createElement('link');
+		    customFont.href = "https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;700&display=swap"; 
+		    customFont.type = "text/css";
+		    customFont.rel = "stylesheet";
+		
+		    document.head.appendChild(customFont);
+		}());
+</script>
+
+    </head>
+    <body class="
+    article-page
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    <!-- 
+        extended
+     -->
+    on-phone--column extended
+">
+    
+<div id="article-toolbar">
+    <a href="https://mkkkk-create.github.io/" class="back-home">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+        <span>Back</span>
+    </a>
+</div>
+    <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hucc22f317b722483cb6f9ebca57a3518b_11388_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <h1 class="site-name"><a href="/">mkkkk</a></h1>
+        <h2 class="site-description">逆向小菜鸟</h2><ol class="social-menu">
+                
+                    <li>
+                        <a 
+                            href='https://github.com/mkkkk-create'
+                            target="_blank"
+                            title="GitHub"
+                        >
+                            
+                            
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a 
+                            href='2418747278@qq.com'
+                            target="_blank"
+                            title="QQ Mail"
+                        >
+                            
+                            
+                                <?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="body_1" width="24" height="24">
+
+<g transform="matrix(1.3333334 0 0 1.3333334 0 0)">
+    <image  x="0" y="0" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADoSURBVEhL7dRfCgFBHMDxjTfFAZRcQSlnICkvruAKruAKruDFg1Mo5Qry5wCUN+L70/w0a2Z2293SPvjWp6b57c4UEv0rVUOc8CzoiAGcZOB7IY8DnHRYtOA5OlijLRsZa2KJ1AvEDTNUkVYFU1xhn+GkgxH2Zr1DD6E62ECePWNi1uKTbtiDGua444EFGtB88zok+5x39uGxAXWxhezLL2NsyFr2ZCbP2PnOSUw/4wv05aTvKPMFWgsrQ9ahnAt041venPftQ215K/p+ar+/QDdCNN8sJPZn53vApvlmPnJ4H/9KURS9AMRjoJPa2qZXAAAAAElFTkSuQmCC" preserveAspectRatio="none" width="18" height="18"/>
+</g>
+</svg>
+
+                            
+                        </a>
+                    </li>
+                
+            </ol></header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>friends</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+
+        
+            <li id="dark-mode-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <span>Dark Mode</span>
+            </li>
+        
+    </ol>
+</aside>
+
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/" >
+                逆向工程
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/2024/0xgame/">0xgame</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Oct 11, 2024</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-words">
+                    383字
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="0xgame-re-wp">0xGame RE WP</h1>
+<br>
+<h2 id="week1">Week1</h2>
+<h3 id="babybase">BabyBase</h3>
+<p>查壳无壳ida打开，进入主函数
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 218; 
+			flex-basis: 523px"
+	>
+	<a href="/2024/0xgame/1.png" data-size="1114x511">
+		<img src="/2024/0xgame/1.png"
+			width="1114"
+			height="511"
+			srcset="/2024/0xgame/1_hu37ecfaff33a28b81c94c2a37e4da4621_48722_480x0_resize_box_3.png 480w, /2024/0xgame/1_hu37ecfaff33a28b81c94c2a37e4da4621_48722_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>发现有个encode函数，跟进
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 148; 
+			flex-basis: 357px"
+	>
+	<a href="/2024/0xgame/2.png" data-size="1354x910">
+		<img src="/2024/0xgame/2.png"
+			width="1354"
+			height="910"
+			srcset="/2024/0xgame/2_hub7fda82e974ee736de7b67e3af5554dc_84005_480x0_resize_box_3.png 480w, /2024/0xgame/2_hub7fda82e974ee736de7b67e3af5554dc_84005_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p>发现是普通的base64加密，拿到密文之后用cyber解一下即可
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 147; 
+			flex-basis: 352px"
+	>
+	<a href="/2024/0xgame/3.png" data-size="963x655">
+		<img src="/2024/0xgame/3.png"
+			width="963"
+			height="655"
+			srcset="/2024/0xgame/3_hu38bbb77341757c5eeaceee71c4d9751f_43270_480x0_resize_box_3.png 480w, /2024/0xgame/3_hu38bbb77341757c5eeaceee71c4d9751f_43270_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+<p><mark>0xGame{N0w_y0u_kn0w_B4se64_Enc0d1ng_w3ll!}</mark></p>
+<h3 id="binarymaster">BinaryMaster</h3>
+<p>查壳发现无壳，ida打开，打开之后F5反编译就看到flag了 <br>
+<mark>0xGame{114514cc-a3a7-4e36-8db1-5f224b776271}</mark></p>
+<h3 id="signsign">SignSign</h3>
+<p>无壳拖进ida
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 216; 
+			flex-basis: 518px"
+	>
+	<a href="/2024/0xgame/4.png" data-size="910x421">
+		<img src="/2024/0xgame/4.png"
+			width="910"
+			height="421"
+			srcset="/2024/0xgame/4_hua2a2fc9f29a4b0a9335e406f6b24183e_31287_480x0_resize_box_3.png 480w, /2024/0xgame/4_hua2a2fc9f29a4b0a9335e406f6b24183e_31287_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure> <br>
+发现这一段很像flag，尝试找找有没有前面部分的，shift+F12查看字符串找到前面部分
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 233; 
+			flex-basis: 561px"
+	>
+	<a href="/2024/0xgame/5.png" data-size="1146x490">
+		<img src="/2024/0xgame/5.png"
+			width="1146"
+			height="490"
+			srcset="/2024/0xgame/5_huad013e316a3f5cd9a6d16e39c35546ac_86120_480x0_resize_box_3.png 480w, /2024/0xgame/5_huad013e316a3f5cd9a6d16e39c35546ac_86120_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure>
+<mark> 0xGame{S1gn1n_h3r3_4nd_b3g1n_Reversing_n0w} </mark></p>
+<h3 id="xor-beginning">Xor-Beginning</h3>
+<p>无壳放进ida，查看主函数
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 193; 
+			flex-basis: 464px"
+	>
+	<a href="/2024/0xgame/6.png" data-size="960x496">
+		<img src="/2024/0xgame/6.png"
+			width="960"
+			height="496"
+			srcset="/2024/0xgame/6_hucfb1bfff1e7c75195272ca4bd7c955db_41808_480x0_resize_box_3.png 480w, /2024/0xgame/6_hucfb1bfff1e7c75195272ca4bd7c955db_41808_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure>
+发现一处异或
+解密脚本如下
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">a</span> <span class="o">=</span> <span class="p">[</span>  <span class="mi">126</span><span class="p">,</span>  <span class="mi">53</span><span class="p">,</span>  <span class="mi">11</span><span class="p">,</span>  <span class="mi">42</span><span class="p">,</span>  <span class="mi">39</span><span class="p">,</span>  <span class="mi">44</span><span class="p">,</span>  <span class="mi">51</span><span class="p">,</span>  <span class="mi">31</span><span class="p">,</span> <span class="mi">118</span><span class="p">,</span>  <span class="mi">55</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">   <span class="mi">27</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span>  <span class="mi">49</span><span class="p">,</span>  <span class="mi">30</span><span class="p">,</span>  <span class="mi">54</span><span class="p">,</span>  <span class="mi">12</span><span class="p">,</span>  <span class="mi">76</span><span class="p">,</span>  <span class="mi">68</span><span class="p">,</span>  <span class="mi">99</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">   <span class="mi">87</span><span class="p">,</span>  <span class="mi">73</span><span class="p">,</span>   <span class="mi">8</span><span class="p">,</span>  <span class="mi">69</span><span class="p">,</span>  <span class="mi">66</span><span class="p">,</span>   <span class="mi">1</span><span class="p">,</span>  <span class="mi">90</span><span class="p">,</span>   <span class="mi">4</span><span class="p">,</span>  <span class="mi">19</span><span class="p">,</span>  <span class="mi">76</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>  <span class="mi">21</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">b</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^</span> <span class="p">(</span><span class="mi">78</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">b</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span></span></span></code></pre></td></tr></table>
+</div>
+</div>
+<mark> 0xGame{X0r_1s_v3ry_Imp0rt4n7!}</mark></p>
+<h3 id="xor-endian">Xor-Endian</h3>
+<p>无壳放进ida
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 145; 
+			flex-basis: 348px"
+	>
+	<a href="/2024/0xgame/7.png" data-size="1135x781">
+		<img src="/2024/0xgame/7.png"
+			width="1135"
+			height="781"
+			srcset="/2024/0xgame/7_hucefb10dd4080b7bf2f45f7a27437ab3d_81020_480x0_resize_box_3.png 480w, /2024/0xgame/7_hucefb10dd4080b7bf2f45f7a27437ab3d_81020_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure> <br>
+有个encrypt函数，跟进
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 419; 
+			flex-basis: 1005px"
+	>
+	<a href="/2024/0xgame/8.png" data-size="859x205">
+		<img src="/2024/0xgame/8.png"
+			width="859"
+			height="205"
+			srcset="/2024/0xgame/8_hu52a609c74ecfd8978bb627c206a7178f_17154_480x0_resize_box_3.png 480w, /2024/0xgame/8_hu52a609c74ecfd8978bb627c206a7178f_17154_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure>
+是一个与key的异或，key在主函数是<mark>Key0xGame2024</mark>
+解密脚本
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">decrypt</span><span class="p">(</span><span class="n">encrypted</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">key_length</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">decrypted</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">encrypted</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">length</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">decrypted</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^=</span> <span class="n">key</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="n">key_length</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">decrypted</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">v6</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1363025275</span><span class="p">,</span> <span class="mi">253370901</span><span class="p">,</span> <span class="mi">1448151638</span><span class="p">,</span> <span class="mi">1415391232</span><span class="p">,</span> <span class="mi">91507463</span><span class="p">,</span> <span class="mi">139743552</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="mi">1450318164</span><span class="p">,</span> <span class="mi">1985283101</span><span class="p">,</span> <span class="mi">1465125718</span><span class="p">,</span> <span class="mi">1934953223</span><span class="p">,</span> <span class="mi">84430593</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">key</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&#34;Key0xGame2024&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">key_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">length</span> <span class="o">=</span> <span class="mi">44</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">encrypted</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">v6</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">encrypted</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">byteorder</span><span class="o">=</span><span class="s1">&#39;little&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">decrypted</span> <span class="o">=</span> <span class="n">decrypt</span><span class="p">(</span><span class="n">encrypted</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">key_length</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">decrypted</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span></span></span></code></pre></td></tr></table>
+</div>
+</div></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/writeup/">Writeup</a>
+        
+            <a href="/tags/ctf/">CTF</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">Related contents</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/2024/%E7%AC%AC%E4%BA%8C%E5%B1%8A%E9%BB%84%E6%B2%B3%E6%B5%81%E5%9F%9F%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%8A%80%E8%83%BD%E6%8C%91%E6%88%98%E8%B5%9B/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">第二届黄河流域网络安全技能挑战赛</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/2024/wmctf/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">WMCTF</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9Aupx%E8%84%B1%E5%A3%B3/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">从工具到手动学会UPX脱壳</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+    
+
+    <footer class="site-footer">
+  
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+
+<script>
+(function(u, c) {
+  var d = document, t = 'script', o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+  o.src = u;
+  if (c) { o.addEventListener('load', function(e) { c(e); }); }
+  s.parentNode.insertBefore(o, s);
+})('//cdn.bootcss.com/pangu/3.3.0/pangu.min.js', function() {
+  pangu.spacingPage();
+});
+</script>
+
+    <section class="copyright">
+        &copy; 
+        
+        2024 <a href="https://stack-theme-mod.vercel.app/">Example Site</a>·<i class="fas fa-bell"></i> <a id="days">0</a>Days<br>
+      共书写了5.7k字·共 5篇文章</br><span><p>
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.2.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a><br />
+         <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">© Licensed Under CC BY-NC-SA 4.0</a>
+    </section>
+
+<script>
+var s1 = '2024-07-15';
+s1 = new Date(s1.replace(/-/g, "/"));
+s2 = new Date();
+var days = s2.getTime() - s1.getTime();
+var number_of_days = parseInt(days / (1000 * 60 * 60 * 24));
+document.getElementById('days').innerHTML = number_of_days;
+</script>
+    
+</footer>
+
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+    
+    
+    <aside class="sidebar right-sidebar sticky">
+        
+            <form action="/search/" class="search-form widget" >
+        <p>
+            <label>Search</label>
+            <input name="keyword" required placeholder="Type something..." />
+        
+            <button title="Search">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+            </button>
+        </p>
+    </form>
+        
+            
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#week1">Week1</a>
+      <ol>
+        <li><a href="#babybase">BabyBase</a></li>
+        <li><a href="#binarymaster">BinaryMaster</a></li>
+        <li><a href="#signsign">SignSign</a></li>
+        <li><a href="#xor-beginning">Xor-Beginning</a></li>
+        <li><a href="#xor-endian">Xor-Endian</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+        
+            <section class="widget categories">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-infinity" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M9.828 9.172a4 4 0 1 0 0 5.656 a10 10 0 0 0 2.172 -2.828a10 10 0 0 1 2.172 -2.828 a4 4 0 1 1 0 5.656a10 10 0 0 1 -2.172 -2.828a10 10 0 0 0 -2.172 -2.828" />
+</svg>
+
+
+  
+        </div> 
+        <h2 class="widget-title section-title">Categories</h2>
+    <div class="widget-categories--list">
+<div class="widget">
+    <h3 class="widget-title"> </h3>
+    <div class="widget-body">
+        <div class="category-list">
+            <div class="category-list-item"><a href="https://mkkkk-create.github.io/categories/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/" class="category-list-link">逆向工程<span class="category-list-count">5</a>
+            </span></div>
+        </div>
+    </div>
+</div>
+    </div>
+    </section>
+        
+            <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-infinity" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M9.828 9.172a4 4 0 1 0 0 5.656 a10 10 0 0 0 2.172 -2.828a10 10 0 0 1 2.172 -2.828 a4 4 0 1 1 0 5.656a10 10 0 0 1 -2.172 -2.828a10 10 0 0 0 -2.172 -2.828" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Archives</h2>
+
+        
+        
+        
+        
+        
+        <div class="widget-archive--list">
+            <div class="archives-year">
+                    <a href="/archives/#2024">
+                        
+                            <span class="year">2024</span>
+                            <span class="count">5</span>
+                        
+                    </a> 
+                </div>
+            
+        </div>
+    </section>
+        
+            <section class="widget tagCloud">
+    <div class="widget-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+    </div>
+    <h2 class="widget-title section-title">Tags</h2>
+
+    <div class="tagCloud-tags">
+        
+            <a href="/tags/ctf/" class="font_size_5">
+                CTF
+            </a>
+        
+            <a href="/tags/writeup/" class="font_size_3">
+                Writeup
+            </a>
+        
+            <a href="/tags/upx%E5%8E%8B%E7%BC%A9%E5%A3%B3/" class="font_size_1">
+                UPX压缩壳
+            </a>
+        
+            <a href="/tags/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" class="font_size_1">
+                加密算法
+            </a>
+        
+    </div>
+</section>
+        
+    </aside>
+
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

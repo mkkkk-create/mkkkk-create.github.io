@@ -13,7 +13,7 @@
       <link>https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9Aupx%E8%84%B1%E5%A3%B3/</link>
       <pubDate>Fri, 20 Sep 2024 11:17:49 +0800</pubDate>
       <guid>https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9Aupx%E8%84%B1%E5%A3%B3/</guid>
-      <description>本篇博客以BaseCTF的UPX压缩壳的三道题目为基础进行讲解 什么是压缩壳 加壳：其实是利用特殊的算法，对EXE、DLL文件里的资源进行压缩。</description>
+      <description>本篇博客以BaseCTF的UPX压缩壳的题目为基础进行讲解 什么是压缩壳 加壳：其实是利用特殊的算法，对EXE、DLL文件里的资源进行压缩。类似</description>
     </item>
   </channel>
 </rss>
