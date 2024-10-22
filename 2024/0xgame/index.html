@@ -330,7 +330,7 @@
 
 
                 <time class="article-words">
-                    383字
+                    1350字
                 </time>
             </div>
         
@@ -575,6 +575,338 @@
 </span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">decrypted</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span></span></span></code></pre></td></tr></table>
 </div>
 </div></p>
+<h2 id="week2">Week2</h2>
+<h3 id="babyupx">BabyUPX</h3>
+<p>查壳，发现是最简单的UPX壳，放进脱壳软件里面脱壳，拖进ida
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 200; 
+			flex-basis: 481px"
+	>
+	<a href="/2024/0xgame/9.png" data-size="1128x562">
+		<img src="/2024/0xgame/9.png"
+			width="1128"
+			height="562"
+			srcset="/2024/0xgame/9_hucb11614ca58e83f1150fd731081d6a28_50538_480x0_resize_box_3.png 480w, /2024/0xgame/9_hucb11614ca58e83f1150fd731081d6a28_50538_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure> <br>
+跟进encode函数
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 249; 
+			flex-basis: 599px"
+	>
+	<a href="/2024/0xgame/10.png" data-size="997x399">
+		<img src="/2024/0xgame/10.png"
+			width="997"
+			height="399"
+			srcset="/2024/0xgame/10_hu642b709abc7a7af91b8260cbc460b45b_25992_480x0_resize_box_3.png 480w, /2024/0xgame/10_hu642b709abc7a7af91b8260cbc460b45b_25992_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure>
+发现是位运算，下面填脚本
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">enc</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">135</span><span class="p">,</span> <span class="mi">116</span><span class="p">,</span>  <span class="mi">22</span><span class="p">,</span> <span class="mi">214</span><span class="p">,</span>  <span class="mi">86</span><span class="p">,</span> <span class="mi">183</span><span class="p">,</span>  <span class="mi">99</span><span class="p">,</span> <span class="mi">131</span><span class="p">,</span>  <span class="mi">70</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="mi">102</span><span class="p">,</span> <span class="mi">102</span><span class="p">,</span>  <span class="mi">67</span><span class="p">,</span>  <span class="mi">83</span><span class="p">,</span> <span class="mi">131</span><span class="p">,</span> <span class="mi">210</span><span class="p">,</span>  <span class="mi">35</span><span class="p">,</span> <span class="mi">147</span><span class="p">,</span>  <span class="mi">86</span><span class="p">,</span>  <span class="mi">83</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="mi">210</span><span class="p">,</span>  <span class="mi">67</span><span class="p">,</span>  <span class="mi">54</span><span class="p">,</span>  <span class="mi">54</span><span class="p">,</span>   <span class="mi">3</span><span class="p">,</span> <span class="mi">210</span><span class="p">,</span>  <span class="mi">22</span><span class="p">,</span> <span class="mi">147</span><span class="p">,</span>  <span class="mi">54</span><span class="p">,</span>  <span class="mi">38</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="mi">210</span><span class="p">,</span> <span class="mi">147</span><span class="p">,</span> <span class="mi">115</span><span class="p">,</span>  <span class="mi">19</span><span class="p">,</span> <span class="mi">102</span><span class="p">,</span>  <span class="mi">86</span><span class="p">,</span>  <span class="mi">54</span><span class="p">,</span>  <span class="mi">51</span><span class="p">,</span>  <span class="mi">51</span><span class="p">,</span> <span class="mi">131</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">   <span class="mi">86</span><span class="p">,</span>  <span class="mi">35</span><span class="p">,</span> <span class="mi">102</span><span class="p">,</span> <span class="mi">215</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">flag</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">44</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">#提取高4位并右移，提取低4位并左移</span>
+</span></span><span class="line"><span class="cl">    <span class="n">original</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">enc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&amp;</span> <span class="mh">0xF0</span><span class="p">)</span> <span class="o">/</span> <span class="mi">16</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">enc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&amp;</span> <span class="mh">0x0F</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">4</span>
+</span></span><span class="line"><span class="cl">    <span class="n">flag</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="n">original</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#0xGame{68dff458-29e5-4cc0-a9cb-971fec338e2f}</span></span></span></code></pre></td></tr></table>
+</div>
+</div>
+<mark> (官方wp给出)可以看出每个字节高4位和低4位交换，实际上就是16进制逆序。 </mark></p>
+<h3 id="firstsight-jar">FirstSight-Jar</h3>
+<p>jadx打开，主要逻辑红框框住，接下来直接上脚本
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 167; 
+			flex-basis: 403px"
+	>
+	<a href="/2024/0xgame/11.png" data-size="1387x826">
+		<img src="/2024/0xgame/11.png"
+			width="1387"
+			height="826"
+			srcset="/2024/0xgame/11_hu4fcae6178c6b186e0c7bbcef8884839f_76171_480x0_resize_box_3.png 480w, /2024/0xgame/11_hu4fcae6178c6b186e0c7bbcef8884839f_76171_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">dec</span><span class="p">(</span><span class="n">enc</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Alphabat</span> <span class="o">=</span> <span class="s2">&#34;0123456789abcdef&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">reverse_map</span> <span class="o">=</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Alphabat</span><span class="p">)):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">new_index</span> <span class="o">=</span> <span class="p">((</span><span class="n">i</span> <span class="o">*</span> <span class="mi">5</span><span class="p">)</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span> <span class="o">%</span> <span class="mi">16</span>
+</span></span><span class="line"><span class="cl">        <span class="n">reverse_map</span><span class="p">[</span><span class="n">Alphabat</span><span class="p">[</span><span class="n">new_index</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Alphabat</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">dec_str</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">enc</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">reverse_map</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">dec_str</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reverse_map</span><span class="p">[</span><span class="n">char</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">dec_str</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">char</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dec_str</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">enc</span> <span class="o">=</span> <span class="s2">&#34;ab50e920-4a97-70d1-b646-cdac5c873376&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">flag</span> <span class="o">=</span> <span class="n">dec</span><span class="p">(</span><span class="n">enc</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;0xGame{&#34;</span><span class="o">+</span> <span class="n">flag</span> <span class="o">+</span> <span class="s2">&#34;}&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#0xGame{b8a9fe39-dbe4-4926-87d7-52b5a5140047}</span></span></span></code></pre></td></tr></table>
+</div>
+</div></p>
+<h3 id="fisrtsight-pyc">FisrtSight-Pyc</h3>
+<p>看到pyc文件，uncompyle6反编译
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">hashlib</span>
+</span></span><span class="line"><span class="cl"><span class="n">user_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&#34;请输入神秘代号：&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="n">user_input</span> <span class="o">!=</span> <span class="s2">&#34;Ciallo~&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;代号不是这个哦&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">exit</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">input_hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">user_input</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">input_hash</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">input_hash</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">input_hash</span><span class="p">)):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nb">ord</span><span class="p">(</span><span class="n">input_hash</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">48</span><span class="p">,</span> <span class="mi">58</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">original_num</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">input_hash</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">        <span class="n">new_num</span> <span class="o">=</span> <span class="p">(</span><span class="n">original_num</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span> <span class="o">%</span> <span class="mi">10</span>
+</span></span><span class="line"><span class="cl">        <span class="n">input_hash</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">new_num</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">input_hash</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_hash</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;0xGame{{</span><span class="si">{}</span><span class="s2">}}&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">input_hash</span><span class="p">))</span></span></span></code></pre></td></tr></table>
+</div>
+</div>
+直接运行一遍，就发现flag出来了0xGame{2f5ef5762bf8a2c043d836b522127e54}</p>
+<h3 id="xorramdom">Xor::Ramdom</h3>
+<p>无壳，拖进ida里面，跟进主函数，下图是主要的判断，这题是一道Windows下的伪随机数，记住<mark>运行环境不一样随机数生成也会不一样 </mark>
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 180; 
+			flex-basis: 433px"
+	>
+	<a href="/2024/0xgame/12.png" data-size="1713x948">
+		<img src="/2024/0xgame/12.png"
+			width="1713"
+			height="948"
+			srcset="/2024/0xgame/12_hue46e617d6ae0efa1c8ac5972ec6e682c_123698_480x0_resize_box_3.png 480w, /2024/0xgame/12_hue46e617d6ae0efa1c8ac5972ec6e682c_123698_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure>
+我们通过分析可以知道其实这两个随机数种子只会运行0x77这一个，因为v6的判断只判断了长度，flag肯定满足长度，下面是一个奇偶性的判断
+我们直接写出脚本
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cp">#include</span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span><span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">ra</span><span class="p">,</span> <span class="n">key</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">enc</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">v13</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">v13</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x1221164E1F104F0C</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">v13</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x171F240A4B10244B</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">v13</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x1A2C5C2108074F09</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">v13</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">99338668810000</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">srand</span><span class="p">(</span><span class="mh">0x77</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">rand</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ra</span> <span class="o">=</span> <span class="nf">rand</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">enc</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">v13</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">29</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&amp;</span> <span class="mi">1</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">key</span> <span class="o">=</span> <span class="n">ra</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span> <span class="n">key</span> <span class="o">=</span> <span class="n">ra</span> <span class="o">+</span> <span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">enc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^=</span> <span class="n">key</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;0xGame{%s}&#34;</span><span class="p">,</span> <span class="n">enc</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">//0xGame{r4nd0m_i5_n0t_alw4ys_&#39;Random&#39;!}
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div></p>
+<h3 id="zzz">ZzZ</h3>
+<p>跟进到主函数
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 178; 
+			flex-basis: 429px"
+	>
+	<a href="/2024/0xgame/13.png" data-size="1477x826">
+		<img src="/2024/0xgame/13.png"
+			width="1477"
+			height="826"
+			srcset="/2024/0xgame/13_hue0628a758b4e7ccde253236472452c5e_94789_480x0_resize_box_3.png 480w, /2024/0xgame/13_hue0628a758b4e7ccde253236472452c5e_94789_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			>
+	</a>
+	
+</figure>
+题目给出了字符串的形式0xGame{%8llx-%4s-%4s-%4s-%12llx}<br>
+%8x 表示一个以十六进制格式输出的整数，宽度为 8。<br>
+%4s 表示一个宽度为 4 的字符串。<br>
+%12x 表示一个以十六进制格式输出的整数，宽度为 12。<br>
+我们还发现框住的if语句有多个条件判断，这时我们可以想到z3求解，直接上z3库
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">z3</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl"><span class="n">flag</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl"><span class="n">v13</span> <span class="o">=</span> <span class="mh">0xE544267D</span>
+</span></span><span class="line"><span class="cl"><span class="n">v14</span> <span class="o">=</span> <span class="mh">0xD085A85201A4</span>
+</span></span><span class="line"><span class="cl"><span class="n">v10</span><span class="p">,</span><span class="n">v11</span><span class="p">,</span><span class="n">v12</span> <span class="o">=</span> <span class="n">BitVecs</span><span class="p">(</span><span class="s2">&#34;v10 v11 v12&#34;</span><span class="p">,</span><span class="mi">32</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">s</span> <span class="o">=</span> <span class="n">Solver</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">11</span> <span class="o">*</span> <span class="n">v11</span> <span class="o">+</span> <span class="mi">14</span> <span class="o">*</span> <span class="n">v10</span> <span class="o">-</span> <span class="n">v12</span> <span class="o">==</span> <span class="mh">0x48FB41DDD</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">9</span> <span class="o">*</span> <span class="n">v10</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">v11</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">v12</span> <span class="o">==</span> <span class="mh">0x2BA692AD7</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(((</span><span class="n">v12</span> <span class="o">-</span> <span class="n">v11</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">v10</span> <span class="o">^</span> <span class="mh">0x87654321</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3451779756</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">check</span><span class="p">()</span><span class="o">==</span><span class="n">sat</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">tmp</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">model</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span><span class="n">v10</span><span class="p">,</span> <span class="n">v11</span><span class="p">,</span> <span class="n">v12</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">l</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">as_long</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">b</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s2">&#34;little&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">flag</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl"><span class="c1">#0xGame{e544267d-7812-44b3-a35d-d085a85201a4}</span></span></span></code></pre></td></tr></table>
+</div>
+</div></p>
 
 </section>
 
@@ -698,7 +1030,7 @@
         &copy; 
         
         2024 <a href="https://stack-theme-mod.vercel.app/">Example Site</a>·<i class="fas fa-bell"></i> <a id="days">0</a>Days<br>
-      共书写了5.7k字·共 5篇文章</br><span><p>
+      共书写了6.7k字·共 5篇文章</br><span><p>
     </section>
     
     <section class="powerby">
@@ -848,6 +1180,15 @@ document.getElementById('days').innerHTML = number_of_days;
         <li><a href="#signsign">SignSign</a></li>
         <li><a href="#xor-beginning">Xor-Beginning</a></li>
         <li><a href="#xor-endian">Xor-Endian</a></li>
+      </ol>
+    </li>
+    <li><a href="#week2">Week2</a>
+      <ol>
+        <li><a href="#babyupx">BabyUPX</a></li>
+        <li><a href="#firstsight-jar">FirstSight-Jar</a></li>
+        <li><a href="#fisrtsight-pyc">FisrtSight-Pyc</a></li>
+        <li><a href="#xorramdom">Xor::Ramdom</a></li>
+        <li><a href="#zzz">ZzZ</a></li>
       </ol>
     </li>
   </ol>
