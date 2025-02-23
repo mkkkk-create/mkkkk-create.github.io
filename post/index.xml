@@ -6,8 +6,22 @@
     <description>Recent content in Posts on mkkkk</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 11 Oct 2024 18:46:04 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 25 Nov 2024 22:40:04 +0800</lastBuildDate>
     <atom:link href="https://mkkkk-create.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>BF算法与KMP算法</title>
+      <link>https://mkkkk-create.github.io/2024/bf%E7%AE%97%E6%B3%95%E4%B8%8Ekmp%E7%AE%97%E6%B3%95/</link>
+      <pubDate>Mon, 25 Nov 2024 22:40:04 +0800</pubDate>
+      <guid>https://mkkkk-create.github.io/2024/bf%E7%AE%97%E6%B3%95%E4%B8%8Ekmp%E7%AE%97%E6%B3%95/</guid>
+      <description>BF算法(暴力匹配算法) 算法描述 注：模式匹配不一定是从主串的第一个位置开始，可以指定主串中开始查找的起始位置pos。 分别利用i和j指针表示主</description>
+    </item>
+    <item>
+      <title>单链表及相关操作</title>
+      <link>https://mkkkk-create.github.io/2024/%E5%8D%95%E9%93%BE%E8%A1%A8%E5%8F%8A%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/</link>
+      <pubDate>Sat, 09 Nov 2024 23:38:07 +0800</pubDate>
+      <guid>https://mkkkk-create.github.io/2024/%E5%8D%95%E9%93%BE%E8%A1%A8%E5%8F%8A%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/</guid>
+      <description>单链表定义 单链表通过一组任意的存储单元来存储线性表中的数据元素，不需要使用地址连续的存储单元，因此它不要求在逻辑上相邻的两个元素在物理位置上</description>
+    </item>
     <item>
       <title>0xgame</title>
       <link>https://mkkkk-create.github.io/2024/0xgame/</link>

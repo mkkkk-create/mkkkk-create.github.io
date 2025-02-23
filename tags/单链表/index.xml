@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>单链表 on mkkkk</title>
+    <link>https://mkkkk-create.github.io/tags/%E5%8D%95%E9%93%BE%E8%A1%A8/</link>
+    <description>Recent content in 单链表 on mkkkk</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 09 Nov 2024 23:38:07 +0800</lastBuildDate>
+    <atom:link href="https://mkkkk-create.github.io/tags/%E5%8D%95%E9%93%BE%E8%A1%A8/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>单链表及相关操作</title>
+      <link>https://mkkkk-create.github.io/2024/%E5%8D%95%E9%93%BE%E8%A1%A8%E5%8F%8A%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/</link>
+      <pubDate>Sat, 09 Nov 2024 23:38:07 +0800</pubDate>
+      <guid>https://mkkkk-create.github.io/2024/%E5%8D%95%E9%93%BE%E8%A1%A8%E5%8F%8A%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/</guid>
+      <description>单链表定义 单链表通过一组任意的存储单元来存储线性表中的数据元素，不需要使用地址连续的存储单元，因此它不要求在逻辑上相邻的两个元素在物理位置上</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>C语言基础 on mkkkk</title>
+    <link>http://localhost:1313/tags/c%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/</link>
+    <description>Recent content in C语言基础 on mkkkk</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 01 Nov 2024 23:23:44 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/c%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>C primer plus有感</title>
+      <link>http://localhost:1313/2024/c-primer-plus%E6%9C%89%E6%84%9F/</link>
+      <pubDate>Fri, 01 Nov 2024 23:23:44 +0800</pubDate>
+      <guid>http://localhost:1313/2024/c-primer-plus%E6%9C%89%E6%84%9F/</guid>
+      <description>本文意在补充部分C语言基础，且不按顺序，写得不足之处欢迎指出 关键字enum 我们普通的星期枚举可能就要用 1 2 3 4 5 6 7 #define MON 1 #define TUE 2 #define WED 3 #define THR 4</description>
+    </item>
+  </channel>
+</rss>
