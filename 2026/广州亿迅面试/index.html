@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
     <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="问题1：ref和reactive区别 特性 ref reactive 作用对象 基本类型（也可用于对象） 对象类型（对象、数组、Map、Set 等） 返回值 一个包含 .value 的对象 一个 Proxy 代理对象 取值方式 需要 .value 直接访问属性即可 解包行为 模板中自动解包 模板中直接访问属性 底层原理 通过 Object.defineProperty + getter/setter 实现 通过 Proxy 深层代理整个对象 是否深层响应 否（仅对 .value 响应） 是（所有嵌套属性都响应） 问题2：vue2和vue3组件通信了解，与祖先通信会选择哪种 Vue2 常见通信方式 场景 使用方式 适用范围 父 → 子 props 最常用 子 → 父 $emit 最常用 兄弟组件 事件总线（EventBus）或 Vuex 中小型项目 跨层级（祖孙） provide / inject（2.6+ 支持）或 Vuex 深层通信 全局通信 Vuex 大型项目状态管理 Vue3 组件通信方式汇总 场景 使用方式 说明 父 → 子 props 同 Vue2 子 → 父 emit 同 Vue2，Composition API 用 defineEmits 兄弟组件 共享状态（reactive + ref）、Pinia、事件总线 推荐使用 Pinia 跨层级（祖先/后代） ✅ provide / inject（更强大，支持响应式） 推荐 全局状态 Pinia（取代 Vuex） Vue3 官方推荐方案 与祖先通信用provide/inject\n">
 <title>广州亿迅面试</title>
 
 <link rel='canonical' href='http://localhost:1313/2026/%E5%B9%BF%E5%B7%9E%E4%BA%BF%E8%BF%85%E9%9D%A2%E8%AF%95/'>
 
 <link rel="stylesheet" href="/scss/style.min.503a651fd8a85b2b025533bf0d780be393b4b991a01f13e137a298ee3877e3f1.css"><meta property='og:title' content="广州亿迅面试">
-<meta property='og:description' content="">
+<meta property='og:description' content="问题1：ref和reactive区别 特性 ref reactive 作用对象 基本类型（也可用于对象） 对象类型（对象、数组、Map、Set 等） 返回值 一个包含 .value 的对象 一个 Proxy 代理对象 取值方式 需要 .value 直接访问属性即可 解包行为 模板中自动解包 模板中直接访问属性 底层原理 通过 Object.defineProperty + getter/setter 实现 通过 Proxy 深层代理整个对象 是否深层响应 否（仅对 .value 响应） 是（所有嵌套属性都响应） 问题2：vue2和vue3组件通信了解，与祖先通信会选择哪种 Vue2 常见通信方式 场景 使用方式 适用范围 父 → 子 props 最常用 子 → 父 $emit 最常用 兄弟组件 事件总线（EventBus）或 Vuex 中小型项目 跨层级（祖孙） provide / inject（2.6+ 支持）或 Vuex 深层通信 全局通信 Vuex 大型项目状态管理 Vue3 组件通信方式汇总 场景 使用方式 说明 父 → 子 props 同 Vue2 子 → 父 emit 同 Vue2，Composition API 用 defineEmits 兄弟组件 共享状态（reactive + ref）、Pinia、事件总线 推荐使用 Pinia 跨层级（祖先/后代） ✅ provide / inject（更强大，支持响应式） 推荐 全局状态 Pinia（取代 Vuex） Vue3 官方推荐方案 与祖先通信用provide/inject\n">
 <meta property='og:url' content='http://localhost:1313/2026/%E5%B9%BF%E5%B7%9E%E4%BA%BF%E8%BF%85%E9%9D%A2%E8%AF%95/'>
 <meta property='og:site_name' content='mkkkk'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-01-08T15:49:15&#43;08:00'/><meta property='article:modified_time' content='2026-01-08T15:49:15&#43;08:00'/>
 <meta name="twitter:title" content="广州亿迅面试">
-<meta name="twitter:description" content=""><style>
+<meta name="twitter:description" content="问题1：ref和reactive区别 特性 ref reactive 作用对象 基本类型（也可用于对象） 对象类型（对象、数组、Map、Set 等） 返回值 一个包含 .value 的对象 一个 Proxy 代理对象 取值方式 需要 .value 直接访问属性即可 解包行为 模板中自动解包 模板中直接访问属性 底层原理 通过 Object.defineProperty + getter/setter 实现 通过 Proxy 深层代理整个对象 是否深层响应 否（仅对 .value 响应） 是（所有嵌套属性都响应） 问题2：vue2和vue3组件通信了解，与祖先通信会选择哪种 Vue2 常见通信方式 场景 使用方式 适用范围 父 → 子 props 最常用 子 → 父 $emit 最常用 兄弟组件 事件总线（EventBus）或 Vuex 中小型项目 跨层级（祖孙） provide / inject（2.6+ 支持）或 Vuex 深层通信 全局通信 Vuex 大型项目状态管理 Vue3 组件通信方式汇总 场景 使用方式 说明 父 → 子 props 同 Vue2 子 → 父 emit 同 Vue2，Composition API 用 defineEmits 兄弟组件 共享状态（reactive + ref）、Pinia、事件总线 推荐使用 Pinia 跨层级（祖先/后代） ✅ provide / inject（更强大，支持响应式） 推荐 全局状态 Pinia（取代 Vuex） Vue3 官方推荐方案 与祖先通信用provide/inject\n"><style>
     :root {
         --article-font-family: "Noto Serif SC", var(--base-font-family);
     }
@@ -294,6 +294,44 @@
     </form>
         
             
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#问题1ref和reactive区别">问题1：ref和reactive区别</a></li>
+    <li><a href="#问题2vue2和vue3组件通信了解与祖先通信会选择哪种">问题2：vue2和vue3组件通信了解，与祖先通信会选择哪种</a>
+      <ol>
+        <li><a href="#vue2-常见通信方式">Vue2 常见通信方式</a></li>
+        <li><a href="#vue3-组件通信方式汇总">Vue3 组件通信方式汇总</a></li>
+      </ol>
+    </li>
+    <li><a href="#问题3给你两个盒子一个左边固定200px如何让右边占满剩下空间">问题3：给你两个盒子，一个左边固定200px，如何让右边占满剩下空间</a>
+      <ol>
+        <li><a href="#方法1flex布局">方法1：flex布局</a></li>
+        <li><a href="#方法2使用浮动老方法">方法2：使用浮动（老方法）</a></li>
+        <li><a href="#方法3使用-grid-布局">方法3：使用 Grid 布局</a></li>
+      </ol>
+    </li>
+    <li><a href="#样式继承">样式继承</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
         
             <section class="widget archives">
         <div class="widget-icon">
@@ -401,245 +439,34 @@
 
             <main class="main full-width">
   
-    <article class="main-article">
-    <header class="article-header">
+    <div id="article-content"></div>
+    <script>
+      const password = prompt("请输入文章密码");
+      const correctPassword = "123";
 
-    <div class="article-details">
-    
-
-    <div class="article-title-wrapper">
-        <h2 class="article-title">
-            <a href="/2026/%E5%B9%BF%E5%B7%9E%E4%BA%BF%E8%BF%85%E9%9D%A2%E8%AF%95/">广州亿迅面试</a>
-        </h2>
-    
+      if (password === correctPassword) {
+        const container = document.getElementById("article-content");
         
-    </div>
+        container.innerHTML += `\u003carticle class=\u0022main-article\u0022\u003e\n    \u003cheader class=\u0022article-header\u0022\u003e\n\n    \u003cdiv class=\u0022article-details\u0022\u003e\n    \n\n    \u003cdiv class=\u0022article-title-wrapper\u0022\u003e\n        \u003ch2 class=\u0022article-title\u0022\u003e\n            \u003ca href=\u0022\/2026\/%E5%B9%BF%E5%B7%9E%E4%BA%BF%E8%BF%85%E9%9D%A2%E8%AF%95\/\u0022\u003e广州亿迅面试\u003c\/a\u003e\n        \u003c\/h2\u003e\n    \n        \n    \u003c\/div\u003e\n\n    \n    \n    \n    \n    \u003cfooter class=\u0022article-time\u0022\u003e\n        \n            \u003cdiv\u003e\n                \u003csvg xmlns=\u0022http:\/\/www.w3.org\/2000\/svg\u0022 class=\u0022icon icon-tabler icon-tabler-calendar-time\u0022 width=\u002256\u0022 height=\u002256\u0022 viewBox=\u00220 0 24 24\u0022 stroke-width=\u00222\u0022 stroke=\u0022currentColor\u0022 fill=\u0022none\u0022 stroke-linecap=\u0022round\u0022 stroke-linejoin=\u0022round\u0022\u003e\n  \u003cpath stroke=\u0022none\u0022 d=\u0022M0 0h24v24H0z\u0022\/\u003e\n  \u003cpath d=\u0022M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4\u0022 \/\u003e\n  \u003ccircle cx=\u002218\u0022 cy=\u002218\u0022 r=\u00224\u0022 \/\u003e\n  \u003cpath d=\u0022M15 3v4\u0022 \/\u003e\n  \u003cpath d=\u0022M7 3v4\u0022 \/\u003e\n  \u003cpath d=\u0022M3 11h16\u0022 \/\u003e\n  \u003cpath d=\u0022M18 16.496v1.504l1 1\u0022 \/\u003e\n\u003c\/svg\u003e\n                \u003ctime class=\u0022article-time--published\u0022\u003eJan 08, 2026\u003c\/time\u003e\n            \u003c\/div\u003e\n        \n\n        \n            \u003cdiv\u003e\n                \u003csvg xmlns=\u0022http:\/\/www.w3.org\/2000\/svg\u0022 class=\u0022icon icon-tabler icon-tabler-clock\u0022 width=\u002224\u0022 height=\u002224\u0022 viewBox=\u00220 0 24 24\u0022 stroke-width=\u00222\u0022 stroke=\u0022currentColor\u0022 fill=\u0022none\u0022 stroke-linecap=\u0022round\u0022 stroke-linejoin=\u0022round\u0022\u003e\n  \u003cpath stroke=\u0022none\u0022 d=\u0022M0 0h24v24H0z\u0022\/\u003e\n  \u003ccircle cx=\u002212\u0022 cy=\u002212\u0022 r=\u00229\u0022 \/\u003e\n  \u003cpolyline points=\u002212 7 12 12 15 15\u0022 \/\u003e\n\u003c\/svg\u003e\n\n\n\n                \n                \u003ctime class=\u0022article-words\u0022\u003e\n                    842 字\n                \u003c\/time\u003e\n            \u003c\/div\u003e\n        \n    \u003c\/footer\u003e\n    \n\n    \n\u003c\/div\u003e\n\n\u003c\/header\u003e\n\n    \u003csection class=\u0022article-content\u0022\u003e\n    \n    \n    \u003ch2 id=\u0022问题1ref和reactive区别\u0022\u003e问题1：ref和reactive区别\n\u003c\/h2\u003e\n\u003cdiv class=\u0022table-wrapper\u0022\u003e\u003ctable\u003e\n  \u003cthead\u003e\n      \u003ctr\u003e\n          \u003cth\u003e特性\u003c\/th\u003e\n          \u003cth\u003eref\u003c\/th\u003e\n          \u003cth\u003ereactive\u003c\/th\u003e\n      \u003c\/tr\u003e\n  \u003c\/thead\u003e\n  \u003ctbody\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e\u003cstrong\u003e作用对象\u003c\/strong\u003e\u003c\/td\u003e\n          \u003ctd\u003e基本类型（也可用于对象）\u003c\/td\u003e\n          \u003ctd\u003e对象类型（对象、数组、Map、Set 等）\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e\u003cstrong\u003e返回值\u003c\/strong\u003e\u003c\/td\u003e\n          \u003ctd\u003e一个包含 \u003ccode\u003e.value\u003c\/code\u003e 的对象\u003c\/td\u003e\n          \u003ctd\u003e一个 Proxy 代理对象\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e\u003cstrong\u003e取值方式\u003c\/strong\u003e\u003c\/td\u003e\n          \u003ctd\u003e需要 \u003ccode\u003e.value\u003c\/code\u003e\u003c\/td\u003e\n          \u003ctd\u003e直接访问属性即可\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e\u003cstrong\u003e解包行为\u003c\/strong\u003e\u003c\/td\u003e\n          \u003ctd\u003e模板中自动解包\u003c\/td\u003e\n          \u003ctd\u003e模板中直接访问属性\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e\u003cstrong\u003e底层原理\u003c\/strong\u003e\u003c\/td\u003e\n          \u003ctd\u003e通过 \u003ccode\u003eObject.defineProperty\u003c\/code\u003e \u002b getter\/setter 实现\u003c\/td\u003e\n          \u003ctd\u003e通过 \u003ccode\u003eProxy\u003c\/code\u003e 深层代理整个对象\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e\u003cstrong\u003e是否深层响应\u003c\/strong\u003e\u003c\/td\u003e\n          \u003ctd\u003e否（仅对 \u003ccode\u003e.value\u003c\/code\u003e 响应）\u003c\/td\u003e\n          \u003ctd\u003e是（所有嵌套属性都响应）\u003c\/td\u003e\n      \u003c\/tr\u003e\n  \u003c\/tbody\u003e\n\u003c\/table\u003e\u003c\/div\u003e\n\u003ch2 id=\u0022问题2vue2和vue3组件通信了解与祖先通信会选择哪种\u0022\u003e问题2：vue2和vue3组件通信了解，与祖先通信会选择哪种\n\u003c\/h2\u003e\n\u003ch3 id=\u0022vue2-常见通信方式\u0022\u003eVue2 常见通信方式\n\u003c\/h3\u003e\n\u003cdiv class=\u0022table-wrapper\u0022\u003e\u003ctable\u003e\n  \u003cthead\u003e\n      \u003ctr\u003e\n          \u003cth\u003e场景\u003c\/th\u003e\n          \u003cth\u003e使用方式\u003c\/th\u003e\n          \u003cth\u003e适用范围\u003c\/th\u003e\n      \u003c\/tr\u003e\n  \u003c\/thead\u003e\n  \u003ctbody\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e父 → 子\u003c\/td\u003e\n          \u003ctd\u003eprops\u003c\/td\u003e\n          \u003ctd\u003e最常用\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e子 → 父\u003c\/td\u003e\n          \u003ctd\u003e\u0024emit\u003c\/td\u003e\n          \u003ctd\u003e最常用\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e兄弟组件\u003c\/td\u003e\n          \u003ctd\u003e事件总线（EventBus）或 Vuex\u003c\/td\u003e\n          \u003ctd\u003e中小型项目\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e跨层级（祖孙）\u003c\/td\u003e\n          \u003ctd\u003eprovide \/ inject（2.6\u002b 支持）或 Vuex\u003c\/td\u003e\n          \u003ctd\u003e深层通信\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e全局通信\u003c\/td\u003e\n          \u003ctd\u003eVuex\u003c\/td\u003e\n          \u003ctd\u003e大型项目状态管理\u003c\/td\u003e\n      \u003c\/tr\u003e\n  \u003c\/tbody\u003e\n\u003c\/table\u003e\u003c\/div\u003e\n\u003ch3 id=\u0022vue3-组件通信方式汇总\u0022\u003eVue3 组件通信方式汇总\n\u003c\/h3\u003e\n\u003cdiv class=\u0022table-wrapper\u0022\u003e\u003ctable\u003e\n  \u003cthead\u003e\n      \u003ctr\u003e\n          \u003cth\u003e场景\u003c\/th\u003e\n          \u003cth\u003e使用方式\u003c\/th\u003e\n          \u003cth\u003e说明\u003c\/th\u003e\n      \u003c\/tr\u003e\n  \u003c\/thead\u003e\n  \u003ctbody\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e父 → 子\u003c\/td\u003e\n          \u003ctd\u003eprops\u003c\/td\u003e\n          \u003ctd\u003e同 Vue2\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e子 → 父\u003c\/td\u003e\n          \u003ctd\u003eemit\u003c\/td\u003e\n          \u003ctd\u003e同 Vue2，Composition API 用 \u003ccode\u003edefineEmits\u003c\/code\u003e\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e兄弟组件\u003c\/td\u003e\n          \u003ctd\u003e共享状态（reactive \u002b ref）、Pinia、事件总线\u003c\/td\u003e\n          \u003ctd\u003e推荐使用 \u003cstrong\u003ePinia\u003c\/strong\u003e\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e跨层级（祖先\/后代）\u003c\/td\u003e\n          \u003ctd\u003e✅ provide \/ inject（更强大，支持响应式）\u003c\/td\u003e\n          \u003ctd\u003e推荐\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e全局状态\u003c\/td\u003e\n          \u003ctd\u003ePinia（取代 Vuex）\u003c\/td\u003e\n          \u003ctd\u003eVue3 官方推荐方案\u003c\/td\u003e\n      \u003c\/tr\u003e\n  \u003c\/tbody\u003e\n\u003c\/table\u003e\u003c\/div\u003e\n\u003cp\u003e\u003cstrong\u003e与祖先通信用provide\/inject\u003c\/strong\u003e\u003c\/p\u003e\n\u003ch2 id=\u0022问题3给你两个盒子一个左边固定200px如何让右边占满剩下空间\u0022\u003e问题3：给你两个盒子，一个左边固定200px，如何让右边占满剩下空间\n\u003c\/h2\u003e\n\u003ch3 id=\u0022方法1flex布局\u0022\u003e方法1：flex布局\n\u003c\/h3\u003e\n\u003cp\u003e\u003cdiv class=\u0022highlight\u0022\u003e\u003cdiv class=\u0022chroma\u0022\u003e\n\u003ctable class=\u0022lntable\u0022\u003e\u003ctr\u003e\u003ctd class=\u0022lntd\u0022\u003e\n\u003cpre tabindex=\u00220\u0022 class=\u0022chroma\u0022\u003e\u003ccode\u003e\u003cspan class=\u0022lnt\u0022\u003e 1\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e 2\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e 3\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e 4\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e 5\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e 6\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e 7\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e 8\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e 9\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e10\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e11\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e12\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e13\n\u003c\/span\u003e\u003c\/code\u003e\u003c\/pre\u003e\u003c\/td\u003e\n\u003ctd class=\u0022lntd\u0022\u003e\n\u003cpre tabindex=\u00220\u0022 class=\u0022chroma\u0022\u003e\u003ccode class=\u0022language-css\u0022 data-lang=\u0022css\u0022\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e\u003cspan class=\u0022p\u0022\u003e.\u003c\/span\u003e\u003cspan class=\u0022nc\u0022\u003econtainer\u003c\/span\u003e \u003cspan class=\u0022p\u0022\u003e\u007b\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e  \u003cspan class=\u0022k\u0022\u003edisplay\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e:\u003c\/span\u003e \u003cspan class=\u0022kc\u0022\u003eflex\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e;\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e\u003cspan class=\u0022p\u0022\u003e\u007d\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e\u003cspan class=\u0022p\u0022\u003e.\u003c\/span\u003e\u003cspan class=\u0022nc\u0022\u003eleft\u003c\/span\u003e \u003cspan class=\u0022p\u0022\u003e\u007b\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e  \u003cspan class=\u0022k\u0022\u003ewidth\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e:\u003c\/span\u003e \u003cspan class=\u0022mi\u0022\u003e200\u003c\/span\u003e\u003cspan class=\u0022kt\u0022\u003epx\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e;\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e  \u003cspan class=\u0022k\u0022\u003ebackground\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e:\u003c\/span\u003e \u003cspan class=\u0022kc\u0022\u003elightcoral\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e;\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e\u003cspan class=\u0022p\u0022\u003e\u007d\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e\u003cspan class=\u0022p\u0022\u003e.\u003c\/span\u003e\u003cspan class=\u0022nc\u0022\u003eright\u003c\/span\u003e \u003cspan class=\u0022p\u0022\u003e\u007b\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e  \u003cspan class=\u0022k\u0022\u003eflex\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e:\u003c\/span\u003e \u003cspan class=\u0022mi\u0022\u003e1\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e;\u003c\/span\u003e \u003cspan class=\u0022c\u0022\u003e\/* 占满剩余空间 *\/\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e  \u003cspan class=\u0022k\u0022\u003ebackground\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e:\u003c\/span\u003e \u003cspan class=\u0022kc\u0022\u003elightblue\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e;\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e\u003cspan class=\u0022p\u0022\u003e\u007d\u003c\/span\u003e\u003c\/span\u003e\u003c\/span\u003e\u003c\/code\u003e\u003c\/pre\u003e\u003c\/td\u003e\u003c\/tr\u003e\u003c\/table\u003e\n\u003c\/div\u003e\n\u003c\/div\u003e\n👉 原理： \u003cbr\u003e\ndisplay: flex 让子元素在同一行排列 \u003cbr\u003e\n固定宽度的左盒子后，右盒子用 flex: 1 自动填满剩余空间。\u003c\/p\u003e\n\u003ch3 id=\u0022方法2使用浮动老方法\u0022\u003e方法2：使用浮动（老方法）\n\u003c\/h3\u003e\n\u003cp\u003e\u003cdiv class=\u0022highlight\u0022\u003e\u003cdiv class=\u0022chroma\u0022\u003e\n\u003ctable class=\u0022lntable\u0022\u003e\u003ctr\u003e\u003ctd class=\u0022lntd\u0022\u003e\n\u003cpre tabindex=\u00220\u0022 class=\u0022chroma\u0022\u003e\u003ccode\u003e\u003cspan class=\u0022lnt\u0022\u003e 1\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e 2\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e 3\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e 4\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e 5\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e 6\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e 7\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e 8\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e 9\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e10\n\u003c\/span\u003e\u003c\/code\u003e\u003c\/pre\u003e\u003c\/td\u003e\n\u003ctd class=\u0022lntd\u0022\u003e\n\u003cpre tabindex=\u00220\u0022 class=\u0022chroma\u0022\u003e\u003ccode class=\u0022language-css\u0022 data-lang=\u0022css\u0022\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e\u003cspan class=\u0022p\u0022\u003e.\u003c\/span\u003e\u003cspan class=\u0022nc\u0022\u003eleft\u003c\/span\u003e \u003cspan class=\u0022p\u0022\u003e\u007b\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e  \u003cspan class=\u0022k\u0022\u003efloat\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e:\u003c\/span\u003e \u003cspan class=\u0022kc\u0022\u003eleft\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e;\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e  \u003cspan class=\u0022k\u0022\u003ewidth\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e:\u003c\/span\u003e \u003cspan class=\u0022mi\u0022\u003e200\u003c\/span\u003e\u003cspan class=\u0022kt\u0022\u003epx\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e;\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e  \u003cspan class=\u0022k\u0022\u003ebackground\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e:\u003c\/span\u003e \u003cspan class=\u0022kc\u0022\u003elightcoral\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e;\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e\u003cspan class=\u0022p\u0022\u003e\u007d\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e\u003cspan class=\u0022p\u0022\u003e.\u003c\/span\u003e\u003cspan class=\u0022nc\u0022\u003eright\u003c\/span\u003e \u003cspan class=\u0022p\u0022\u003e\u007b\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e  \u003cspan class=\u0022k\u0022\u003emargin-left\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e:\u003c\/span\u003e \u003cspan class=\u0022mi\u0022\u003e200\u003c\/span\u003e\u003cspan class=\u0022kt\u0022\u003epx\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e;\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e  \u003cspan class=\u0022k\u0022\u003ebackground\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e:\u003c\/span\u003e \u003cspan class=\u0022kc\u0022\u003elightblue\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e;\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e\u003cspan class=\u0022p\u0022\u003e\u007d\u003c\/span\u003e\u003c\/span\u003e\u003c\/span\u003e\u003c\/code\u003e\u003c\/pre\u003e\u003c\/td\u003e\u003c\/tr\u003e\u003c\/table\u003e\n\u003c\/div\u003e\n\u003c\/div\u003e\n👉 原理： \u003cbr\u003e\n左边浮动，右边通过 margin-left 避开左侧区域。\u003c\/p\u003e\n\u003ch3 id=\u0022方法3使用-grid-布局\u0022\u003e方法3：使用 Grid 布局\n\u003c\/h3\u003e\n\u003cp\u003e\u003cdiv class=\u0022highlight\u0022\u003e\u003cdiv class=\u0022chroma\u0022\u003e\n\u003ctable class=\u0022lntable\u0022\u003e\u003ctr\u003e\u003ctd class=\u0022lntd\u0022\u003e\n\u003cpre tabindex=\u00220\u0022 class=\u0022chroma\u0022\u003e\u003ccode\u003e\u003cspan class=\u0022lnt\u0022\u003e 1\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e 2\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e 3\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e 4\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e 5\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e 6\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e 7\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e 8\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e 9\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e10\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e11\n\u003c\/span\u003e\u003cspan class=\u0022lnt\u0022\u003e12\n\u003c\/span\u003e\u003c\/code\u003e\u003c\/pre\u003e\u003c\/td\u003e\n\u003ctd class=\u0022lntd\u0022\u003e\n\u003cpre tabindex=\u00220\u0022 class=\u0022chroma\u0022\u003e\u003ccode class=\u0022language-css\u0022 data-lang=\u0022css\u0022\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e\u003cspan class=\u0022p\u0022\u003e.\u003c\/span\u003e\u003cspan class=\u0022nc\u0022\u003econtainer\u003c\/span\u003e \u003cspan class=\u0022p\u0022\u003e\u007b\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e  \u003cspan class=\u0022k\u0022\u003edisplay\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e:\u003c\/span\u003e \u003cspan class=\u0022k\u0022\u003egrid\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e;\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e  \u003cspan class=\u0022k\u0022\u003egrid-template-columns\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e:\u003c\/span\u003e \u003cspan class=\u0022mi\u0022\u003e200\u003c\/span\u003e\u003cspan class=\u0022kt\u0022\u003epx\u003c\/span\u003e \u003cspan class=\u0022mi\u0022\u003e1\u003c\/span\u003e\u003cspan class=\u0022n\u0022\u003efr\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e;\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e\u003cspan class=\u0022p\u0022\u003e\u007d\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e\u003cspan class=\u0022p\u0022\u003e.\u003c\/span\u003e\u003cspan class=\u0022nc\u0022\u003eleft\u003c\/span\u003e \u003cspan class=\u0022p\u0022\u003e\u007b\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e  \u003cspan class=\u0022k\u0022\u003ebackground\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e:\u003c\/span\u003e \u003cspan class=\u0022kc\u0022\u003elightcoral\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e;\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e\u003cspan class=\u0022p\u0022\u003e\u007d\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e\u003cspan class=\u0022p\u0022\u003e.\u003c\/span\u003e\u003cspan class=\u0022nc\u0022\u003eright\u003c\/span\u003e \u003cspan class=\u0022p\u0022\u003e\u007b\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e  \u003cspan class=\u0022k\u0022\u003ebackground\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e:\u003c\/span\u003e \u003cspan class=\u0022kc\u0022\u003elightblue\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e;\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e\u003cspan class=\u0022p\u0022\u003e\u007d\u003c\/span\u003e\u003c\/span\u003e\u003c\/span\u003e\u003c\/code\u003e\u003c\/pre\u003e\u003c\/td\u003e\u003c\/tr\u003e\u003c\/table\u003e\n\u003c\/div\u003e\n\u003c\/div\u003e\n👉 原理： \u003cbr\u003e\ngrid-template-columns: 200px 1fr 表示第一列固定 200px，第二列占满剩余空间。\u003c\/p\u003e\n\u003ch2 id=\u0022样式继承\u0022\u003e样式继承\n\u003c\/h2\u003e\n\u003cp\u003e\u003cstrong\u003e继承：\u003c\/strong\u003e \u003cbr\u003e\n当父元素设置了一些可继承的属性，而子元素没有指定这些属性时，子元素会自动获得这些属性的值。\u003c\/p\u003e\n\u003col\u003e\n\u003cli\u003e字体相关\u003c\/li\u003e\n\u003cli\u003e文本相关\u003c\/li\u003e\n\u003cli\u003e列表相关\u003c\/li\u003e\n\u003cli\u003e可见性相关\u003c\/li\u003e\n\u003cli\u003e表格相关\u003c\/li\u003e\n\u003c\/ol\u003e\n\u003cp\u003e\u003cstrong\u003e不继承：\u003c\/strong\u003e \u003cbr\u003e\n某些属性（如盒模型相关的属性、边框、背景等）不会被子元素继承。\u003c\/p\u003e\n\u003col\u003e\n\u003cli\u003e盒模型\u003c\/li\u003e\n\u003cli\u003e定位与浮动（position, top, left, float, clear, z-index）\u003c\/li\u003e\n\u003cli\u003e背景\u003c\/li\u003e\n\u003c\/ol\u003e\n\n\u003c\/section\u003e\n\n\n    \u003cfooter class=\u0022article-footer\u0022\u003e\n    \n\n    \n    \u003csection class=\u0022article-copyleft\u0022\u003e\n        \u003csvg xmlns=\u0022http:\/\/www.w3.org\/2000\/svg\u0022 class=\u0022icon icon-tabler icon-tabler-copyleft\u0022 \n     width=\u002224\u0022 height=\u002224\u0022 viewBox=\u00220 0 24 24\u0022 \n     stroke-width=\u00222\u0022 stroke=\u0022currentColor\u0022 fill=\u0022none\u0022 \n     stroke-linecap=\u0022round\u0022 stroke-linejoin=\u0022round\u0022\n     transform=\u0022scale(-1, 1)\u0022\u003e\n  \u003cpath stroke=\u0022none\u0022 d=\u0022M0 0h24v24H0z\u0022\/\u003e\n  \u003ccircle cx=\u002212\u0022 cy=\u002212\u0022 r=\u00229\u0022 \/\u003e\n  \u003cpath d=\u0022M14.5 9a3.5 4 0 1 0 0 6\u0022 \/\u003e\n\u003c\/svg\u003e\n        \u003cspan\u003eLicensed under CC BY-NC-SA 4.0\u003c\/span\u003e\n    \u003c\/section\u003e\n    \u003c\/footer\u003e\n\n\n    \n\u003c\/article\u003e`;
 
-    
-    
-    
-    
-    <footer class="article-time">
         
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
-  <circle cx="18" cy="18" r="4" />
-  <path d="M15 3v4" />
-  <path d="M7 3v4" />
-  <path d="M3 11h16" />
-  <path d="M18 16.496v1.504l1 1" />
-</svg>
-                <time class="article-time--published">Jan 08, 2026</time>
-            </div>
         
 
         
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
-</svg>
-
-
-
-                
-                <time class="article-words">
-                    0 字
-                </time>
-            </div>
-        
-    </footer>
-    
-
-    
-</div>
-
-</header>
-
-    <section class="article-content">
-    
-    
-    
-</section>
-
-
-    <footer class="article-footer">
-    
-
-    
-    <section class="article-copyleft">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyleft" 
-     width="24" height="24" viewBox="0 0 24 24" 
-     stroke-width="2" stroke="currentColor" fill="none" 
-     stroke-linecap="round" stroke-linejoin="round"
-     transform="scale(-1, 1)">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
-</svg>
-        <span>Licensed under CC BY-NC-SA 4.0</span>
-    </section>
-    </footer>
-
-
-    
-</article>
-    <aside class="related-contents--wrapper">
-    
-    
-</aside>
-
-    
-    <footer class="site-footer">
-  
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-
-<script>
-(function(u, c) {
-  var d = document, t = 'script', o = d.createElement(t),
-      s = d.getElementsByTagName(t)[0];
-  o.src = u;
-  if (c) { o.addEventListener('load', function(e) { c(e); }); }
-  s.parentNode.insertBefore(o, s);
-})('//testingcf.jsdelivr.net/npm/pangu@4.0.7/dist/browser/pangu.min.js', function() {
-  pangu.spacingPage();
-});
-</script>
-
-    <section class="copyleft">
-        ©   
-        
-            2024 - 
-        
-        2026 </a>·<i class="fas fa-bell"></i>  <a id="days">0</a> Days<br>
-      共书写了8.9k字·共 9篇文章</br><span><p>
-    </section>
-    
-    <section class="powerby">
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://codeberg.org/iceyear/hugo-theme-stack-mod" target="_blank" rel="noopener" data-version="3.29.0">Stack Mod</a></b> designed by <a href="https://iceyear.eu.org" target="_blank" rel="noopener">Ice Year</a><br />
-         <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">©  Licensed Under CC BY-NC-SA 4.0</a>
-    </section>
-
-<script>
-var s1 = '2024-07-15';
-s1 = new Date(s1.replace(/-/g, "/"));
-s2 = new Date();
-var days = s2.getTime() - s1.getTime();
-var number_of_days = parseInt(days / (1000 * 60 * 60 * 24));
-document.getElementById('days').innerHTML = number_of_days;
-</script>
-    
-</footer>
-
-
-    
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-
-    
-    <div class="pswp__bg"></div>
-
-    
-    <div class="pswp__scroll-wrap">
+        container.innerHTML += `\u003caside class=\u0022related-contents--wrapper\u0022\u003e\n    \n    \n\u003c\/aside\u003e\n`;
 
         
-        <div class="pswp__container">
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-        </div>
+        
 
         
-        <div class="pswp__ui pswp__ui--hidden">
+        container.innerHTML += `\u003cfooter class=\u0022site-footer\u0022\u003e\n  \n\n\n    \n\n    \n\n    \n\n    \n\n    \n\n    \n\n    \n\n    \n\n    \n\n    \n\n    \n\n    \n\n    \n\n\n\u003cscript\u003e\n(function(u, c) \u007b\n  var d = document, t = \u0027script\u0027, o = d.createElement(t),\n      s = d.getElementsByTagName(t)[0];\n  o.src = u;\n  if (c) \u007b o.addEventListener(\u0027load\u0027, function(e) \u007b c(e); \u007d); \u007d\n  s.parentNode.insertBefore(o, s);\n\u007d)(\u0027\/\/testingcf.jsdelivr.net\/npm\/pangu@4.0.7\/dist\/browser\/pangu.min.js\u0027, function() \u007b\n  pangu.spacingPage();\n\u007d);\n\u003c\/script\u003e\n\n    \u003csection class=\u0022copyleft\u0022\u003e\n        ©   \n        \n            2024 - \n        \n        2026 \u003c\/a\u003e·\u003ci class=\u0022fas fa-bell\u0022\u003e\u003c\/i\u003e  \u003ca id=\u0022days\u0022\u003e0\u003c\/a\u003e Days\u003cbr\u003e\n      共书写了9.8k字·共 9篇文章\u003c\/br\u003e\u003cspan\u003e\u003cp\u003e\n    \u003c\/section\u003e\n    \n    \u003csection class=\u0022powerby\u0022\u003e\n        Built with \u003ca href=\u0022https:\/\/gohugo.io\/\u0022 target=\u0022_blank\u0022 rel=\u0022noopener\u0022\u003eHugo\u003c\/a\u003e \u003cbr \/\u003e\n        Theme \u003cb\u003e\u003ca href=\u0022https:\/\/codeberg.org\/iceyear\/hugo-theme-stack-mod\u0022 target=\u0022_blank\u0022 rel=\u0022noopener\u0022 data-version=\u00223.29.0\u0022\u003eStack Mod\u003c\/a\u003e\u003c\/b\u003e designed by \u003ca href=\u0022https:\/\/iceyear.eu.org\u0022 target=\u0022_blank\u0022 rel=\u0022noopener\u0022\u003eIce Year\u003c\/a\u003e\u003cbr \/\u003e\n         \u003ca href=\u0022https:\/\/creativecommons.org\/licenses\/by-nc-sa\/4.0\/deed.zh\u0022 target=\u0022_blank\u0022\u003e©  Licensed Under CC BY-NC-SA 4.0\u003c\/a\u003e\n    \u003c\/section\u003e\n\n\u003cscript\u003e\nvar s1 = \u00272024-07-15\u0027;\ns1 = new Date(s1.replace(\/-\/g, \u0022\/\u0022));\ns2 = new Date();\nvar days = s2.getTime() - s1.getTime();\nvar number_of_days = parseInt(days \/ (1000 * 60 * 60 * 24));\ndocument.getElementById(\u0027days\u0027).innerHTML = number_of_days;\n\u003c\/script\u003e\n    \n\u003c\/footer\u003e\n\n`;
+        container.innerHTML += `\n\u003cdiv class=\u0022pswp\u0022 tabindex=\u0022-1\u0022 role=\u0022dialog\u0022 aria-hidden=\u0022true\u0022\u003e\n\n    \n    \u003cdiv class=\u0022pswp__bg\u0022\u003e\u003c\/div\u003e\n\n    \n    \u003cdiv class=\u0022pswp__scroll-wrap\u0022\u003e\n\n        \n        \u003cdiv class=\u0022pswp__container\u0022\u003e\n            \u003cdiv class=\u0022pswp__item\u0022\u003e\u003c\/div\u003e\n            \u003cdiv class=\u0022pswp__item\u0022\u003e\u003c\/div\u003e\n            \u003cdiv class=\u0022pswp__item\u0022\u003e\u003c\/div\u003e\n        \u003c\/div\u003e\n\n        \n        \u003cdiv class=\u0022pswp__ui pswp__ui--hidden\u0022\u003e\n\n            \u003cdiv class=\u0022pswp__top-bar\u0022\u003e\n\n                \n\n                \u003cdiv class=\u0022pswp__counter\u0022\u003e\u003c\/div\u003e\n\n                \u003cbutton class=\u0022pswp__button pswp__button--close\u0022 title=\u0022Close (Esc)\u0022\u003e\u003c\/button\u003e\n\n                \u003cbutton class=\u0022pswp__button pswp__button--share\u0022 title=\u0022Share\u0022\u003e\u003c\/button\u003e\n\n                \u003cbutton class=\u0022pswp__button pswp__button--fs\u0022 title=\u0022Toggle fullscreen\u0022\u003e\u003c\/button\u003e\n\n                \u003cbutton class=\u0022pswp__button pswp__button--zoom\u0022 title=\u0022Zoom in\/out\u0022\u003e\u003c\/button\u003e\n\n                \n                \n                \u003cdiv class=\u0022pswp__preloader\u0022\u003e\n                    \u003cdiv class=\u0022pswp__preloader__icn\u0022\u003e\n                        \u003cdiv class=\u0022pswp__preloader__cut\u0022\u003e\n                            \u003cdiv class=\u0022pswp__preloader__donut\u0022\u003e\u003c\/div\u003e\n                        \u003c\/div\u003e\n                    \u003c\/div\u003e\n                \u003c\/div\u003e\n            \u003c\/div\u003e\n\n            \u003cdiv class=\u0022pswp__share-modal pswp__share-modal--hidden pswp__single-tap\u0022\u003e\n                \u003cdiv class=\u0022pswp__share-tooltip\u0022\u003e\u003c\/div\u003e\n            \u003c\/div\u003e\n\n            \u003cbutton class=\u0022pswp__button pswp__button--arrow--left\u0022 title=\u0022Previous (arrow left)\u0022\u003e\n            \u003c\/button\u003e\n\n            \u003cbutton class=\u0022pswp__button pswp__button--arrow--right\u0022 title=\u0022Next (arrow right)\u0022\u003e\n            \u003c\/button\u003e\n\n            \u003cdiv class=\u0022pswp__caption\u0022\u003e\n                \u003cdiv class=\u0022pswp__caption__center\u0022\u003e\u003c\/div\u003e\n            \u003c\/div\u003e\n\n        \u003c\/div\u003e\n\n    \u003c\/div\u003e\n\n\u003c\/div\u003e\u003cscript \n                src=\u0022https:\/\/testingcf.jsdelivr.net\/npm\/photoswipe@4.1.3\/dist\/photoswipe.min.js\u0022integrity=\u0022sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=\u0022crossorigin=\u0022anonymous\u0022\n                defer\n                \u003e\n            \u003c\/script\u003e\u003cscript \n                src=\u0022https:\/\/testingcf.jsdelivr.net\/npm\/photoswipe@4.1.3\/dist\/photoswipe-ui-default.min.js\u0022integrity=\u0022sha256-UKkzOn\/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=\u0022crossorigin=\u0022anonymous\u0022\n                defer\n                \u003e\n            \u003c\/script\u003e\u003clink \n                rel=\u0022stylesheet\u0022 \n                href=\u0022https:\/\/testingcf.jsdelivr.net\/npm\/photoswipe@4.1.3\/dist\/default-skin\/default-skin.min.css\u0022crossorigin=\u0022anonymous\u0022\n            \u003e\u003clink \n                rel=\u0022stylesheet\u0022 \n                href=\u0022https:\/\/testingcf.jsdelivr.net\/npm\/photoswipe@4.1.3\/dist\/photoswipe.min.css\u0022crossorigin=\u0022anonymous\u0022\n            \u003e`;
 
-            <div class="pswp__top-bar">
-
-                
-
-                <div class="pswp__counter"></div>
-
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-
-                <button class="pswp__button pswp__button--share" title="Share"></button>
-
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-
-                
-                
-                <div class="pswp__preloader">
-                    <div class="pswp__preloader__icn">
-                        <div class="pswp__preloader__cut">
-                            <div class="pswp__preloader__donut"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                <div class="pswp__share-tooltip"></div>
-            </div>
-
-            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-            </button>
-
-            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-            </button>
-
-            <div class="pswp__caption">
-                <div class="pswp__caption__center"></div>
-            </div>
-
-        </div>
-
-    </div>
-
-</div><script 
-                src="https://testingcf.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
-                defer
-                >
-            </script><script 
-                src="https://testingcf.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
-                defer
-                >
-            </script><link 
-                rel="stylesheet" 
-                href="https://testingcf.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
-            ><link 
-                rel="stylesheet" 
-                href="https://testingcf.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
-            >
+      } else {
+        alert("密码错误，无法查看内容！");
+        window.location.href = "http:\/\/localhost:1313\/";
+      }
+    </script>
   
 
             </main>
