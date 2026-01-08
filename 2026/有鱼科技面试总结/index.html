@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="问题1：vue3生命周期 创建 / 挂载 / 更新 / 卸载 / 错误捕获 五个阶段 ⚠️ Vue 3 没有 beforeCreate / created 它们的能力被 setup() 统一取代\n阶段 Vue2 对应 Vue3 Options API Vue3 Composition API 写法 创建前 beforeCreate beforeCreate ⚠️ 已被 setup() 替代 创建后 created created ⚠️ 已被 setup() 替代 挂载前 beforeMount beforeMount onBeforeMount() 挂载后 mounted mounted onMounted() 更新前 beforeUpdate beforeUpdate onBeforeUpdate() 更新后 updated updated onUpdated() 卸载前 beforeDestroy beforeUnmount onBeforeUnmount() 卸载后 destroyed unmounted onUnmounted() 错误捕获 errorCaptured errorCaptured onErrorCaptured() 新增：激活 - activated onActivated() 新增：停用 - deactivated onDeactivated() 扩展：Vue2生命周期 创建 / 挂载 / 更新 / 销毁\n">
+<title>有鱼科技面试总结</title>
+
+<link rel='canonical' href='https://mkkkk-create.github.io/2026/%E6%9C%89%E9%B1%BC%E7%A7%91%E6%8A%80%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93/'>
+
+<link rel="stylesheet" href="/scss/style.min.503a651fd8a85b2b025533bf0d780be393b4b991a01f13e137a298ee3877e3f1.css"><meta property='og:title' content="有鱼科技面试总结">
+<meta property='og:description' content="问题1：vue3生命周期 创建 / 挂载 / 更新 / 卸载 / 错误捕获 五个阶段 ⚠️ Vue 3 没有 beforeCreate / created 它们的能力被 setup() 统一取代\n阶段 Vue2 对应 Vue3 Options API Vue3 Composition API 写法 创建前 beforeCreate beforeCreate ⚠️ 已被 setup() 替代 创建后 created created ⚠️ 已被 setup() 替代 挂载前 beforeMount beforeMount onBeforeMount() 挂载后 mounted mounted onMounted() 更新前 beforeUpdate beforeUpdate onBeforeUpdate() 更新后 updated updated onUpdated() 卸载前 beforeDestroy beforeUnmount onBeforeUnmount() 卸载后 destroyed unmounted onUnmounted() 错误捕获 errorCaptured errorCaptured onErrorCaptured() 新增：激活 - activated onActivated() 新增：停用 - deactivated onDeactivated() 扩展：Vue2生命周期 创建 / 挂载 / 更新 / 销毁\n">
+<meta property='og:url' content='https://mkkkk-create.github.io/2026/%E6%9C%89%E9%B1%BC%E7%A7%91%E6%8A%80%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93/'>
+<meta property='og:site_name' content='mkkkk'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='面经' /><meta property='article:published_time' content='2026-01-08T00:26:34&#43;08:00'/><meta property='article:modified_time' content='2026-01-08T00:26:34&#43;08:00'/>
+<meta name="twitter:title" content="有鱼科技面试总结">
+<meta name="twitter:description" content="问题1：vue3生命周期 创建 / 挂载 / 更新 / 卸载 / 错误捕获 五个阶段 ⚠️ Vue 3 没有 beforeCreate / created 它们的能力被 setup() 统一取代\n阶段 Vue2 对应 Vue3 Options API Vue3 Composition API 写法 创建前 beforeCreate beforeCreate ⚠️ 已被 setup() 替代 创建后 created created ⚠️ 已被 setup() 替代 挂载前 beforeMount beforeMount onBeforeMount() 挂载后 mounted mounted onMounted() 更新前 beforeUpdate beforeUpdate onBeforeUpdate() 更新后 updated updated onUpdated() 卸载前 beforeDestroy beforeUnmount onBeforeUnmount() 卸载后 destroyed unmounted onUnmounted() 错误捕获 errorCaptured errorCaptured onErrorCaptured() 新增：激活 - activated onActivated() 新增：停用 - deactivated onDeactivated() 扩展：Vue2生命周期 创建 / 挂载 / 更新 / 销毁\n"><style>
+    :root {
+        --article-font-family: "Noto Serif SC", var(--base-font-family);
+    }
+</style>
+
+<script> 
+		(function () {
+		    const customFont = document.createElement('link');
+		    customFont.href = "https://fonts.bunny.net/css2?family=Noto+Serif+SC:wght@300;700&display=swap"; 
+		    customFont.type = "text/css";
+		    customFont.rel = "stylesheet";
+		
+		    document.head.appendChild(customFont);
+		}());
+</script>
+
+    </head>
+    <body class="
+    article-page
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended">
+    
+<div id="article-toolbar">
+    <a href="https://mkkkk-create.github.io/" class="back-home">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+        <span>Back</span>
+    </a>
+</div>
+    <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_3246c36c7e913b88.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🎯</span>
+                
+            </figure>
+            
+        
+        
+        <h1 class="site-name"><a href="/">mkkkk</a></h1>
+        <h2 class="site-description">逆向，计算机软件，硬件...热衷于探索未知的领域</h2><ol class="social-menu">
+                
+                    <li>
+                        <a 
+                            href='https://github.com/mkkkk-create'
+                            target="_blank"
+                            title="GitHub"
+                            rel="me"
+                        >
+                            
+                            
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a 
+                            href='mailto:mail@iceyear.eu.org'
+                            target="_blank"
+                            title="Mail"
+                            rel="me"
+                        >
+                            
+                            
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-mail" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><rect x="3" y="5" width="18" height="14" rx="2"></rect><polyline points="3 7 12 13 21 7"></polyline></svg>
+
+                            
+                        </a>
+                    </li>
+                
+            </ol></header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Friends</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+
+        
+            <li id="dark-mode-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <span>Dark Mode</span>
+            </li>
+        
+    </ol>
+</aside>
+
+
+    
+    
+    
+    <aside class="sidebar right-sidebar sticky">
+        
+            <form action="/search/" class="search-form widget" >
+        <p>
+            <label>Search</label>
+            <input name="keyword" required placeholder="Type something..." />
+        
+            <button title="Search">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+            </button>
+        </p>
+    </form>
+        
+            
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#问题1vue3生命周期">问题1：vue3生命周期</a>
+      <ol>
+        <li><a href="#扩展vue2生命周期">扩展：Vue2生命周期</a></li>
+      </ol>
+    </li>
+    <li><a href="#问题2git同一分支两个人push如何避免代码混乱">问题2：git同一分支两个人push如何避免代码混乱</a></li>
+    <li><a href="#问题3筑梦e财项目实时通知推送如何实现">问题3：筑梦E财项目实时通知推送如何实现</a>
+      <ol>
+        <li><a href="#扩展为什么您的小程序没有用长连接">扩展：为什么您的小程序没有用长连接？</a></li>
+      </ol>
+    </li>
+    <li><a href="#问题4筑梦e财项目懒加载具体实现">问题4：筑梦E财项目懒加载具体实现</a></li>
+    <li><a href="#问题5split-chunks详解">问题5：Split chunks详解</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+        
+            <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-infinity" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M9.828 9.172a4 4 0 1 0 0 5.656 a10 10 0 0 0 2.172 -2.828a10 10 0 0 1 2.172 -2.828 a4 4 0 1 1 0 5.656a10 10 0 0 1 -2.172 -2.828a10 10 0 0 0 -2.172 -2.828" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Archives</h2>
+
+        
+        
+        
+        
+        
+        <div class="widget-archive--list">
+            <div class="archives-year">
+                    <a href="/archives/#2026">
+                        
+                            <span class="year">2026</span>
+                            <span class="count">1</span>
+                        
+                    </a> 
+                </div>
+            <div class="archives-year">
+                    <a href="/archives/#2024">
+                        
+                            <span class="year">2024</span>
+                            <span class="count">7</span>
+                        
+                    </a> 
+                </div>
+            
+        </div>
+    </section>
+        
+            <section class="widget tagCloud">
+    <div class="widget-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+    </div>
+    <h2 class="widget-title section-title">Tags</h2>
+
+    <div class="tagCloud-tags">
+    
+        <a href="/tags/reverse/" class="tag-link">
+            <span class="tag-name">Reverse</span>
+            <span class="tag-count">(5)</span>
+        </a>
+    
+        <a href="/tags/writeup/" class="tag-link">
+            <span class="tag-name">Writeup</span>
+            <span class="tag-count">(3)</span>
+        </a>
+    
+        <a href="/tags/c%E8%AF%AD%E8%A8%80/" class="tag-link">
+            <span class="tag-name">C语言</span>
+            <span class="tag-count">(2)</span>
+        </a>
+    
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="tag-link">
+            <span class="tag-name">数据结构</span>
+            <span class="tag-count">(2)</span>
+        </a>
+    
+        <a href="/tags/upx%E5%8E%8B%E7%BC%A9%E5%A3%B3/" class="tag-link">
+            <span class="tag-name">UPX压缩壳</span>
+            <span class="tag-count">(1)</span>
+        </a>
+    
+        <a href="/tags/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" class="tag-link">
+            <span class="tag-name">加密算法</span>
+            <span class="tag-count">(1)</span>
+        </a>
+    
+        <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D/" class="tag-link">
+            <span class="tag-name">字符串匹配</span>
+            <span class="tag-count">(1)</span>
+        </a>
+    
+        <a href="/tags/%E9%93%BE%E8%A1%A8/" class="tag-link">
+            <span class="tag-name">链表</span>
+            <span class="tag-count">(1)</span>
+        </a>
+    
+        <a href="/tags/%E9%9D%A2%E7%BB%8F/" class="tag-link">
+            <span class="tag-name">面经</span>
+            <span class="tag-count">(1)</span>
+        </a>
+    
+</div>
+</section>
+        
+    </aside>
+
+
+            <main class="main full-width">
+  
+    <script>
+      const password = prompt("请输入文章密码");
+      const correctPassword = "123456";
+      if (password === correctPassword) {
+        document.write(`\u003carticle class=\u0022main-article\u0022\u003e\n    \u003cheader class=\u0022article-header\u0022\u003e\n\n    \u003cdiv class=\u0022article-details\u0022\u003e\n    \n    \u003cheader class=\u0022article-category\u0022\u003e\n        \n            \u003ca href=\u0022\/categories\/%E9%9D%A2%E7%BB%8F\/\u0022 \u003e\n                面经\n            \u003c\/a\u003e\n        \n    \u003c\/header\u003e\n    \n\n    \u003cdiv class=\u0022article-title-wrapper\u0022\u003e\n        \u003ch2 class=\u0022article-title\u0022\u003e\n            \u003ca href=\u0022\/2026\/%E6%9C%89%E9%B1%BC%E7%A7%91%E6%8A%80%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93\/\u0022\u003e有鱼科技面试总结\u003c\/a\u003e\n        \u003c\/h2\u003e\n    \n        \n    \u003c\/div\u003e\n\n    \n    \n    \n    \n    \u003cfooter class=\u0022article-time\u0022\u003e\n        \n            \u003cdiv\u003e\n                \u003csvg xmlns=\u0022http:\/\/www.w3.org\/2000\/svg\u0022 class=\u0022icon icon-tabler icon-tabler-calendar-time\u0022 width=\u002256\u0022 height=\u002256\u0022 viewBox=\u00220 0 24 24\u0022 stroke-width=\u00222\u0022 stroke=\u0022currentColor\u0022 fill=\u0022none\u0022 stroke-linecap=\u0022round\u0022 stroke-linejoin=\u0022round\u0022\u003e\n  \u003cpath stroke=\u0022none\u0022 d=\u0022M0 0h24v24H0z\u0022\/\u003e\n  \u003cpath d=\u0022M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4\u0022 \/\u003e\n  \u003ccircle cx=\u002218\u0022 cy=\u002218\u0022 r=\u00224\u0022 \/\u003e\n  \u003cpath d=\u0022M15 3v4\u0022 \/\u003e\n  \u003cpath d=\u0022M7 3v4\u0022 \/\u003e\n  \u003cpath d=\u0022M3 11h16\u0022 \/\u003e\n  \u003cpath d=\u0022M18 16.496v1.504l1 1\u0022 \/\u003e\n\u003c\/svg\u003e\n                \u003ctime class=\u0022article-time--published\u0022\u003eJan 08, 2026\u003c\/time\u003e\n            \u003c\/div\u003e\n        \n\n        \n            \u003cdiv\u003e\n                \u003csvg xmlns=\u0022http:\/\/www.w3.org\/2000\/svg\u0022 class=\u0022icon icon-tabler icon-tabler-clock\u0022 width=\u002224\u0022 height=\u002224\u0022 viewBox=\u00220 0 24 24\u0022 stroke-width=\u00222\u0022 stroke=\u0022currentColor\u0022 fill=\u0022none\u0022 stroke-linecap=\u0022round\u0022 stroke-linejoin=\u0022round\u0022\u003e\n  \u003cpath stroke=\u0022none\u0022 d=\u0022M0 0h24v24H0z\u0022\/\u003e\n  \u003ccircle cx=\u002212\u0022 cy=\u002212\u0022 r=\u00229\u0022 \/\u003e\n  \u003cpolyline points=\u002212 7 12 12 15 15\u0022 \/\u003e\n\u003c\/svg\u003e\n\n\n\n                \n                \u003ctime class=\u0022article-words\u0022\u003e\n                    1075 字\n                \u003c\/time\u003e\n            \u003c\/div\u003e\n        \n    \u003c\/footer\u003e\n    \n\n    \n\u003c\/div\u003e\n\n\u003c\/header\u003e\n\n    \u003csection class=\u0022article-content\u0022\u003e\n    \n    \n    \u003ch2 id=\u0022问题1vue3生命周期\u0022\u003e问题1：vue3生命周期\n\u003c\/h2\u003e\n\u003cp\u003e创建 \/ 挂载 \/ 更新 \/ 卸载 \/ 错误捕获 五个阶段 \u003cbr\u003e\u003c\/p\u003e\n\u003cp\u003e⚠️ Vue 3 没有 beforeCreate \/ created \u003cbr\u003e\n它们的能力被 setup() 统一取代\u003c\/p\u003e\n\u003cdiv class=\u0022table-wrapper\u0022\u003e\u003ctable\u003e\n  \u003cthead\u003e\n      \u003ctr\u003e\n          \u003cth\u003e阶段\u003c\/th\u003e\n          \u003cth\u003eVue2 对应\u003c\/th\u003e\n          \u003cth\u003eVue3 Options API\u003c\/th\u003e\n          \u003cth\u003eVue3 Composition API 写法\u003c\/th\u003e\n      \u003c\/tr\u003e\n  \u003c\/thead\u003e\n  \u003ctbody\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e创建前\u003c\/td\u003e\n          \u003ctd\u003ebeforeCreate\u003c\/td\u003e\n          \u003ctd\u003ebeforeCreate\u003c\/td\u003e\n          \u003ctd\u003e⚠️ 已被 setup() 替代\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e创建后\u003c\/td\u003e\n          \u003ctd\u003ecreated\u003c\/td\u003e\n          \u003ctd\u003ecreated\u003c\/td\u003e\n          \u003ctd\u003e⚠️ 已被 setup() 替代\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e挂载前\u003c\/td\u003e\n          \u003ctd\u003ebeforeMount\u003c\/td\u003e\n          \u003ctd\u003ebeforeMount\u003c\/td\u003e\n          \u003ctd\u003eonBeforeMount()\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e挂载后\u003c\/td\u003e\n          \u003ctd\u003emounted\u003c\/td\u003e\n          \u003ctd\u003emounted\u003c\/td\u003e\n          \u003ctd\u003e\u003cmark\u003eonMounted()\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e更新前\u003c\/td\u003e\n          \u003ctd\u003ebeforeUpdate\u003c\/td\u003e\n          \u003ctd\u003ebeforeUpdate\u003c\/td\u003e\n          \u003ctd\u003eonBeforeUpdate()\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e更新后\u003c\/td\u003e\n          \u003ctd\u003eupdated\u003c\/td\u003e\n          \u003ctd\u003eupdated\u003c\/td\u003e\n          \u003ctd\u003e\u003cmark\u003eonUpdated()\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e卸载前\u003c\/td\u003e\n          \u003ctd\u003ebeforeDestroy\u003c\/td\u003e\n          \u003ctd\u003ebeforeUnmount\u003c\/td\u003e\n          \u003ctd\u003eonBeforeUnmount()\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e卸载后\u003c\/td\u003e\n          \u003ctd\u003edestroyed\u003c\/td\u003e\n          \u003ctd\u003eunmounted\u003c\/td\u003e\n          \u003ctd\u003e\u003cmark\u003eonUnmounted()\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e错误捕获\u003c\/td\u003e\n          \u003ctd\u003eerrorCaptured\u003c\/td\u003e\n          \u003ctd\u003eerrorCaptured\u003c\/td\u003e\n          \u003ctd\u003e\u003cmark\u003eonErrorCaptured()\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e新增：激活\u003c\/td\u003e\n          \u003ctd\u003e-\u003c\/td\u003e\n          \u003ctd\u003eactivated\u003c\/td\u003e\n          \u003ctd\u003eonActivated()\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e新增：停用\u003c\/td\u003e\n          \u003ctd\u003e-\u003c\/td\u003e\n          \u003ctd\u003edeactivated\u003c\/td\u003e\n          \u003ctd\u003eonDeactivated()\u003c\/td\u003e\n      \u003c\/tr\u003e\n  \u003c\/tbody\u003e\n\u003c\/table\u003e\u003c\/div\u003e\n\u003ch3 id=\u0022扩展vue2生命周期\u0022\u003e扩展：Vue2生命周期\n\u003c\/h3\u003e\n\u003cp\u003e创建 \/ 挂载 \/ 更新 \/ 销毁\u003c\/p\u003e\n\u003cdiv class=\u0022table-wrapper\u0022\u003e\u003ctable\u003e\n  \u003cthead\u003e\n      \u003ctr\u003e\n          \u003cth\u003e阶段\u003c\/th\u003e\n          \u003cth\u003e生命周期钩子\u003c\/th\u003e\n          \u003cth\u003e说明\u003c\/th\u003e\n      \u003c\/tr\u003e\n  \u003c\/thead\u003e\n  \u003ctbody\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e创建前\u003c\/td\u003e\n          \u003ctd\u003ebeforeCreate()\u003c\/td\u003e\n          \u003ctd\u003e实例初始化之前，data、methods、props 都还没被创建\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e创建后\u003c\/td\u003e\n          \u003ctd\u003e\u003cmark\u003e \u003cstrong\u003ecreated()\u003c\/strong\u003e\u003c\/td\u003e\n          \u003ctd\u003e实例创建完成，可以访问 data、methods，但还未挂载到 DOM\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e挂载前\u003c\/td\u003e\n          \u003ctd\u003ebeforeMount()\u003c\/td\u003e\n          \u003ctd\u003e在挂载开始之前调用，此时模板已编译，但还未渲染到页面上\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e挂载后\u003c\/td\u003e\n          \u003ctd\u003e\u003cmark\u003e\u003cstrong\u003emounted()\u003c\/strong\u003e\u003c\/td\u003e\n          \u003ctd\u003e组件挂载到 DOM 后调用，可操作真实 DOM\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e更新前\u003c\/td\u003e\n          \u003ctd\u003ebeforeUpdate()\u003c\/td\u003e\n          \u003ctd\u003e响应式数据更新时，在重新渲染前调用\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e更新后\u003c\/td\u003e\n          \u003ctd\u003e\u003cmark\u003e\u003cstrong\u003eupdated()\u003c\/strong\u003e\u003c\/td\u003e\n          \u003ctd\u003e组件更新并重新渲染后调用\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e销毁前\u003c\/td\u003e\n          \u003ctd\u003ebeforeDestroy()\u003c\/td\u003e\n          \u003ctd\u003e实例销毁前调用，可执行清理工作（如移除事件监听、定时器等）\u003c\/td\u003e\n      \u003c\/tr\u003e\n      \u003ctr\u003e\n          \u003ctd\u003e销毁后\u003c\/td\u003e\n          \u003ctd\u003e\u003cmark\u003e\u003cstrong\u003edestroyed()\u003c\/strong\u003e\u003c\/td\u003e\n          \u003ctd\u003e实例销毁后调用，所有指令解绑、子组件销毁\u003c\/td\u003e\n      \u003c\/tr\u003e\n  \u003c\/tbody\u003e\n\u003c\/table\u003e\u003c\/div\u003e\n\u003ch2 id=\u0022问题2git同一分支两个人push如何避免代码混乱\u0022\u003e问题2：git同一分支两个人push如何避免代码混乱\n\u003c\/h2\u003e\n\u003cp\u003e每次开发前先拉取最新代码pull \u0026ndash;rebase再push:这是避免\u0026quot;混乱历史\u0026quot;和\u0026quot;重复冲突\u0026quot;的关键。\u003c\/p\u003e\n\u003cp\u003e\u003cmark\u003e \u003cstrong\u003e治本之策：采用功能分支工作流，在当前分支下建立每个人自己的分支，就可以避免\u003c\/strong\u003e\u003c\/p\u003e\n\u003ch2 id=\u0022问题3筑梦e财项目实时通知推送如何实现\u0022\u003e问题3：筑梦E财项目实时通知推送如何实现\n\u003c\/h2\u003e\n\u003cp\u003e管理员在后台管理系统 communication.html 中编写消息。点击发送后，前端通过 \u003cstrong\u003ePOST\u003c\/strong\u003e 请求将数据提交至后端的 \u003cstrong\u003e\/api\/notices 接口\u003c\/strong\u003e。\u003c\/p\u003e\n\u003cp\u003e后端 NoticeController.java 接收到数据后，利用 NoticeService(负责消息创建、更新、删除通知) 将其持久化到数据库中。\u003c\/p\u003e\n\u003cp\u003e小程序并没有使用长连接推送，而是利用页面生命周期实现“进入即更新”。在 notice.js 的 onShow 方法中，系统会在每次用户打开消息页面时自动调用 loadNotifications 。\u003c\/p\u003e\n\u003ch3 id=\u0022扩展为什么您的小程序没有用长连接\u0022\u003e扩展：为什么您的小程序没有用长连接？\n\u003c\/h3\u003e\n\u003cp\u003e家校通知通常不需要秒级同步。家长在打开小程序时能看到最新消息，体验已经足够。\u003c\/p\u003e\n\u003cp\u003e维护 WebSocket 需要服务器有更高的内存和长连接处理能力。对于托育系统这种非高频即时通讯（如微信聊天）的应用，使用传统的 RESTful API 更加稳定且易于维护。\u003c\/p\u003e\n\u003ch2 id=\u0022问题4筑梦e财项目懒加载具体实现\u0022\u003e问题4：筑梦E财项目懒加载具体实现\n\u003c\/h2\u003e\n\u003cul\u003e\n\u003cli\u003e给所有图片加 lazy-load （如距离图片多少rpx再加载）。\u003c\/li\u003e\n\u003cli\u003e为通知列表实现“触底加载更多”分页功能（提升交互感）。\u003c\/li\u003e\n\u003cli\u003e随着页面增多，进行分包重构（将非核心页面（如 userPolicy 、 bindchild 、 webview ）移入 分包 。）（这种分包通常就是split chunk）\u003c\/li\u003e\n\u003c\/ul\u003e\n\u003ch2 id=\u0022问题5split-chunks详解\u0022\u003e问题5：Split chunks详解\n\u003c\/h2\u003e\n\u003cp\u003e\u003cstrong\u003e核心目标：\u003c\/strong\u003e 提高性能、优化缓存、减少重复\u003c\/p\u003e\n\u003cp\u003e\u003cstrong\u003e核心配置：\u003c\/strong\u003e\u003c\/p\u003e\n\u003cul\u003e\n\u003cli\u003echunks → 哪些模块拆分\u003c\/li\u003e\n\u003cli\u003eminSize \/ minChunks → 拆分条件\u003c\/li\u003e\n\u003cli\u003ecacheGroups → 自定义分组策略\u003c\/li\u003e\n\u003c\/ul\u003e\n\u003cp\u003e\u003cstrong\u003e最佳实践：\u003c\/strong\u003e\u003c\/p\u003e\n\u003col\u003e\n\u003cli\u003e第三方库独立打包（vendors）\u003c\/li\u003e\n\u003cli\u003e公共模块抽取（common）\u003c\/li\u003e\n\u003cli\u003e动态 import 拆分异步模块\u003c\/li\u003e\n\u003cli\u003e利用缓存提高性能\u003c\/li\u003e\n\u003c\/ol\u003e\n\n\u003c\/section\u003e\n\n\n    \u003cfooter class=\u0022article-footer\u0022\u003e\n    \n    \u003csection class=\u0022article-tags\u0022\u003e\n        \n            \u003ca href=\u0022\/tags\/%E9%9D%A2%E7%BB%8F\/\u0022\u003e面经\u003c\/a\u003e\n        \n    \u003c\/section\u003e\n\n\n    \n    \u003csection class=\u0022article-copyleft\u0022\u003e\n        \u003csvg xmlns=\u0022http:\/\/www.w3.org\/2000\/svg\u0022 class=\u0022icon icon-tabler icon-tabler-copyleft\u0022 \n     width=\u002224\u0022 height=\u002224\u0022 viewBox=\u00220 0 24 24\u0022 \n     stroke-width=\u00222\u0022 stroke=\u0022currentColor\u0022 fill=\u0022none\u0022 \n     stroke-linecap=\u0022round\u0022 stroke-linejoin=\u0022round\u0022\n     transform=\u0022scale(-1, 1)\u0022\u003e\n  \u003cpath stroke=\u0022none\u0022 d=\u0022M0 0h24v24H0z\u0022\/\u003e\n  \u003ccircle cx=\u002212\u0022 cy=\u002212\u0022 r=\u00229\u0022 \/\u003e\n  \u003cpath d=\u0022M14.5 9a3.5 4 0 1 0 0 6\u0022 \/\u003e\n\u003c\/svg\u003e\n        \u003cspan\u003eLicensed under CC BY-NC-SA 4.0\u003c\/span\u003e\n    \u003c\/section\u003e\n    \u003c\/footer\u003e\n\n\n    \n\u003c\/article\u003e`);
+        
+        document.write(`\u003caside class=\u0022related-contents--wrapper\u0022\u003e\n    \n    \n\u003c\/aside\u003e\n`);
+        
+        document.write(`\u003cfooter class=\u0022site-footer\u0022\u003e\n  \n\n\n    \n\n    \n\n    \n\n    \n\n    \n\n    \n\n    \n\n    \n\n    \n\n    \n\n    \n\n    \n\n\n\u003cscript\u003e\n(function(u, c) \u007b\n  var d = document, t = \u0027script\u0027, o = d.createElement(t),\n      s = d.getElementsByTagName(t)[0];\n  o.src = u;\n  if (c) \u007b o.addEventListener(\u0027load\u0027, function(e) \u007b c(e); \u007d); \u007d\n  s.parentNode.insertBefore(o, s);\n\u007d)(\u0027\/\/testingcf.jsdelivr.net\/npm\/pangu@4.0.7\/dist\/browser\/pangu.min.js\u0027, function() \u007b\n  pangu.spacingPage();\n\u007d);\n\u003c\/script\u003e\n\n    \u003csection class=\u0022copyleft\u0022\u003e\n        ©   \n        \n            2024 - \n        \n        2026 \u003c\/a\u003e·\u003ci class=\u0022fas fa-bell\u0022\u003e\u003c\/i\u003e  \u003ca id=\u0022days\u0022\u003e0\u003c\/a\u003e Days\u003cbr\u003e\n      共书写了8.9k字·共 8篇文章\u003c\/br\u003e\u003cspan\u003e\u003cp\u003e\n    \u003c\/section\u003e\n    \n    \u003csection class=\u0022powerby\u0022\u003e\n        Built with \u003ca href=\u0022https:\/\/gohugo.io\/\u0022 target=\u0022_blank\u0022 rel=\u0022noopener\u0022\u003eHugo\u003c\/a\u003e \u003cbr \/\u003e\n        Theme \u003cb\u003e\u003ca href=\u0022https:\/\/codeberg.org\/iceyear\/hugo-theme-stack-mod\u0022 target=\u0022_blank\u0022 rel=\u0022noopener\u0022 data-version=\u00223.29.0\u0022\u003eStack Mod\u003c\/a\u003e\u003c\/b\u003e designed by \u003ca href=\u0022https:\/\/iceyear.eu.org\u0022 target=\u0022_blank\u0022 rel=\u0022noopener\u0022\u003eIce Year\u003c\/a\u003e\u003cbr \/\u003e\n         \u003ca href=\u0022https:\/\/creativecommons.org\/licenses\/by-nc-sa\/4.0\/deed.zh\u0022 target=\u0022_blank\u0022\u003e©  Licensed Under CC BY-NC-SA 4.0\u003c\/a\u003e\n    \u003c\/section\u003e\n\n\u003cscript\u003e\nvar s1 = \u00272024-07-15\u0027;\ns1 = new Date(s1.replace(\/-\/g, \u0022\/\u0022));\ns2 = new Date();\nvar days = s2.getTime() - s1.getTime();\nvar number_of_days = parseInt(days \/ (1000 * 60 * 60 * 24));\ndocument.getElementById(\u0027days\u0027).innerHTML = number_of_days;\n\u003c\/script\u003e\n    \n\u003c\/footer\u003e\n\n`);
+        document.write(`\n\u003cdiv class=\u0022pswp\u0022 tabindex=\u0022-1\u0022 role=\u0022dialog\u0022 aria-hidden=\u0022true\u0022\u003e\n\n    \n    \u003cdiv class=\u0022pswp__bg\u0022\u003e\u003c\/div\u003e\n\n    \n    \u003cdiv class=\u0022pswp__scroll-wrap\u0022\u003e\n\n        \n        \u003cdiv class=\u0022pswp__container\u0022\u003e\n            \u003cdiv class=\u0022pswp__item\u0022\u003e\u003c\/div\u003e\n            \u003cdiv class=\u0022pswp__item\u0022\u003e\u003c\/div\u003e\n            \u003cdiv class=\u0022pswp__item\u0022\u003e\u003c\/div\u003e\n        \u003c\/div\u003e\n\n        \n        \u003cdiv class=\u0022pswp__ui pswp__ui--hidden\u0022\u003e\n\n            \u003cdiv class=\u0022pswp__top-bar\u0022\u003e\n\n                \n\n                \u003cdiv class=\u0022pswp__counter\u0022\u003e\u003c\/div\u003e\n\n                \u003cbutton class=\u0022pswp__button pswp__button--close\u0022 title=\u0022Close (Esc)\u0022\u003e\u003c\/button\u003e\n\n                \u003cbutton class=\u0022pswp__button pswp__button--share\u0022 title=\u0022Share\u0022\u003e\u003c\/button\u003e\n\n                \u003cbutton class=\u0022pswp__button pswp__button--fs\u0022 title=\u0022Toggle fullscreen\u0022\u003e\u003c\/button\u003e\n\n                \u003cbutton class=\u0022pswp__button pswp__button--zoom\u0022 title=\u0022Zoom in\/out\u0022\u003e\u003c\/button\u003e\n\n                \n                \n                \u003cdiv class=\u0022pswp__preloader\u0022\u003e\n                    \u003cdiv class=\u0022pswp__preloader__icn\u0022\u003e\n                        \u003cdiv class=\u0022pswp__preloader__cut\u0022\u003e\n                            \u003cdiv class=\u0022pswp__preloader__donut\u0022\u003e\u003c\/div\u003e\n                        \u003c\/div\u003e\n                    \u003c\/div\u003e\n                \u003c\/div\u003e\n            \u003c\/div\u003e\n\n            \u003cdiv class=\u0022pswp__share-modal pswp__share-modal--hidden pswp__single-tap\u0022\u003e\n                \u003cdiv class=\u0022pswp__share-tooltip\u0022\u003e\u003c\/div\u003e\n            \u003c\/div\u003e\n\n            \u003cbutton class=\u0022pswp__button pswp__button--arrow--left\u0022 title=\u0022Previous (arrow left)\u0022\u003e\n            \u003c\/button\u003e\n\n            \u003cbutton class=\u0022pswp__button pswp__button--arrow--right\u0022 title=\u0022Next (arrow right)\u0022\u003e\n            \u003c\/button\u003e\n\n            \u003cdiv class=\u0022pswp__caption\u0022\u003e\n                \u003cdiv class=\u0022pswp__caption__center\u0022\u003e\u003c\/div\u003e\n            \u003c\/div\u003e\n\n        \u003c\/div\u003e\n\n    \u003c\/div\u003e\n\n\u003c\/div\u003e\u003cscript \n                src=\u0022https:\/\/testingcf.jsdelivr.net\/npm\/photoswipe@4.1.3\/dist\/photoswipe.min.js\u0022integrity=\u0022sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=\u0022crossorigin=\u0022anonymous\u0022\n                defer\n                \u003e\n            \u003c\/script\u003e\u003cscript \n                src=\u0022https:\/\/testingcf.jsdelivr.net\/npm\/photoswipe@4.1.3\/dist\/photoswipe-ui-default.min.js\u0022integrity=\u0022sha256-UKkzOn\/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=\u0022crossorigin=\u0022anonymous\u0022\n                defer\n                \u003e\n            \u003c\/script\u003e\u003clink \n                rel=\u0022stylesheet\u0022 \n                href=\u0022https:\/\/testingcf.jsdelivr.net\/npm\/photoswipe@4.1.3\/dist\/default-skin\/default-skin.min.css\u0022crossorigin=\u0022anonymous\u0022\n            \u003e\u003clink \n                rel=\u0022stylesheet\u0022 \n                href=\u0022https:\/\/testingcf.jsdelivr.net\/npm\/photoswipe@4.1.3\/dist\/photoswipe.min.css\u0022crossorigin=\u0022anonymous\u0022\n            \u003e`);
+      } else {
+        alert("密码错误，无法查看内容！");
+        window.location.href = "https:\/\/mkkkk-create.github.io\/";
+      }
+    </script>
+  
+
+            </main>
+        </div>
+        <script 
+                src="https://testingcf.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.0bd16652234b138336e9a2f765908650df99e335b845d48acb8f49e6e0626a8f.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.bunny.net/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
+

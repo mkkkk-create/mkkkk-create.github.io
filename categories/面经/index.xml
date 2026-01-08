@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>面经 on mkkkk</title>
+        <link>https://mkkkk-create.github.io/categories/%E9%9D%A2%E7%BB%8F/</link>
+        <description>Recent content in 面经 on mkkkk</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en</language>
+        <lastBuildDate>Thu, 08 Jan 2026 00:26:34 +0800</lastBuildDate><atom:link href="https://mkkkk-create.github.io/categories/%E9%9D%A2%E7%BB%8F/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>有鱼科技面试总结</title>
+        <link>https://mkkkk-create.github.io/2026/%E6%9C%89%E9%B1%BC%E7%A7%91%E6%8A%80%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93/</link>
+        <pubDate>Thu, 08 Jan 2026 00:26:34 +0800</pubDate>
+        
+        <guid>https://mkkkk-create.github.io/2026/%E6%9C%89%E9%B1%BC%E7%A7%91%E6%8A%80%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93/</guid>
+        <description>&lt;h2 id=&#34;问题1vue3生命周期&#34;&gt;问题1：vue3生命周期
+&lt;/h2&gt;
+&lt;p&gt;创建 / 挂载 / 更新 / 卸载 / 错误捕获 五个阶段 &lt;br&gt;&lt;/p&gt;
+&lt;p&gt;⚠️ Vue 3 没有 beforeCreate / created &lt;br&gt;
+它们的能力被 setup() 统一取代&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;阶段&lt;/th&gt;
+          &lt;th&gt;Vue2 对应&lt;/th&gt;
+          &lt;th&gt;Vue3 Options API&lt;/th&gt;
+          &lt;th&gt;Vue3 Composition API 写法&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;创建前&lt;/td&gt;
+          &lt;td&gt;beforeCreate&lt;/td&gt;
+          &lt;td&gt;beforeCreate&lt;/td&gt;
+          &lt;td&gt;⚠️ 已被 setup() 替代&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;创建后&lt;/td&gt;
+          &lt;td&gt;created&lt;/td&gt;
+          &lt;td&gt;created&lt;/td&gt;
+          &lt;td&gt;⚠️ 已被 setup() 替代&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;挂载前&lt;/td&gt;
+          &lt;td&gt;beforeMount&lt;/td&gt;
+          &lt;td&gt;beforeMount&lt;/td&gt;
+          &lt;td&gt;onBeforeMount()&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;挂载后&lt;/td&gt;
+          &lt;td&gt;mounted&lt;/td&gt;
+          &lt;td&gt;mounted&lt;/td&gt;
+          &lt;td&gt;&lt;mark&gt;onMounted()&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;更新前&lt;/td&gt;
+          &lt;td&gt;beforeUpdate&lt;/td&gt;
+          &lt;td&gt;beforeUpdate&lt;/td&gt;
+          &lt;td&gt;onBeforeUpdate()&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;更新后&lt;/td&gt;
+          &lt;td&gt;updated&lt;/td&gt;
+          &lt;td&gt;updated&lt;/td&gt;
+          &lt;td&gt;&lt;mark&gt;onUpdated()&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;卸载前&lt;/td&gt;
+          &lt;td&gt;beforeDestroy&lt;/td&gt;
+          &lt;td&gt;beforeUnmount&lt;/td&gt;
+          &lt;td&gt;onBeforeUnmount()&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;卸载后&lt;/td&gt;
+          &lt;td&gt;destroyed&lt;/td&gt;
+          &lt;td&gt;unmounted&lt;/td&gt;
+          &lt;td&gt;&lt;mark&gt;onUnmounted()&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;错误捕获&lt;/td&gt;
+          &lt;td&gt;errorCaptured&lt;/td&gt;
+          &lt;td&gt;errorCaptured&lt;/td&gt;
+          &lt;td&gt;&lt;mark&gt;onErrorCaptured()&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;新增：激活&lt;/td&gt;
+          &lt;td&gt;-&lt;/td&gt;
+          &lt;td&gt;activated&lt;/td&gt;
+          &lt;td&gt;onActivated()&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;新增：停用&lt;/td&gt;
+          &lt;td&gt;-&lt;/td&gt;
+          &lt;td&gt;deactivated&lt;/td&gt;
+          &lt;td&gt;onDeactivated()&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;扩展vue2生命周期&#34;&gt;扩展：Vue2生命周期
+&lt;/h3&gt;
+&lt;p&gt;创建 / 挂载 / 更新 / 销毁&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;阶段&lt;/th&gt;
+          &lt;th&gt;生命周期钩子&lt;/th&gt;
+          &lt;th&gt;说明&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;创建前&lt;/td&gt;
+          &lt;td&gt;beforeCreate()&lt;/td&gt;
+          &lt;td&gt;实例初始化之前，data、methods、props 都还没被创建&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;创建后&lt;/td&gt;
+          &lt;td&gt;&lt;mark&gt; &lt;strong&gt;created()&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;实例创建完成，可以访问 data、methods，但还未挂载到 DOM&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;挂载前&lt;/td&gt;
+          &lt;td&gt;beforeMount()&lt;/td&gt;
+          &lt;td&gt;在挂载开始之前调用，此时模板已编译，但还未渲染到页面上&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;挂载后&lt;/td&gt;
+          &lt;td&gt;&lt;mark&gt;&lt;strong&gt;mounted()&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;组件挂载到 DOM 后调用，可操作真实 DOM&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;更新前&lt;/td&gt;
+          &lt;td&gt;beforeUpdate()&lt;/td&gt;
+          &lt;td&gt;响应式数据更新时，在重新渲染前调用&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;更新后&lt;/td&gt;
+          &lt;td&gt;&lt;mark&gt;&lt;strong&gt;updated()&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;组件更新并重新渲染后调用&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;销毁前&lt;/td&gt;
+          &lt;td&gt;beforeDestroy()&lt;/td&gt;
+          &lt;td&gt;实例销毁前调用，可执行清理工作（如移除事件监听、定时器等）&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;销毁后&lt;/td&gt;
+          &lt;td&gt;&lt;mark&gt;&lt;strong&gt;destroyed()&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;实例销毁后调用，所有指令解绑、子组件销毁&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;问题2git同一分支两个人push如何避免代码混乱&#34;&gt;问题2：git同一分支两个人push如何避免代码混乱
+&lt;/h2&gt;
+&lt;p&gt;每次开发前先拉取最新代码pull &amp;ndash;rebase再push:这是避免&amp;quot;混乱历史&amp;quot;和&amp;quot;重复冲突&amp;quot;的关键。&lt;/p&gt;
+&lt;p&gt;&lt;mark&gt; &lt;strong&gt;治本之策：采用功能分支工作流，在当前分支下建立每个人自己的分支，就可以避免&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;问题3筑梦e财项目实时通知推送如何实现&#34;&gt;问题3：筑梦E财项目实时通知推送如何实现
+&lt;/h2&gt;
+&lt;p&gt;管理员在后台管理系统 communication.html 中编写消息。点击发送后，前端通过 &lt;strong&gt;POST&lt;/strong&gt; 请求将数据提交至后端的 &lt;strong&gt;/api/notices 接口&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;后端 NoticeController.java 接收到数据后，利用 NoticeService(负责消息创建、更新、删除通知) 将其持久化到数据库中。&lt;/p&gt;
+&lt;p&gt;小程序并没有使用长连接推送，而是利用页面生命周期实现“进入即更新”。在 notice.js 的 onShow 方法中，系统会在每次用户打开消息页面时自动调用 loadNotifications 。&lt;/p&gt;
+&lt;h3 id=&#34;扩展为什么您的小程序没有用长连接&#34;&gt;扩展：为什么您的小程序没有用长连接？
+&lt;/h3&gt;
+&lt;p&gt;家校通知通常不需要秒级同步。家长在打开小程序时能看到最新消息，体验已经足够。&lt;/p&gt;
+&lt;p&gt;维护 WebSocket 需要服务器有更高的内存和长连接处理能力。对于托育系统这种非高频即时通讯（如微信聊天）的应用，使用传统的 RESTful API 更加稳定且易于维护。&lt;/p&gt;
+&lt;h2 id=&#34;问题4筑梦e财项目懒加载具体实现&#34;&gt;问题4：筑梦E财项目懒加载具体实现
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;给所有图片加 lazy-load （如距离图片多少rpx再加载）。&lt;/li&gt;
+&lt;li&gt;为通知列表实现“触底加载更多”分页功能（提升交互感）。&lt;/li&gt;
+&lt;li&gt;随着页面增多，进行分包重构（将非核心页面（如 userPolicy 、 bindchild 、 webview ）移入 分包 。）（这种分包通常就是split chunk）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;问题5split-chunks详解&#34;&gt;问题5：Split chunks详解
+&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;核心目标：&lt;/strong&gt; 提高性能、优化缓存、减少重复&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;核心配置：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;chunks → 哪些模块拆分&lt;/li&gt;
+&lt;li&gt;minSize / minChunks → 拆分条件&lt;/li&gt;
+&lt;li&gt;cacheGroups → 自定义分组策略&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;最佳实践：&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;第三方库独立打包（vendors）&lt;/li&gt;
+&lt;li&gt;公共模块抽取（common）&lt;/li&gt;
+&lt;li&gt;动态 import 拆分异步模块&lt;/li&gt;
+&lt;li&gt;利用缓存提高性能&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

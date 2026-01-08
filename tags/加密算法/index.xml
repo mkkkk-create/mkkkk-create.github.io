@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>加密算法 on mkkkk</title>
+        <link>https://mkkkk-create.github.io/tags/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/</link>
+        <description>Recent content in 加密算法 on mkkkk</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en</language>
+        <lastBuildDate>Wed, 18 Sep 2024 23:42:32 +0800</lastBuildDate><atom:link href="https://mkkkk-create.github.io/tags/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Base64算法详解</title>
+        <link>https://mkkkk-create.github.io/2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/</link>
+        <pubDate>Wed, 18 Sep 2024 23:42:32 +0800</pubDate>
+        
+        <guid>https://mkkkk-create.github.io/2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/</guid>
+        <description>&lt;h2 id=&#34;编码原理&#34;&gt;编码原理
+&lt;/h2&gt;
+&lt;p&gt;Base64 编码是将字符串以每 3 个 8 比特 (bit) 的字节子序列拆分成 4 个 6 比特 (bit) 的字节 (6 比特有效字节，其实也是 8 比特的字节，只是最左边两个比特永远为 0) 子序列，再将得到的子序列查找 Base64 的编码索引表，得到对应的字符拼接成新的字符串的一种编码方式。&lt;/p&gt;
+&lt;h2 id=&#34;举例&#34;&gt;举例
+&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://mkkkk-create.github.io/2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/1.png&#34;
+	width=&#34;1174&#34;
+	height=&#34;450&#34;
+	srcset=&#34;https://mkkkk-create.github.io/2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/1_hu_c91ca34dacbe3a6d.png 480w, https://mkkkk-create.github.io/2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/1_hu_b70011ea7b1e19c3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;图摘自知乎&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;260&#34;
+		data-flex-basis=&#34;626px&#34;
+	
+&gt;
+（1）. 先将原文转为 ASCII 码 &lt;br&gt;&lt;/p&gt;
+&lt;p&gt;（2）. 将 ASCII 码转为二进制数 &lt;br&gt;&lt;/p&gt;
+&lt;p&gt;（3）. 将二进制数合并，每八个二进制位为一组，将每一组按照索引表对应相应的 base64 码 &lt;br&gt; &lt;br&gt;&lt;/p&gt;
+&lt;p&gt;&lt;mark&gt; 注：如果编码内容字节数不是 3 的整数倍！！！&lt;/mark&gt; &lt;br&gt;&lt;/p&gt;
+&lt;p&gt;情况1. 如果最后剩下 1 个字节，那么将补 4 个 0 位，编码成 2 个 Base64 字符，然后补两个 &amp;ldquo;=&amp;rdquo;
+&lt;img src=&#34;https://mkkkk-create.github.io/2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/2.png&#34;
+	width=&#34;1129&#34;
+	height=&#34;439&#34;
+	srcset=&#34;https://mkkkk-create.github.io/2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/2_hu_da5212b9808620ee.png 480w, https://mkkkk-create.github.io/2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/2_hu_bef69b47ce6a536f.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;图摘自知乎&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;257&#34;
+		data-flex-basis=&#34;617px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;情况2. 如果最后剩下 2 个字节，那么将补 2 个 0 位，编码成 3 个 Base64 字符，然后补一个 &amp;ldquo;=&amp;rdquo;
+&lt;img src=&#34;https://mkkkk-create.github.io/2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/3.png&#34;
+	width=&#34;1119&#34;
+	height=&#34;469&#34;
+	srcset=&#34;https://mkkkk-create.github.io/2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/3_hu_cc430ecf4c953d5.png 480w, https://mkkkk-create.github.io/2024/base64%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/3_hu_7b2941a0e6010bdf.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;图摘自知乎&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;238&#34;
+		data-flex-basis=&#34;572px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;在知道了加密原理之后我们就可以逆向解密 &lt;br&gt;
+先找出编码后的字符在编码之前代表的数字 &lt;br&gt;
+编码中将 3 位个字符变成 4 个字符，得到这 4 个字符的每个字符代表的原本数字 &lt;br&gt;
+因为在编码中间每个字符用 base64 码表进行了替换，所以这里要先换回来 &lt;br&gt;
+在对换回来的数字进行位运算使其还原成 3 个字符 &lt;br&gt;&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

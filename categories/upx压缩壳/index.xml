@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>UPX压缩壳 on mkkkk</title>
+        <link>https://mkkkk-create.github.io/categories/upx%E5%8E%8B%E7%BC%A9%E5%A3%B3/</link>
+        <description>Recent content in UPX压缩壳 on mkkkk</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en</language>
+        <lastBuildDate>Fri, 20 Sep 2024 23:42:32 +0800</lastBuildDate><atom:link href="https://mkkkk-create.github.io/categories/upx%E5%8E%8B%E7%BC%A9%E5%A3%B3/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>从工具到手动学会 UPX 脱壳</title>
+        <link>https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/</link>
+        <pubDate>Fri, 20 Sep 2024 23:42:32 +0800</pubDate>
+        
+        <guid>https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/</guid>
+        <description>&lt;p&gt;&lt;mark&gt; 本篇博客以 BaseCTF 的 UPX 压缩壳的题目为基础进行讲解 &lt;/mark&gt;&lt;/p&gt;
+&lt;h2 id=&#34;什么是压缩壳&#34;&gt;什么是压缩壳
+&lt;/h2&gt;
+
+
+&lt;blockquote class=&#34;quote&#34;&gt;
+        &lt;p&gt;加壳：其实是利用特殊的算法，对 EXE、DLL 文件里的资源进行压缩。类似 WINZIP 的效果，只不过这个压缩之后的文件，可以独立运行，解压过程完全隐蔽，都在内存中完成。解压原理，是加壳工具在文件头里加了一段指令，告诉 CPU，怎么才能解压自己。当加壳时，其实就是给可执行的文件加上个外衣。用户执行的只是这个外壳程序。当执行这个程序的时候这个壳就会把原来的程序在内存中解开，解开后，以后的就交给真正的程序。—- 摘自百度百科&lt;/p&gt;&lt;/blockquote&gt; 
+&lt;h2 id=&#34;easy-upxmini&#34;&gt;Easy UPXmini
+&lt;/h2&gt;
+&lt;p&gt;拿到题目查壳
+&lt;img src=&#34;https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/1.png&#34;
+	width=&#34;802&#34;
+	height=&#34;370&#34;
+	srcset=&#34;https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/1_hu_458db8c4c7f672fe.png 480w, https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/1_hu_dc3eafa4baa167dd.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;216&#34;
+		data-flex-basis=&#34;520px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;可以看到写明了被 UPX 壳加密过了，但是这种题通常是出题者为了让大家认识工具出的，所以我们可以直接工具脱壳
+&lt;img src=&#34;https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/2.png&#34;
+	width=&#34;1039&#34;
+	height=&#34;802&#34;
+	srcset=&#34;https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/2_hu_39acdae2b69f6761.png 480w, https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/2_hu_c06f1abaa108cdf4.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;129&#34;
+		data-flex-basis=&#34;310px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;这就是脱完壳的结果，后面就是 ida 分析，这里就不细说了&lt;/p&gt;
+&lt;h2 id=&#34;normal-upx&#34;&gt;Normal UPX
+&lt;/h2&gt;
+&lt;p&gt;查壳
+&lt;img src=&#34;https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/3.png&#34;
+	width=&#34;798&#34;
+	height=&#34;378&#34;
+	srcset=&#34;https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/3_hu_5a038d5ef1f45346.png 480w, https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/3_hu_c98ea9ee5bd9bfe3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;211&#34;
+		data-flex-basis=&#34;506px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;我们发现这个 UPX 壳不能直接工具脱壳，对比上一个 Easy 关卡我们发现红框框住的地方不太一样 &lt;br&gt;
+这时候我们就引入一个名词：区段名，&lt;mark&gt; Normal 关卡中正是修改了 UPX 壳的区段名导致不能直接工具脱壳 &lt;/mark&gt; &lt;br&gt;
+接下来我们打开010editor来恢复区段名
+&lt;img src=&#34;https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/4.png&#34;
+	width=&#34;1149&#34;
+	height=&#34;274&#34;
+	srcset=&#34;https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/4_hu_3f2f01b03eab0800.png 480w, https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/4_hu_f195a6cee112a6f0.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;419&#34;
+		data-flex-basis=&#34;1006px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;恢复区段名后我们就可以工具脱壳了&lt;/p&gt;
+&lt;h2 id=&#34;normal-upx-pro&#34;&gt;Normal UPX PRO
+&lt;/h2&gt;
+&lt;p&gt;查壳发现不能直接工具脱壳
+&lt;img src=&#34;https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/6.png&#34;
+	width=&#34;805&#34;
+	height=&#34;382&#34;
+	srcset=&#34;https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/6_hu_bb04d13236983198.png 480w, https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/6_hu_352b48ede8171efb.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;210&#34;
+		data-flex-basis=&#34;505px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;发现区段名也消失了，试过改区段名发现没用，还是不能脱壳 引入一个新的名词：&lt;mark&gt; overlay_offset &lt;/mark&gt; &lt;br&gt;
+这里 overlay_offset 值为 p_info 字段的文件偏移
+&lt;img src=&#34;https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/7.png&#34;
+	width=&#34;1135&#34;
+	height=&#34;304&#34;
+	srcset=&#34;https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/7_hu_3031388be95031b2.png 480w, https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/7_hu_896c7e7e7a31992a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;373&#34;
+		data-flex-basis=&#34;896px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;正确的是 F4 00 00 00，改了之后，就可以正常脱壳了&lt;/p&gt;
+&lt;h2 id=&#34;手动脱壳-upx-pro-max&#34;&gt;手动脱壳 UPX PRO MAX
+&lt;/h2&gt;
+&lt;p&gt;查壳
+&lt;img src=&#34;https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/8.png&#34;
+	width=&#34;804&#34;
+	height=&#34;381&#34;
+	srcset=&#34;https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/8_hu_a2729846576ab8e.png 480w, https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/8_hu_df2e5092023c291c.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;211&#34;
+		data-flex-basis=&#34;506px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;我们可以看到入口区段什么都没显示，只有提示被 upx 壳保护，打开 010editor 发现区段名都变成了 00 &lt;br&gt;
+这个时候我们就搬出更高级的脱壳手法，手动脱壳，本题主要靠&lt;mark&gt; ESP 定律脱壳 &lt;/mark&gt;(也就是靠堆栈平衡找到 OEP 入口点) &lt;br&gt;
+以下是脱壳步骤，首先我们拖入 x64dbg 中，按下 F9 运行
+&lt;img src=&#34;https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/9.png&#34;
+	width=&#34;2115&#34;
+	height=&#34;339&#34;
+	srcset=&#34;https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/9_hu_ab06f1c46afe9626.png 480w, https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/9_hu_9b11766d32752f46.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;623&#34;
+		data-flex-basis=&#34;1497px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;我们看到这里有多个 push，我们前面提到 ESP 就是堆栈平衡，所以我们接下来找到 pop 就可以找到 OEP 入口了
+对 RSP 寄存器按下右键
+&lt;img src=&#34;https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/10.png&#34;
+	width=&#34;508&#34;
+	height=&#34;595&#34;
+	srcset=&#34;https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/10_hu_a65e7d09a6caa174.png 480w, https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/10_hu_d6290e6cad382d8b.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;85&#34;
+		data-flex-basis=&#34;204px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;点击在内存窗口中转到&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/11.png&#34;
+	width=&#34;1008&#34;
+	height=&#34;769&#34;
+	srcset=&#34;https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/11_hu_f08d99ba3ac38512.png 480w, https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/11_hu_3e87ee930eb3c4e1.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;这里也可以选二字节，字节，看框选多少数据&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;131&#34;
+		data-flex-basis=&#34;314px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;接着按几次 F9 运行下一断点，可以看到&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/12.png&#34;
+	width=&#34;865&#34;
+	height=&#34;376&#34;
+	srcset=&#34;https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/12_hu_5d27fde8e15fe96.png 480w, https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/12_hu_aa3e9ef2497926dc.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;230&#34;
+		data-flex-basis=&#34;552px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;上面红色方框中的多个 pop 就说明解压已经结束，正要进入主要函数，下面红色方框中就是 OEP 了，然后我们只需 F8 通过 jmp 跳到正确有效函数的入口&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/13.png&#34;
+	width=&#34;1230&#34;
+	height=&#34;460&#34;
+	srcset=&#34;https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/13_hu_72ffff8952da4a55.png 480w, https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/13_hu_85cd99c28894dbca.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;267&#34;
+		data-flex-basis=&#34;641px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;跳转到这，我们就可以使用插件&lt;mark&gt; scylla 进行脱壳了&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/14.png&#34;
+	width=&#34;877&#34;
+	height=&#34;931&#34;
+	srcset=&#34;https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/14_hu_a08ee2c76b8a6c4c.png 480w, https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/14_hu_35fd03140fc80b65.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;94&#34;
+		data-flex-basis=&#34;226px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;可以看到进程已经填好，OEP 也填好了，我们只要点击 Dump，然后保存好文件 &lt;br&gt;
+再点击 IAT Autosearch&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/15.png&#34;
+	width=&#34;904&#34;
+	height=&#34;969&#34;
+	srcset=&#34;https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/15_hu_84a671b756ab712.png 480w, https://mkkkk-create.github.io/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/15_hu_73e2339d269d4136.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;93&#34;
+		data-flex-basis=&#34;223px&#34;
+	
+&gt;
+IAT 已找到，再点击 Get Imports &lt;br&gt;
+最后点击 Fix Dump，选择我们刚才 Dump 下来的文件就可以了。最后分析的时候我们分析的是修复好的文件，UPX PRO MAX_dump_SCY.exe&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

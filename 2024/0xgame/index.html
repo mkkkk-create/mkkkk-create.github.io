@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Week1 BabyBase 查壳无壳 ida 打开，进入主函数\n发现有个 encode 函数，跟进\n发现是普通的 base64 加密，拿到密文之后用 cyber 解一下即可\n0xGame{N0w_y0u_kn0w_B4se64_Enc0d1ng_w3ll!}\nBinaryMaster 查壳发现无壳，ida 打开，打开之后 F5 反编译就看到 flag 了\n">
+<title>0xGame</title>
+
+<link rel='canonical' href='https://mkkkk-create.github.io/2024/0xgame/'>
+
+<link rel="stylesheet" href="/scss/style.min.503a651fd8a85b2b025533bf0d780be393b4b991a01f13e137a298ee3877e3f1.css"><meta property='og:title' content="0xGame">
+<meta property='og:description' content="Week1 BabyBase 查壳无壳 ida 打开，进入主函数\n发现有个 encode 函数，跟进\n发现是普通的 base64 加密，拿到密文之后用 cyber 解一下即可\n0xGame{N0w_y0u_kn0w_B4se64_Enc0d1ng_w3ll!}\nBinaryMaster 查壳发现无壳，ida 打开，打开之后 F5 反编译就看到 flag 了\n">
+<meta property='og:url' content='https://mkkkk-create.github.io/2024/0xgame/'>
+<meta property='og:site_name' content='mkkkk'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Reverse' /><meta property='article:tag' content='Writeup' /><meta property='article:published_time' content='2024-10-11T23:42:32&#43;08:00'/><meta property='article:modified_time' content='2024-10-11T23:42:32&#43;08:00'/>
+<meta name="twitter:title" content="0xGame">
+<meta name="twitter:description" content="Week1 BabyBase 查壳无壳 ida 打开，进入主函数\n发现有个 encode 函数，跟进\n发现是普通的 base64 加密，拿到密文之后用 cyber 解一下即可\n0xGame{N0w_y0u_kn0w_B4se64_Enc0d1ng_w3ll!}\nBinaryMaster 查壳发现无壳，ida 打开，打开之后 F5 反编译就看到 flag 了\n"><style>
+    :root {
+        --article-font-family: "Noto Serif SC", var(--base-font-family);
+    }
+</style>
+
+<script> 
+		(function () {
+		    const customFont = document.createElement('link');
+		    customFont.href = "https://fonts.bunny.net/css2?family=Noto+Serif+SC:wght@300;700&display=swap"; 
+		    customFont.type = "text/css";
+		    customFont.rel = "stylesheet";
+		
+		    document.head.appendChild(customFont);
+		}());
+</script>
+
+    </head>
+    <body class="
+    article-page
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended">
+    
+<div id="article-toolbar">
+    <a href="https://mkkkk-create.github.io/" class="back-home">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+        <span>Back</span>
+    </a>
+</div>
+    <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_3246c36c7e913b88.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🎯</span>
+                
+            </figure>
+            
+        
+        
+        <h1 class="site-name"><a href="/">mkkkk</a></h1>
+        <h2 class="site-description">逆向，计算机软件，硬件...热衷于探索未知的领域</h2><ol class="social-menu">
+                
+                    <li>
+                        <a 
+                            href='https://github.com/mkkkk-create'
+                            target="_blank"
+                            title="GitHub"
+                            rel="me"
+                        >
+                            
+                            
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a 
+                            href='mailto:mail@iceyear.eu.org'
+                            target="_blank"
+                            title="Mail"
+                            rel="me"
+                        >
+                            
+                            
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-mail" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><rect x="3" y="5" width="18" height="14" rx="2"></rect><polyline points="3 7 12 13 21 7"></polyline></svg>
+
+                            
+                        </a>
+                    </li>
+                
+            </ol></header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Friends</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+
+        
+            <li id="dark-mode-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <span>Dark Mode</span>
+            </li>
+        
+    </ol>
+</aside>
+
+
+    
+    
+    
+    <aside class="sidebar right-sidebar sticky">
+        
+            <form action="/search/" class="search-form widget" >
+        <p>
+            <label>Search</label>
+            <input name="keyword" required placeholder="Type something..." />
+        
+            <button title="Search">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+            </button>
+        </p>
+    </form>
+        
+            
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#week1">Week1</a>
+      <ol>
+        <li><a href="#babybase">BabyBase</a></li>
+        <li><a href="#binarymaster">BinaryMaster</a></li>
+        <li><a href="#signsign">SignSign</a></li>
+        <li><a href="#xor-beginning">Xor-Beginning</a></li>
+      </ol>
+    </li>
+    <li><a href="#week2">Week2</a>
+      <ol>
+        <li><a href="#babyupx">BabyUPX</a></li>
+        <li><a href="#firstsight-jar">FirstSight-Jar</a></li>
+        <li><a href="#fisrtsight-pyc">FisrtSight-Pyc</a></li>
+        <li><a href="#xorramdom">Xor::Ramdom</a></li>
+        <li><a href="#zzz">ZzZ</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+        
+            <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-infinity" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M9.828 9.172a4 4 0 1 0 0 5.656 a10 10 0 0 0 2.172 -2.828a10 10 0 0 1 2.172 -2.828 a4 4 0 1 1 0 5.656a10 10 0 0 1 -2.172 -2.828a10 10 0 0 0 -2.172 -2.828" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Archives</h2>
+
+        
+        
+        
+        
+        
+        <div class="widget-archive--list">
+            <div class="archives-year">
+                    <a href="/archives/#2026">
+                        
+                            <span class="year">2026</span>
+                            <span class="count">1</span>
+                        
+                    </a> 
+                </div>
+            <div class="archives-year">
+                    <a href="/archives/#2024">
+                        
+                            <span class="year">2024</span>
+                            <span class="count">7</span>
+                        
+                    </a> 
+                </div>
+            
+        </div>
+    </section>
+        
+            <section class="widget tagCloud">
+    <div class="widget-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+    </div>
+    <h2 class="widget-title section-title">Tags</h2>
+
+    <div class="tagCloud-tags">
+    
+        <a href="/tags/reverse/" class="tag-link">
+            <span class="tag-name">Reverse</span>
+            <span class="tag-count">(5)</span>
+        </a>
+    
+        <a href="/tags/writeup/" class="tag-link">
+            <span class="tag-name">Writeup</span>
+            <span class="tag-count">(3)</span>
+        </a>
+    
+        <a href="/tags/c%E8%AF%AD%E8%A8%80/" class="tag-link">
+            <span class="tag-name">C语言</span>
+            <span class="tag-count">(2)</span>
+        </a>
+    
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="tag-link">
+            <span class="tag-name">数据结构</span>
+            <span class="tag-count">(2)</span>
+        </a>
+    
+        <a href="/tags/upx%E5%8E%8B%E7%BC%A9%E5%A3%B3/" class="tag-link">
+            <span class="tag-name">UPX压缩壳</span>
+            <span class="tag-count">(1)</span>
+        </a>
+    
+        <a href="/tags/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" class="tag-link">
+            <span class="tag-name">加密算法</span>
+            <span class="tag-count">(1)</span>
+        </a>
+    
+        <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D/" class="tag-link">
+            <span class="tag-name">字符串匹配</span>
+            <span class="tag-count">(1)</span>
+        </a>
+    
+        <a href="/tags/%E9%93%BE%E8%A1%A8/" class="tag-link">
+            <span class="tag-name">链表</span>
+            <span class="tag-count">(1)</span>
+        </a>
+    
+        <a href="/tags/%E9%9D%A2%E7%BB%8F/" class="tag-link">
+            <span class="tag-name">面经</span>
+            <span class="tag-count">(1)</span>
+        </a>
+    
+</div>
+</section>
+        
+    </aside>
+
+
+            <main class="main full-width">
+  
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/reverse/" >
+                Reverse
+            </a>
+        
+            <a href="/categories/writeup/" >
+                Writeup
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/2024/0xgame/">0xGame</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Oct 11, 2024</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                
+                <time class="article-words">
+                    1086 字
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="week1">Week1
+</h2>
+<h3 id="babybase">BabyBase
+</h3>
+<p>查壳无壳 ida 打开，进入主函数</p>
+<p><img src="/2024/0xgame/1.png"
+	width="1114"
+	height="511"
+	srcset="/2024/0xgame/1_hu_cc7f4bbfe71dbf75.png 480w, /2024/0xgame/1_hu_e6cc6af0ba9f39ab.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="218"
+		data-flex-basis="523px"
+	
+></p>
+<p>发现有个 encode 函数，跟进</p>
+<p><img src="/2024/0xgame/2.png"
+	width="1354"
+	height="910"
+	srcset="/2024/0xgame/2_hu_ae2a89591ffb0c71.png 480w, /2024/0xgame/2_hu_57e63ebeca79c8a8.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="148"
+		data-flex-basis="357px"
+	
+></p>
+<p>发现是普通的 base64 加密，拿到密文之后用 cyber 解一下即可</p>
+<p><img src="/2024/0xgame/3.png"
+	width="963"
+	height="655"
+	srcset="/2024/0xgame/3_hu_15774855ef3a6a60.png 480w, /2024/0xgame/3_hu_ba9a3d4ec62934e0.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="147"
+		data-flex-basis="352px"
+	
+></p>
+<p><mark> 0xGame{N0w_y0u_kn0w_B4se64_Enc0d1ng_w3ll!}</p>
+<h3 id="binarymaster">BinaryMaster
+</h3>
+<p>查壳发现无壳，ida 打开，打开之后 F5 反编译就看到 flag 了</p>
+<p><mark> 0xGame{114514cc-a3a7-4e36-8db1-5f224b776271}</p>
+<h3 id="signsign">SignSign
+</h3>
+<p>无壳拖进 ida</p>
+<p><img src="/2024/0xgame/4.png"
+	width="910"
+	height="421"
+	srcset="/2024/0xgame/4_hu_194d30d93e8e839c.png 480w, /2024/0xgame/4_hu_698aef9c588d5968.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="216"
+		data-flex-basis="518px"
+	
+></p>
+<p>发现这一段很像 flag，尝试找找有没有前面部分的，shift+F12 查看字符串找到前面部分</p>
+<p><img src="/2024/0xgame/5.png"
+	width="1146"
+	height="490"
+	srcset="/2024/0xgame/5_hu_b1ae95c3cb508e35.png 480w, /2024/0xgame/5_hu_10866ed6d377147a.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="233"
+		data-flex-basis="561px"
+	
+></p>
+<p><mark> 0xGame{S1gn1n_h3r3_4nd_b3g1n_Reversing_n0w}</p>
+<h3 id="xor-beginning">Xor-Beginning
+</h3>
+<p>无壳放进 ida，查看主函数</p>
+<p><img src="/2024/0xgame/6.png"
+	width="960"
+	height="496"
+	srcset="/2024/0xgame/6_hu_28e646896bc4061f.png 480w, /2024/0xgame/6_hu_d507abaf205177b0.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="193"
+		data-flex-basis="464px"
+	
+></p>
+<p>发现一处异或 解密脚本如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">a</span> <span class="o">=</span> <span class="p">[</span>  <span class="mi">126</span><span class="p">,</span>  <span class="mi">53</span><span class="p">,</span>  <span class="mi">11</span><span class="p">,</span>  <span class="mi">42</span><span class="p">,</span>  <span class="mi">39</span><span class="p">,</span>  <span class="mi">44</span><span class="p">,</span>  <span class="mi">51</span><span class="p">,</span>  <span class="mi">31</span><span class="p">,</span> <span class="mi">118</span><span class="p">,</span>  <span class="mi">55</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">   <span class="mi">27</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span>  <span class="mi">49</span><span class="p">,</span>  <span class="mi">30</span><span class="p">,</span>  <span class="mi">54</span><span class="p">,</span>  <span class="mi">12</span><span class="p">,</span>  <span class="mi">76</span><span class="p">,</span>  <span class="mi">68</span><span class="p">,</span>  <span class="mi">99</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">   <span class="mi">87</span><span class="p">,</span>  <span class="mi">73</span><span class="p">,</span>   <span class="mi">8</span><span class="p">,</span>  <span class="mi">69</span><span class="p">,</span>  <span class="mi">66</span><span class="p">,</span>   <span class="mi">1</span><span class="p">,</span>  <span class="mi">90</span><span class="p">,</span>   <span class="mi">4</span><span class="p">,</span>  <span class="mi">19</span><span class="p">,</span>  <span class="mi">76</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>  <span class="mi">21</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">b</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^</span> <span class="p">(</span><span class="mi">78</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">b</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span></span></span></code></pre></td></tr></table>
+</div>
+</div>
+<p><mark>0xGame{X0r_1s_v3ry_Imp0rt4n7!}</p>
+<h2 id="week2">Week2
+</h2>
+<h3 id="babyupx">BabyUPX
+</h3>
+<p>查壳，发现是最简单的 UPX 壳，放进脱壳软件里面脱壳，拖进 ida</p>
+<p><img src="/2024/0xgame/7.png"
+	width="1135"
+	height="781"
+	srcset="/2024/0xgame/7_hu_1b078c685299f23c.png 480w, /2024/0xgame/7_hu_590be41d372206e0.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="145"
+		data-flex-basis="348px"
+	
+></p>
+<p>跟进 encode 函数</p>
+<p><img src="/2024/0xgame/8.png"
+	width="859"
+	height="205"
+	srcset="/2024/0xgame/8_hu_6cf07d4d4005417.png 480w, /2024/0xgame/8_hu_96fa18775a024e28.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="419"
+		data-flex-basis="1005px"
+	
+></p>
+<p>发现是位运算，下面填脚本</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">enc</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">135</span><span class="p">,</span> <span class="mi">116</span><span class="p">,</span>  <span class="mi">22</span><span class="p">,</span> <span class="mi">214</span><span class="p">,</span>  <span class="mi">86</span><span class="p">,</span> <span class="mi">183</span><span class="p">,</span>  <span class="mi">99</span><span class="p">,</span> <span class="mi">131</span><span class="p">,</span>  <span class="mi">70</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="mi">102</span><span class="p">,</span> <span class="mi">102</span><span class="p">,</span>  <span class="mi">67</span><span class="p">,</span>  <span class="mi">83</span><span class="p">,</span> <span class="mi">131</span><span class="p">,</span> <span class="mi">210</span><span class="p">,</span>  <span class="mi">35</span><span class="p">,</span> <span class="mi">147</span><span class="p">,</span>  <span class="mi">86</span><span class="p">,</span>  <span class="mi">83</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="mi">210</span><span class="p">,</span>  <span class="mi">67</span><span class="p">,</span>  <span class="mi">54</span><span class="p">,</span>  <span class="mi">54</span><span class="p">,</span>   <span class="mi">3</span><span class="p">,</span> <span class="mi">210</span><span class="p">,</span>  <span class="mi">22</span><span class="p">,</span> <span class="mi">147</span><span class="p">,</span>  <span class="mi">54</span><span class="p">,</span>  <span class="mi">38</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="mi">210</span><span class="p">,</span> <span class="mi">147</span><span class="p">,</span> <span class="mi">115</span><span class="p">,</span>  <span class="mi">19</span><span class="p">,</span> <span class="mi">102</span><span class="p">,</span>  <span class="mi">86</span><span class="p">,</span>  <span class="mi">54</span><span class="p">,</span>  <span class="mi">51</span><span class="p">,</span>  <span class="mi">51</span><span class="p">,</span> <span class="mi">131</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">   <span class="mi">86</span><span class="p">,</span>  <span class="mi">35</span><span class="p">,</span> <span class="mi">102</span><span class="p">,</span> <span class="mi">215</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">flag</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">44</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">#提取高4位并右移，提取低4位并左移</span>
+</span></span><span class="line"><span class="cl">    <span class="n">original</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">enc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&amp;</span> <span class="mh">0xF0</span><span class="p">)</span> <span class="o">/</span> <span class="mi">16</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">enc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&amp;</span> <span class="mh">0x0F</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">4</span>
+</span></span><span class="line"><span class="cl">    <span class="n">flag</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="n">original</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#0xGame{68dff458-29e5-4cc0-a9cb-971fec338e2f}</span></span></span></code></pre></td></tr></table>
+</div>
+</div>
+<p><mark> (官方 wp 给出) 可以看出每个字节高 4 位和低 4 位交换，实际上就是 16 进制逆序。</p>
+<h3 id="firstsight-jar">FirstSight-Jar
+</h3>
+<p>jadx 打开，主要逻辑红框框住，接下来直接上脚本</p>
+<p><img src="/2024/0xgame/9.png"
+	width="1387"
+	height="826"
+	srcset="/2024/0xgame/9_hu_91801edd0d656039.png 480w, /2024/0xgame/9_hu_c995ac9699771847.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="167"
+		data-flex-basis="403px"
+	
+></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">dec</span><span class="p">(</span><span class="n">enc</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Alphabat</span> <span class="o">=</span> <span class="s2">&#34;0123456789abcdef&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">reverse_map</span> <span class="o">=</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Alphabat</span><span class="p">)):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">new_index</span> <span class="o">=</span> <span class="p">((</span><span class="n">i</span> <span class="o">*</span> <span class="mi">5</span><span class="p">)</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span> <span class="o">%</span> <span class="mi">16</span>
+</span></span><span class="line"><span class="cl">        <span class="n">reverse_map</span><span class="p">[</span><span class="n">Alphabat</span><span class="p">[</span><span class="n">new_index</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Alphabat</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">dec_str</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">enc</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">reverse_map</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">dec_str</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reverse_map</span><span class="p">[</span><span class="n">char</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">dec_str</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">char</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dec_str</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">enc</span> <span class="o">=</span> <span class="s2">&#34;ab50e920-4a97-70d1-b646-cdac5c873376&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">flag</span> <span class="o">=</span> <span class="n">dec</span><span class="p">(</span><span class="n">enc</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;0xGame{&#34;</span><span class="o">+</span> <span class="n">flag</span> <span class="o">+</span> <span class="s2">&#34;}&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#0xGame{b8a9fe39-dbe4-4926-87d7-52b5a5140047}</span></span></span></code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="fisrtsight-pyc">FisrtSight-Pyc
+</h3>
+<p>看到 pyc 文件，uncompyle6 反编译</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">hashlib</span>
+</span></span><span class="line"><span class="cl"><span class="n">user_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&#34;请输入神秘代号：&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="n">user_input</span> <span class="o">!=</span> <span class="s2">&#34;Ciallo~&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;代号不是这个哦&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">exit</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">input_hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">user_input</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">input_hash</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">input_hash</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">input_hash</span><span class="p">)):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nb">ord</span><span class="p">(</span><span class="n">input_hash</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">48</span><span class="p">,</span> <span class="mi">58</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">original_num</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">input_hash</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">        <span class="n">new_num</span> <span class="o">=</span> <span class="p">(</span><span class="n">original_num</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span> <span class="o">%</span> <span class="mi">10</span>
+</span></span><span class="line"><span class="cl">        <span class="n">input_hash</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">new_num</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">input_hash</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_hash</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;0xGame{{</span><span class="si">{}</span><span class="s2">}}&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">input_hash</span><span class="p">))</span></span></span></code></pre></td></tr></table>
+</div>
+</div>
+<p>直接运行一遍，就发现 flag 出来了 <mark> 0xGame{2f5ef5762bf8a2c043d836b522127e54}</p>
+<h3 id="xorramdom">Xor::Ramdom
+</h3>
+<p>无壳，拖进 ida 里面，跟进主函数，下图是主要的判断，这题是一道 Windows 下的伪随机数，<mark> 记住运行环境不一样随机数生成也会不一样</p>
+<p><img src="/2024/0xgame/10.png"
+	width="1713"
+	height="948"
+	srcset="/2024/0xgame/10_hu_3904889540663b93.png 480w, /2024/0xgame/10_hu_87a5596a13f8ae88.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="180"
+		data-flex-basis="433px"
+	
+></p>
+<p>我们通过分析可以知道其实这两个随机数种子只会运行 0x77 这一个，因为 v6 的判断只判断了长度，flag 肯定满足长度，下面是一个奇偶性的判断 我们直接写出脚本</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cp">#include</span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span><span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">ra</span><span class="p">,</span> <span class="n">key</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">enc</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">v13</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">v13</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x1221164E1F104F0C</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">v13</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x171F240A4B10244B</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">v13</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x1A2C5C2108074F09</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">v13</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">99338668810000</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">srand</span><span class="p">(</span><span class="mh">0x77</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">rand</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ra</span> <span class="o">=</span> <span class="nf">rand</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">enc</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">v13</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">29</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&amp;</span> <span class="mi">1</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">key</span> <span class="o">=</span> <span class="n">ra</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span> <span class="n">key</span> <span class="o">=</span> <span class="n">ra</span> <span class="o">+</span> <span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">enc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^=</span> <span class="n">key</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;0xGame{%s}&#34;</span><span class="p">,</span> <span class="n">enc</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">//0xGame{r4nd0m_i5_n0t_alw4ys_&#39;Random&#39;!}
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="zzz">ZzZ
+</h3>
+<p>跟进到主函数</p>
+<p><img src="/2024/0xgame/11.png"
+	width="1477"
+	height="826"
+	srcset="/2024/0xgame/11_hu_a938ea5e33a7f32c.png 480w, /2024/0xgame/11_hu_b59310b3eeb5bf85.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="178"
+		data-flex-basis="429px"
+	
+></p>
+<p>题目给出了字符串的形式 0xGame{%8llx-%4s-%4s-%4s-%12llx} <br>
+%8x 表示一个以十六进制格式输出的整数，宽度为 8。 <br>
+%4s 表示一个宽度为 4 的字符串。 <br>
+%12x 表示一个以十六进制格式输出的整数，宽度为 12。 <br>
+我们还发现框住的 if 语句有多个条件判断，这时我们可以想到 z3 求解，直接上 z3 库</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">z3</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl"><span class="n">flag</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl"><span class="n">v13</span> <span class="o">=</span> <span class="mh">0xE544267D</span>
+</span></span><span class="line"><span class="cl"><span class="n">v14</span> <span class="o">=</span> <span class="mh">0xD085A85201A4</span>
+</span></span><span class="line"><span class="cl"><span class="n">v10</span><span class="p">,</span><span class="n">v11</span><span class="p">,</span><span class="n">v12</span> <span class="o">=</span> <span class="n">BitVecs</span><span class="p">(</span><span class="s2">&#34;v10 v11 v12&#34;</span><span class="p">,</span><span class="mi">32</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">s</span> <span class="o">=</span> <span class="n">Solver</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">11</span> <span class="o">*</span> <span class="n">v11</span> <span class="o">+</span> <span class="mi">14</span> <span class="o">*</span> <span class="n">v10</span> <span class="o">-</span> <span class="n">v12</span> <span class="o">==</span> <span class="mh">0x48FB41DDD</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">9</span> <span class="o">*</span> <span class="n">v10</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">v11</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">v12</span> <span class="o">==</span> <span class="mh">0x2BA692AD7</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(((</span><span class="n">v12</span> <span class="o">-</span> <span class="n">v11</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">v10</span> <span class="o">^</span> <span class="mh">0x87654321</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3451779756</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">check</span><span class="p">()</span><span class="o">==</span><span class="n">sat</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">tmp</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">model</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span><span class="n">v10</span><span class="p">,</span> <span class="n">v11</span><span class="p">,</span> <span class="n">v12</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">l</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">as_long</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">b</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s2">&#34;little&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">flag</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl"><span class="c1">#0xGame{e544267d-7812-44b3-a35d-d085a85201a4}</span></span></span></code></pre></td></tr></table>
+</div>
+</div>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/reverse/">Reverse</a>
+        
+            <a href="/tags/writeup/">Writeup</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyleft">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyleft" 
+     width="24" height="24" viewBox="0 0 24 24" 
+     stroke-width="2" stroke="currentColor" fill="none" 
+     stroke-linecap="round" stroke-linejoin="round"
+     transform="scale(-1, 1)">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">Related contents</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/2024/%E7%AC%AC%E4%BA%8C%E5%B1%8A%E9%BB%84%E6%B2%B3%E6%B5%81%E5%9F%9F%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%8A%80%E8%83%BD%E6%8C%91%E6%88%98%E8%B5%9B/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">第二届黄河流域网络安全技能挑战赛</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/2024/wmctf/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">WMCTF</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/2024/%E4%BB%8E%E5%B7%A5%E5%85%B7%E5%88%B0%E6%89%8B%E5%8A%A8%E5%AD%A6%E4%BC%9A-upx-%E8%84%B1%E5%A3%B3/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">从工具到手动学会 UPX 脱壳</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+    
+    <footer class="site-footer">
+  
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+
+<script>
+(function(u, c) {
+  var d = document, t = 'script', o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+  o.src = u;
+  if (c) { o.addEventListener('load', function(e) { c(e); }); }
+  s.parentNode.insertBefore(o, s);
+})('//testingcf.jsdelivr.net/npm/pangu@4.0.7/dist/browser/pangu.min.js', function() {
+  pangu.spacingPage();
+});
+</script>
+
+    <section class="copyleft">
+        ©   
+        
+            2024 - 
+        
+        2026 </a>·<i class="fas fa-bell"></i>  <a id="days">0</a> Days<br>
+      共书写了8.9k字·共 8篇文章</br><span><p>
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://codeberg.org/iceyear/hugo-theme-stack-mod" target="_blank" rel="noopener" data-version="3.29.0">Stack Mod</a></b> designed by <a href="https://iceyear.eu.org" target="_blank" rel="noopener">Ice Year</a><br />
+         <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">©  Licensed Under CC BY-NC-SA 4.0</a>
+    </section>
+
+<script>
+var s1 = '2024-07-15';
+s1 = new Date(s1.replace(/-/g, "/"));
+s2 = new Date();
+var days = s2.getTime() - s1.getTime();
+var number_of_days = parseInt(days / (1000 * 60 * 60 * 24));
+document.getElementById('days').innerHTML = number_of_days;
+</script>
+    
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://testingcf.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://testingcf.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://testingcf.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://testingcf.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+  
+
+            </main>
+        </div>
+        <script 
+                src="https://testingcf.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.0bd16652234b138336e9a2f765908650df99e335b845d48acb8f49e6e0626a8f.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.bunny.net/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
+
